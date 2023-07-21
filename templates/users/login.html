@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Страница входа в аккаунт</h1>
+    <p>При нажатии “Войти” должна открываться страница личного кабинета /account/</p>
+
+    <h5>
+        <ul><a href="{% url 'users:account' %}">Войти</a></ul>
+        <ul><a href="{% url 'users:e-mail' %}">Забыли пароль</a></ul>
+        <ul><a href="{% url 'users:registration' %}">Зарегистрироваться</a></ul>
+    </h5>
+
+    <h4><a href="{% url 'users:account' %}">Вернуться в Личный кабинет</a></h4>
+    <h4><a href="{% url 'products:index' %}">Вернуться на Главную страницу</a></h4>
+{% endblock %}

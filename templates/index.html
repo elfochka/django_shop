@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Главная страница</h1>
+    <p>Самая первая страница, на которую попадает пользователь при открытии сайта</p>
+    <h4>Ссылки:</h4>
+    <ul>
+        <li>
+            <a href="{% url 'products:index' %}">Главная страница</a>
+        </li>
+        <li>
+            <a href="{% url 'products:catalog' %}">Каталог товаров</a>
+        </li>
+        <li>
+            <a href="{% url 'shop:sale' %}">Скидки</a>
+        </li>
+        <li>
+            <a href="{% url 'orders:cart' %}">Корзина</a>
+        </li>
+        <li>
+            <a href="{% url 'users:account' %}">Личный кабинет</a>
+        </li>
+
+    </ul>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Страница с историей просмотров</h1>
+    <p>Страница на которой можно просмотреть историю просмотров</p>
+
+    <h5>
+        <ul><a href="{% url 'products:product' pk=1 %}">Товар детально (Пример pk=1)</a></ul>
+    </h5>
+
+    <h4><a href="{% url 'users:account' %}">Вернуться в Личный кабинет</a></h4>
+    <h4><a href="{% url 'products:index' %}">Вернуться на Главную страницу</a></h4>
+{% endblock %}

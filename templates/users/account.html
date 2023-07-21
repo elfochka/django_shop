@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Личный кабинет</h1>
+    <p>Страница с аватаркой, ФИО и ссылка на редактирование профиля, последний заказ, последние три просмотра
+        товаров</p>
+    <h5>
+        <ul>
+            <li><a href="{% url 'users:registration' %}">Регистрация</a></li>
+            <li><a href="{% url 'users:login' %}">Логин</a></li>
+            <li><a href="{% url 'users:e-mail' %}">Восстановление пароля</a></li>
+            <li><a href="{% url 'users:profile' %}">Профиль</a></li>
+            <li><a href="{% url 'orders:orders' %}">История заказов</a></li>
+            <li><a href="{% url 'core:viewhistory' %}">История просмотра</a></li>
+        </ul>
+    </h5>
+
+
+    <h4><a href="{% url 'products:index' %}">Вернуться на Главную страницу</a></h4>
+{% endblock %}
