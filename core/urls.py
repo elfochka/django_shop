@@ -4,7 +4,7 @@ from core.views import (
     ActionListView,
 )
 
-app_name = 'core'
+app_name = "core"
 urlpatterns = [
-    path('viewhistory/', ActionListView.as_view(), name='viewhistory'),
+    path("viewhistory/", ActionListView.as_view(), name="viewhistory"),
 ]

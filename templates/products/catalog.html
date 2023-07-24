@@ -1,11 +1,11 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
     <h1>Каталог товаров</h1>
     <p>Страница со всеми продуктами, когда пользователь перешел в “Каталог”</p>
     <h5>
-        <ul><a href="{% url 'products:product' pk=1 %}">Товар детально (Пример pk=1)</a></ul>
-        <ul><a href="{% url 'products:compare' %}">Сравнение товаров</a></ul>
+        <ul><a href="{% url "products:product" pk=1 %}">Товар детально (Пример pk=1)</a></ul>
+        <ul><a href="{% url "products:compare" %}">Сравнение товаров</a></ul>
     </h5>
-    <h4><a href="{% url 'products:index' %}">Вернуться на Главную страницу</a></h4>
+    <h4><a href="{% url "index" %}">Вернуться на Главную страницу</a></h4>
 {% endblock %}

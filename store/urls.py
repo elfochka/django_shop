@@ -17,11 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from products.views import IndexView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', include('products.urls')),
-    path('', include('shop.urls')),
-    path('', include('orders.urls')),
-    path('', include('users.urls')),
-    path('', include('core.urls')),
+    path("", IndexView.as_view(), name="index"),
+
+    path("products/", include("products.urls")),
+    path("shop/", include("shop.urls")),
+    path("orders/", include("orders.urls")),
+    path("users/", include("users.urls")),
+    path("core/", include("core.urls")),
 ]

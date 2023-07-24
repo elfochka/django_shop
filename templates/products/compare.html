@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
     <h1>Страница сравнения товаров</h1>
     <p>Страница, где можно сравнивать характеристики товаров.</p>
 
-    <h4><a href="{% url 'products:catalog' %}">Вернуться в каталог</a></h4>
+    <h4><a href="{% url "products:catalog" %}">Вернуться в каталог</a></h4>
 {% endblock %}

@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
     <h1>Страница ожидания оплаты</h1>
     <p>Страница показывает гифку ожидания оплаты заказа</p>
-    <h4><a href="{% url 'products:index' %}">Вернуться на страницу оплаты</a></h4>
+    <h4><a href="{% url "index" %}">Вернуться на страницу оплаты</a></h4>
 {% endblock %}

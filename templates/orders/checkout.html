@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
     <h1>Страница оформления заказа</h1>
@@ -8,7 +8,7 @@
     <ul>3. выбор способа оплаты,</ul>
     <ul>4. подтверждения заказа.</ul>
     </p>
-    <h5><a href="{% url 'orders:payment' %}">Перейти к оплате</a></h5>
+    <h5><a href="{% url "orders:payment" %}">Перейти к оплате</a></h5>
 
-    <h4><a href="{% url 'orders:checkout' %}">Вернуться в корзину</a></h4>
+    <h4><a href="{% url "orders:checkout" %}">Вернуться в корзину</a></h4>
 {% endblock %}

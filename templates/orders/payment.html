@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
     <h1>Страница оплаты заказа</h1>
     <p>Необходимо ввести данные карты и оплатить заказ.</p>
-    <h5><a href="{% url 'orders:progress-payment' %}">Оплатить</a></h5>
-    <h4><a href="{% url 'orders:cart' %}">Вернуться к оформлению заказа</a></h4>
+    <h5><a href="{% url "orders:progress-payment" %}">Оплатить</a></h5>
+    <h4><a href="{% url "orders:cart" %}">Вернуться к оформлению заказа</a></h4>
 {% endblock %}

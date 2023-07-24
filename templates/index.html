@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
     <h1>Главная страница</h1>
@@ -6,19 +6,19 @@
     <h4>Ссылки:</h4>
     <ul>
         <li>
-            <a href="{% url 'products:index' %}">Главная страница</a>
+            <a href="{% url "index" %}">Главная страница</a>
         </li>
         <li>
-            <a href="{% url 'products:catalog' %}">Каталог товаров</a>
+            <a href="{% url "products:catalog" %}">Каталог товаров</a>
         </li>
         <li>
-            <a href="{% url 'shop:sale' %}">Скидки</a>
+            <a href="{% url "shop:sale" %}">Скидки</a>
         </li>
         <li>
-            <a href="{% url 'orders:cart' %}">Корзина</a>
+            <a href="{% url "orders:cart" %}">Корзина</a>
         </li>
         <li>
-            <a href="{% url 'users:account' %}">Личный кабинет</a>
+            <a href="{% url "users:account" %}">Личный кабинет</a>
         </li>
 
     </ul>

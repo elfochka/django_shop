@@ -7,10 +7,9 @@ from products.views import (
     CompareView,
 )
 
-app_name = 'products'
+app_name = "products"
 urlpatterns = [
-    path('', IndexView.as_view(), name='index'),
-    path('catalog/', CatalogView.as_view(), name='catalog'),
-    path('product/<int:pk>/', ProductDetailsView.as_view(), name='product'),
-    path('compare/', CompareView.as_view(), name='compare'),
+    path('catalog/', CatalogView.as_view(), name="catalog"),
+    path('product/<int:pk>/', ProductDetailsView.as_view(), name="product"),
+    path('compare/', CompareView.as_view(), name="compare"),
 ]
