@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <!--[if IE 7]>
 <html class="ie7" lang="ru">
@@ -25,21 +26,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <link href="{% static 'favicon.ico' %}" rel="shortcut icon">
-    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Regular.woff'%}" as="font">
-    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Italic.woff'%}" as="font">
-    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold.woff'%}" as="font">
-    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold_Italic.woff'%}" as="font">
-    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light.woff'%}" as="font">
-    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light_Italic.woff'%}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Regular.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold_Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light_Italic.woff' %}" as="font">
     <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/basic.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/extra.css' %}">
     <script src="{% static 'assets/plg/CountDown/countdown.js' %}"></script>
     <!--[if lt IE 9]>
-  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
 
-<body>
+<body class="Site">
 {% block header %}
     <header class="Header">
         <div class="ControlPanel">
@@ -278,16 +279,19 @@
                         <div class="Slider-content">
                             <div class="row">
                                 <div class="row-block">
-                                    <strong class="Slider-title">Mavic Pro<span class="text_primary"> 5</span> mini Drone
+                                    <strong class="Slider-title">Mavic Pro<span class="text_primary"> 5</span> mini
+                                        Drone
                                     </strong>
-                                    <div class="Slider-text">Get the best phoneyou ever seen with modern Windows OS plus 70%
+                                    <div class="Slider-text">Get the best phoneyou ever seen with modern Windows OS plus
+                                        70%
                                         Off this summer.
                                     </div>
                                     <div class="Slider-footer"><a class="btn btn_primary" href="#">Get Started</a>
                                     </div>
                                 </div>
                                 <div class="row-block">
-                                    <div class="Slider-img"><img src="assets/img/content/home/slider.png" alt="slider.png"/>
+                                    <div class="Slider-img"><img src="assets/img/content/home/slider.png"
+                                                                 alt="slider.png"/>
                                     </div>
                                 </div>
                             </div>
@@ -297,16 +301,19 @@
                         <div class="Slider-content">
                             <div class="row">
                                 <div class="row-block">
-                                    <strong class="Slider-title">Mavic Pro<span class="text_primary"> 5</span> mini Drone
+                                    <strong class="Slider-title">Mavic Pro<span class="text_primary"> 5</span> mini
+                                        Drone
                                     </strong>
-                                    <div class="Slider-text">Get the best phoneyou ever seen with modern Windows OS plus 70%
+                                    <div class="Slider-text">Get the best phoneyou ever seen with modern Windows OS plus
+                                        70%
                                         Off this summer.
                                     </div>
                                     <div class="Slider-footer"><a class="btn btn_primary" href="#">Get Started</a>
                                     </div>
                                 </div>
                                 <div class="row-block">
-                                    <div class="Slider-img"><img src="assets/img/content/home/slider.png" alt="slider.png"/>
+                                    <div class="Slider-img"><img src="assets/img/content/home/slider.png"
+                                                                 alt="slider.png"/>
                                     </div>
                                 </div>
                             </div>
@@ -328,64 +335,63 @@
 
 {% block footer %}
     <footer class="Footer">
-    <div class="wrap">
-        <div class="row Footer-main">
-            <div class="row-block"><a class="logo Footer-logo" href="index.html"><img class="logo-image"
-                                                                                      src="assets/img/logo_footer.png"
-                                                                                      alt="logo_footer.png"/></a>
-            </div>
-            <div class="row-block">
-                <strong class="Footer-title">Навигация
-                </strong>
-                <ul class="menu menu_vt Footer-menu">
-                    <li class="menu-item"><a class="menu-link" href="index.html">Главная</a>
-                    </li>
-                    <li class="menu-item"><a class="menu-link" href="catalog.html">Каталог</a>
-                    </li>
-                    <li class="menu-item"><a class="menu-link" href="comparison.html">Сравнение</a>
-                    </li>
-                    <li class="menu-item"><a class="menu-link" href="account.html">Профиль</a>
-                    </li>
+        <div class="wrap">
+            <div class="row Footer-main">
+                <div class="row-block"><a class="logo Footer-logo" href="index.html"><img class="logo-image"
+                                                                                          src="assets/img/logo_footer.png"
+                                                                                          alt="logo_footer.png"/></a>
+                </div>
+                <div class="row-block">
+                    <strong class="Footer-title">Навигация
+                    </strong>
+                    <ul class="menu menu_vt Footer-menu">
+                        <li class="menu-item"><a class="menu-link" href="index.html">Главная</a>
+                        </li>
+                        <li class="menu-item"><a class="menu-link" href="catalog.html">Каталог</a>
+                        </li>
+                        <li class="menu-item"><a class="menu-link" href="comparison.html">Сравнение</a>
+                        </li>
+                        <li class="menu-item"><a class="menu-link" href="account.html">Профиль</a>
+                        </li>
 
-                </ul>
-            </div>
-            <div class="row-block">
-                <strong class="Footer-title">Контакты
-                </strong>
-                <p>Phone: 8.800.200.600<br>Email: xxx@meg.com<br>
-                </p>
-                <ul class="menu menu_img menu_smallImg Footer-menuSoc">
-                    <li class="menu-item"><a class="menu-link" href="#"><img src="assets/img/icons/socialFooter/fb.svg"
-                                                                             alt="fb.svg"/></a>
-                    </li>
-                    <li class="menu-item"><a class="menu-link" href="#"><img src="assets/img/icons/socialFooter/tw.svg"
-                                                                             alt="tw.svg"/></a>
-                    </li>
-                    <li class="menu-item"><a class="menu-link" href="#"><img src="assets/img/icons/socialFooter/in.svg"
-                                                                             alt="in.svg"/></a>
-                    </li>
-                    <li class="menu-item"><a class="menu-link" href="#"><img src="assets/img/icons/socialFooter/pt.svg"
-                                                                             alt="pt.svg"/></a>
-                    </li>
-                    <li class="menu-item"><a class="menu-link" href="#"><img
-                            src="assets/img/icons/socialFooter/mail.svg" alt="mail.svg"/></a>
-                    </li>
-                </ul>
+                    </ul>
+                </div>
+                <div class="row-block">
+                    <strong class="Footer-title">Контакты
+                    </strong>
+                    <p>Phone: 8.800.200.600<br>Email: xxx@meg.com<br>
+                    </p>
+                    <ul class="menu menu_img menu_smallImg Footer-menuSoc">
+                        <li class="menu-item"><a class="menu-link" href="#"><img
+                                src="assets/img/icons/socialFooter/fb.svg"
+                                alt="fb.svg"/></a>
+                        </li>
+                        <li class="menu-item"><a class="menu-link" href="#"><img
+                                src="assets/img/icons/socialFooter/tw.svg"
+                                alt="tw.svg"/></a>
+                        </li>
+                        <li class="menu-item"><a class="menu-link" href="#"><img
+                                src="assets/img/icons/socialFooter/in.svg"
+                                alt="in.svg"/></a>
+                        </li>
+                        <li class="menu-item"><a class="menu-link" href="#"><img
+                                src="assets/img/icons/socialFooter/pt.svg"
+                                alt="pt.svg"/></a>
+                        </li>
+                        <li class="menu-item"><a class="menu-link" href="#"><img
+                                src="assets/img/icons/socialFooter/mail.svg" alt="mail.svg"/></a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-</footer>
-<!--+Middle-->
-<!--    +div.-top-->
-<!--        +breadcrumbs('Главная','Портфолио')-->
-<!--    +Article('portfolio')-->
-<!---->
-<script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
-<script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
-<script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
-<script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
-<script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
-<script src="{% static 'assets/js/scripts.js' %}"></script>
+    </footer>
+    <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+    <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
+    <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
+    <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
+    <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
+    <script src="{% static 'assets/js/scripts.js' %}"></script>
 {% endblock %}
 
 </body>
