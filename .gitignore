@@ -1,3 +1,5 @@
 __pycache__/
 .idea
 db.sqlite3
+uploads/*
+!uploads/.gitkeep
