@@ -15,3 +15,7 @@ class ProductDetailsView(TemplateView):
 
 class CompareView(TemplateView):
     template_name = "products/compare.html"
+
+
+class SaleView(TemplateView):
+    template_name = "products/sale.html"
