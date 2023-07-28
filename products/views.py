@@ -1,9 +1,10 @@
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
+from django.views.generic.base import ContextMixin
 
-from .models import Category
+from .models import Category, Product
 
 
-class BaseView(TemplateView):
+class BaseMixin(ContextMixin):
     """
     Put data necessary for base.html template into context.
     """
@@ -16,21 +17,28 @@ class BaseView(TemplateView):
         return context
 
 
-class IndexView(BaseView):
+class IndexView(BaseMixin, TemplateView):
     template_name = "index.html"
 
 
-class CatalogView(BaseView):
+class CatalogView(BaseMixin, ListView):
+    model = Product
     template_name = "products/catalog.html"
+    queryset = (
+        Product.objects.filter(is_deleted=False)
+        .select_related("category")
+        .prefetch_related("tags", "images")
+    )
+    context_object_name = "products"
 
 
-class ProductDetailsView(BaseView):
+class ProductDetailsView(BaseMixin, TemplateView):
     template_name = "products/product.html"
 
 
-class CompareView(BaseView):
+class CompareView(BaseMixin, TemplateView):
     template_name = "products/compare.html"
 
 
-class SaleView(BaseView):
+class SaleView(BaseMixin, TemplateView):
     template_name = "products/sale.html"

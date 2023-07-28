@@ -64,118 +64,39 @@
                         </div>
                     </div>
                     <div class="Cards">
-                        <div class="Card"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
-                            <div class="Card-content">
-                                <strong class="Card-title"><a href="product.html">Corsair Carbide Series Arctic White Steel</a>
-                                </strong>
-                                <div class="Card-description">
-                                    <div class="Card-cost"><span class="Card-price">$85.00</span>
-                                    </div>
-                                    <div class="Card-category">Игры / xbox
-                                    </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/exchange.svg" alt="exchange.svg" /></a>
-                                    </div>
-                                </div>
+                      {% for product in products %}
+                        <div class="Card">
+                          <a class="Card-picture" href="#">
+                            {% if product.images.count %}
+                              <img src="{{ product.images.all.first.image_url }}" alt="{{ product.title }}" />
+                            {% else %}
+                              <img src="{% static 'assets/img/product-placeholder.png' %}" alt="{{ product.title }}" />
+                            {% endif %}
+                          </a>
+                          <div class="Card-content">
+                            <strong class="Card-title">
+                              <a href="product.html">
+                                {{ product.title }}
+                              </a>
+                            </strong>
+                            <div class="Card-description">
+                              <div class="Card-cost">
+                                <span class="Card-price">
+                                  $85.00
+                                </span>
+                              </div>
+                              <div class="Card-category">
+                                {{ product.category }}
+                              </div>
+                              <div class="Card-hover">
+                                <a class="Card-btn" href="#">
+                                  <img src="assets/img/icons/exchange.svg" alt="exchange.svg" />
+                                </a>
+                              </div>
                             </div>
+                          </div>
                         </div>
-                        <div class="Card"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
-                            <div class="Card-content">
-                                <strong class="Card-title"><a href="product.html">Barand New Phone Smart Business</a>
-                                </strong>
-                                <div class="Card-description">
-                                    <div class="Card-cost"><span class="Card-price">$85.00</span>
-                                    </div>
-                                    <div class="Card-category">Игры / xbox
-                                    </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/exchange.svg" alt="exchange.svg" /></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="Card"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="exchange.svg" /></a>
-                            <div class="Card-content">
-                                <strong class="Card-title"><a href="product.html">Mavic PRO Mini Drones Hobby RC Quadcopter</a>
-                                </strong>
-                                <div class="Card-description">
-                                    <div class="Card-cost"><span class="Card-price">$185.00</span>
-                                    </div>
-                                    <div class="Card-category">Разработка / xbox
-                                    </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/exchange.svg" alt="exchange.svg" /></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="Card"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
-                            <div class="Card-content">
-                                <strong class="Card-title"><a href="product.html">Corsair Carbide Series Arctic White Steel</a>
-                                </strong>
-                                <div class="Card-description">
-                                    <div class="Card-cost"><span class="Card-price">$210.00</span>
-                                    </div>
-                                    <div class="Card-category">Медиа / xbox
-                                    </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/exchange.svg" alt="exchange.svg" /></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="Card hide_md"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
-                            <div class="Card-content">
-                                <strong class="Card-title"><a href="product.html">Corsair Carbide Series Arctic White Steel</a>
-                                </strong>
-                                <div class="Card-description">
-                                    <div class="Card-cost"><span class="Card-price">$85.00</span>
-                                    </div>
-                                    <div class="Card-category">Игры / xbox
-                                    </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/exchange.svg" alt="exchange.svg" /></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="Card hide_md"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
-                            <div class="Card-content">
-                                <strong class="Card-title"><a href="product.html">Barand New Phone Smart Business</a>
-                                </strong>
-                                <div class="Card-description">
-                                    <div class="Card-cost"><span class="Card-price">$85.00</span>
-                                    </div>
-                                    <div class="Card-category">Игры / xbox
-                                    </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/exchange.svg" alt="exchange.svg" /></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="Card hide_md hide_1450"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
-                            <div class="Card-content">
-                                <strong class="Card-title"><a href="product.html">Mavic PRO Mini Drones Hobby RC Quadcopter</a>
-                                </strong>
-                                <div class="Card-description">
-                                    <div class="Card-cost"><span class="Card-price">$185.00</span>
-                                    </div>
-                                    <div class="Card-category">Дизайн / xbox
-                                    </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/exchange.svg" alt="exchange.svg" /></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="Card hide_md hide_1450"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
-                            <div class="Card-content">
-                                <strong class="Card-title"><a href="product.html">Corsair Carbide Series Arctic White Steel</a>
-                                </strong>
-                                <div class="Card-description">
-                                    <div class="Card-cost"><span class="Card-price">$210.00</span>
-                                    </div>
-                                    <div class="Card-category">Игры / xbox
-                                    </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/exchange.svg" alt="exchange.svg" /></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                      {% endfor %}
                     </div>
                     <div class="Pagination">
                         <div class="Pagination-ins"><a class="Pagination-element Pagination-element_prev" href="#"><img src="assets/img/icons/prevPagination.svg" alt="prevPagination.svg" /></a><a class="Pagination-element Pagination-element_current" href="#"><span class="Pagination-text">1</span></a><a class="Pagination-element" href="#"><span class="Pagination-text">2</span></a><a class="Pagination-element" href="#"><span class="Pagination-text">3</span></a><a class="Pagination-element Pagination-element_prev" href="#"><img src="assets/img/icons/nextPagination.svg" alt="nextPagination.svg" /></a>

@@ -1,6 +1,5 @@
 from django.db import models
-
-# from django.urls import reverse
+from django.templatetags.static import static
 
 
 class Category(models.Model):
@@ -131,9 +130,6 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
-    # def get_absolute_url(self):
-    #     return reverse("shop:product_detail", args=[self.id, self.slug])
-
 
 class ProductImage(models.Model):
     """
@@ -165,3 +161,19 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def image_url(self):
+        """
+        Return image URL if image file exists.
+        Otherwise, return URL of the static product image placeholder.
+        """
+        try:
+            url = (
+                self.image.url
+                if self.image.storage.exists(self.image.file.name)
+                else ""
+            )
+        except FileNotFoundError:
+            url = static("/assets/img/product-placeholder.png")
+        return url
