@@ -44,10 +44,8 @@ INSTALLED_APPS = [
 
     # Our Applications
     "products",
-    "shop",
     "orders",
     "users",
-    "core",
 ]
 
 MIDDLEWARE = [

@@ -27,3 +27,7 @@ class ProfileView(TemplateView):
 
 class UserProfileUpdateForm(TemplateView):
     template_name = "users/profile_update.html"
+
+
+class ActionListView(TemplateView):
+    template_name = "users/viewhistory.html"

@@ -8,6 +8,7 @@ from users.views import (
     PasswordView,
     ProfileView,
     UserProfileUpdateForm,
+    ActionListView,
 )
 
 app_name = "users"
@@ -19,5 +20,5 @@ urlpatterns = [
     path("password/", PasswordView.as_view(), name="password"),
     path("profile/", ProfileView.as_view(), name="profile"),
     path("profile/update/", UserProfileUpdateForm.as_view(), name="profile_update"),
-
+    path("viewhistory/", ActionListView.as_view(), name="viewhistory"),
 ]

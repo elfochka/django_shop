@@ -5,6 +5,7 @@ from products.views import (
     CatalogView,
     ProductDetailsView,
     CompareView,
+    SaleView,
 )
 
 app_name = "products"
@@ -12,4 +13,5 @@ urlpatterns = [
     path('catalog/', CatalogView.as_view(), name="catalog"),
     path('product/<int:pk>/', ProductDetailsView.as_view(), name="product"),
     path('compare/', CompareView.as_view(), name="compare"),
+    path('sale/', SaleView.as_view(), name="sale"),
 ]
