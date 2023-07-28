@@ -143,136 +143,33 @@
                             </div>
                         </div>
                         <div class="CategoriesButton-content">
-                            <div class="CategoriesButton-link"><a href="#">
-                                <div class="CategoriesButton-icon"><img
-                                        src="{% static 'assets/img/icons/departments/1.svg' %}"
-                                        alt="1.svg"/>
+                          {% for category in categories %}
+                            <div class="CategoriesButton-link">
+                              <a href="{% url 'products:catalog' %}">
+                                <div class="CategoriesButton-icon">
+                                  <img src="{{ category.image.url }}" alt="{{ category.title }}"/>
                                 </div>
-                                <span class="CategoriesButton-text">Телевизоры</span>
-                            </a>
+                                <span class="CategoriesButton-text">
+                                  {{ category.title }}
+                                </span>
+                              </a>
+                              {% if category.subcategories.all.count %}
+                                <a class="CategoriesButton-arrow" href="#"></a>
+                                <div class="CategoriesButton-submenu">
+                                  {% for subcategory in category.subcategories.all %}
+                                    <a class="CategoriesButton-link" href="{% url 'products:catalog' %}">
+                                      <div class="CategoriesButton-icon">
+                                        <img src="{{ subcategory.image.url }}" alt="{{ subcategory.title }}"/>
+                                      </div>
+                                      <span class="CategoriesButton-text">
+                                        {{ subcategory.title }}
+                                      </span>
+                                    </a>
+                                  {% endfor %}
+                                </div>
+                              {% endif %}
                             </div>
-                            <div class="CategoriesButton-link"><a href="#">
-                                <div class="CategoriesButton-icon"><img
-                                        src="{% static 'assets/img/icons/departments/2.svg' %}"
-                                        alt="2.svg"/>
-                                </div>
-                                <span class="CategoriesButton-text">Наушники</span>
-                            </a>
-                            </div>
-                            <div class="CategoriesButton-link"><a href="#">
-                                <div class="CategoriesButton-icon"><img
-                                        src="{% static 'assets/img/icons/departments/3.svg' %}"
-                                        alt="3.svg"/>
-                                </div>
-                                <span class="CategoriesButton-text">Стиральные машины</span>
-                            </a><a class="CategoriesButton-arrow" href="#"></a>
-                                <div class="CategoriesButton-submenu"><a class="CategoriesButton-link" href="#">
-                                    <div class="CategoriesButton-icon"><img
-                                            src="{% static 'assets/img/icons/departments/1.svg' %}"
-                                            alt="1.svg"/>
-                                    </div>
-                                    <span class="CategoriesButton-text">Аксессуары</span>
-                                </a><a class="CategoriesButton-link" href="#">
-                                    <div class="CategoriesButton-icon"><img
-                                            src="{% static 'assets/img/icons/departments/2.svg' %}"
-                                            alt="2.svg"/>
-                                    </div>
-                                    <span class="CategoriesButton-text">Чехлы</span>
-                                </a>
-                                </div>
-                            </div>
-                            <div class="CategoriesButton-link"><a href="#">
-                                <div class="CategoriesButton-icon"><img
-                                        src="{% static 'assets/img/icons/departments/4.svg' %}"
-                                        alt="4.svg"/>
-                                </div>
-                                <span class="CategoriesButton-text">Скидки!</span>
-                            </a>
-                            </div>
-                            <div class="CategoriesButton-link"><a href="#">
-                                <div class="CategoriesButton-icon"><img
-                                        src="{% static 'assets/img/icons/departments/5.svg' %}"
-                                        alt="5.svg"/>
-                                </div>
-                                <span class="CategoriesButton-text">Электроника</span>
-                            </a>
-                            </div>
-                            <div class="CategoriesButton-link"><a href="#">
-                                <div class="CategoriesButton-icon"><img
-                                        src="{% static 'assets/img/icons/departments/6.svg' %}"
-                                        alt="6.svg"/>
-                                </div>
-                                <span class="CategoriesButton-text">Фотоаппараты</span>
-                            </a>
-                            </div>
-                            <div class="CategoriesButton-link"><a href="#">
-                                <div class="CategoriesButton-icon"><img
-                                        src="{% static 'assets/img/icons/departments/7.svg' %}"
-                                        alt="7.svg"/>
-                                </div>
-                                <span class="CategoriesButton-text">Фурнитура</span>
-                            </a><a class="CategoriesButton-arrow" href="#"></a>
-                                <div class="CategoriesButton-submenu"><a class="CategoriesButton-link" href="#">
-                                    <div class="CategoriesButton-icon"><img
-                                            src="{% static 'assets/img/icons/departments/1.svg' %}"
-                                            alt="1.svg"/>
-                                    </div>
-                                    <span class="CategoriesButton-text">Мобильные телефоны</span>
-                                </a><a class="CategoriesButton-link" href="#">
-                                    <div class="CategoriesButton-icon"><img
-                                            src="{% static 'assets/img/icons/departments/2.svg' %}"
-                                            alt="2.svg"/>
-                                    </div>
-                                    <span class="CategoriesButton-text">Сумки</span>
-                                </a>
-                                </div>
-                            </div>
-                            <div class="CategoriesButton-link"><a href="#">
-                                <div class="CategoriesButton-icon"><img
-                                        src="{% static 'assets/img/icons/departments/8.svg' %}"
-                                        alt="8.svg"/>
-                                </div>
-                                <span class="CategoriesButton-text">Мобильные телефоны</span>
-                            </a>
-                            </div>
-                            <div class="CategoriesButton-link"><a href="#">
-                                <div class="CategoriesButton-icon"><img
-                                        src="{% static 'assets/img/icons/departments/9.svg' %}"
-                                        alt="9.svg"/>
-                                </div>
-                                <span class="CategoriesButton-text">Микроволновые печи</span>
-                            </a>
-                            </div>
-                            <div class="CategoriesButton-link"><a href="#">
-                                <div class="CategoriesButton-icon"><img
-                                        src="{% static 'assets/img/icons/departments/10.svg' %}"
-                                        alt="10.svg"/>
-                                </div>
-                                <span class="CategoriesButton-text">Кухонная техника</span>
-                            </a>
-                            </div>
-                            <div class="CategoriesButton-link"><a href="#">
-                                <div class="CategoriesButton-icon"><img
-                                        src="{% static 'assets/img/icons/departments/11.svg' %}"
-                                        alt="11.svg"/>
-                                </div>
-                                <span class="CategoriesButton-text">Торшеры</span>
-                            </a><a class="CategoriesButton-arrow" href="#"></a>
-                                <div class="CategoriesButton-submenu"><a class="CategoriesButton-link" href="#">
-                                    <div class="CategoriesButton-icon"><img
-                                            src="{% static 'assets/img/icons/departments/1.svg' %}"
-                                            alt="1.svg"/>
-                                    </div>
-                                    <span class="CategoriesButton-text">Аксессуары</span>
-                                </a><a class="CategoriesButton-link" href="#">
-                                    <div class="CategoriesButton-icon"><img
-                                            src="{% static 'assets/img/icons/departments/2.svg' %}"
-                                            alt="2.svg"/>
-                                    </div>
-                                    <span class="CategoriesButton-text">Сумки</span>
-                                </a>
-                                </div>
-                            </div>
+                          {% endfor %}
                         </div>
                     </div>
                 </div>
