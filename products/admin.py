@@ -16,6 +16,10 @@ class CategoryAdmin(admin.ModelAdmin):
         "is_chosen",
         "is_deleted",
     ]
+    ordering = [
+        "id",
+        "parent",
+    ]
 
 
 @admin.register(Tag)

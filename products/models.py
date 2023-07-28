@@ -25,11 +25,11 @@ class Category(models.Model):
         upload_to="categories/icons/",
     )
     is_chosen = models.BooleanField(
-        verbose_name="избранный",
+        verbose_name="избранная",
         default=False,
     )
     is_deleted = models.BooleanField(
-        verbose_name="удалён",
+        verbose_name="удалена",
         default=False,
     )
 
@@ -42,7 +42,7 @@ class Category(models.Model):
         verbose_name_plural = "категории"
 
     def __str__(self):
-        return self.title
+        return self.title if not self.parent else f"{self.parent.title} / {self.title}"
 
 
 class Tag(models.Model):
@@ -94,6 +94,7 @@ class Product(models.Model):
     )
     features = models.JSONField(
         verbose_name="характеристики",
+        null=True,
         blank=True,
     )
     is_chosen = models.BooleanField(
