@@ -3,3 +3,5 @@ __pycache__/
 .idea
 db.sqlite3
 docker-compose.yml
+uploads/*
+.env
