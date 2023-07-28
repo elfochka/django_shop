@@ -1,21 +1,36 @@
 from django.views.generic import TemplateView
 
+from .models import Category
 
-class IndexView(TemplateView):
+
+class BaseView(TemplateView):
+    """
+    Put data necessary for base.html template into context.
+    """
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        context["categories"] = Category.objects.filter(
+            parent=None, is_deleted=False
+        ).order_by("pk")
+        return self.render_to_response(context)
+
+
+class IndexView(BaseView):
     template_name = "index.html"
 
 
-class CatalogView(TemplateView):
+class CatalogView(BaseView):
     template_name = "products/catalog.html"
 
 
-class ProductDetailsView(TemplateView):
+class ProductDetailsView(BaseView):
     template_name = "products/product.html"
 
 
-class CompareView(TemplateView):
+class CompareView(BaseView):
     template_name = "products/compare.html"
 
 
-class SaleView(TemplateView):
+class SaleView(BaseView):
     template_name = "products/sale.html"
