@@ -1,15 +1,9 @@
 from django.urls import path
 
-from orders.views import (
-    CartView,
-    CheckoutView,
-    PaymentView,
-    ProgressPaymentView,
-    OrderListView,
-    OrderDetailsView,
-)
+from orders.views import (CartView, CheckoutView, OrderDetailsView,
+                          OrderListView, PaymentView, ProgressPaymentView)
 
-app_name = 'orders'
+app_name = "orders"
 urlpatterns = [
     path("cart/", CartView.as_view(), name="cart"),
     path("checkout/", CheckoutView.as_view(), name="checkout"),

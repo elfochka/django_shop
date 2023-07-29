@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 
 
 class AccountDetailView(TemplateView):
-    template_name = 'users/account.html'
+    template_name = "users/account.html"
 
 
 class RegisterView(TemplateView):
