@@ -55,17 +55,23 @@
 
                 </div>
                 <div class="clear"></div>
-                <form action="#">
-                    <div>
-                        <input class="user-input" type="text" name="name" id="name" placeholder="Имя"/>
-                    </div>
-                    <div>
-                        <input class="user-input" type="email" name="login" id="name" placeholder="E-mail"/>
-                    </div>
-                    <div>
+                <form method="POST">
+<!--                    {% csrf_token %}-->
+<!--                    <div>-->
+<!--                        <input class="user-input" type="text" name="name" id="name" placeholder="Имя"/>-->
+<!--                    </div>-->
+<!--                    <div>-->
+<!--                        <input class="user-input" type="email" name="login" id="name" placeholder="E-mail"/>-->
+<!--                    </div>-->
+                    {% csrf_token %}
+                    {{ form.first_name }}
+                    {{ form.email }}
+                    {{ form.password1 }}
+                    {{ form.errors}}
+<!--                    <div>-->
 
-                        <input type="password" name="pass" id="name" placeholder="Пароль"/>
-                    </div>
+<!--                        <input type="password" name="pass" id="name" placeholder="Пароль"/>-->
+<!--                    </div>-->
                     <input type="submit" value="Зарегистрироваться"/>
 
 
