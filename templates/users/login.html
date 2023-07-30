@@ -64,15 +64,8 @@
                 <div class="clear"></div>
                 <form method="POST">
                     {% csrf_token %}
-                    {{ form.username }}
-                    {{ form.password }}
-<!--                    <div>-->
-<!--                        <input class="user-input" type="text" name="name" id="name" placeholder="E-mail" />-->
-<!--                    </div>-->
-<!--                    <div>-->
-
-<!--                        <input type="password" name="pass" id="name" placeholder="*********" />-->
-<!--                    </div>-->
+                    {{ form }}
+                    {{ form.errors }}
                     <div>
                         <input type="submit" value="Войти" />
                     </div>

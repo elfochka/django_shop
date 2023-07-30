@@ -6,6 +6,7 @@ from users.views import (
     RegisterView,
     # register,
     # LoginView,
+    UserLoginView,
     EmailView,
     PasswordView,
     ProfileView,
@@ -18,7 +19,7 @@ app_name = "users"
 urlpatterns = [
     path("account/", AccountDetailView.as_view(), name="account"),
     path('registration/', RegisterView.as_view(), name="registration"),
-    path("login/", LoginView.as_view(template_name='../templates/users/login.html'), name="login"),
+    path("login/", UserLoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("e-mail/", EmailView.as_view(), name="e-mail"),
     path("password/", PasswordView.as_view(), name="password"),
