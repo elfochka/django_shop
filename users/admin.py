@@ -3,8 +3,8 @@ from users.models import CustomUser
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 
 
+@admin.register(CustomUser)
 class CustomUserAdmin(DjangoUserAdmin):
-    model = CustomUser
     list_display = ('first_name', 'middle_name', 'last_name', 'phone', 'email')
     fieldsets = (
         ('User data', {
@@ -17,4 +17,3 @@ class CustomUserAdmin(DjangoUserAdmin):
     ordering = ('email',)
 
 
-admin.site.register(CustomUser, CustomUserAdmin)

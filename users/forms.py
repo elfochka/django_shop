@@ -4,12 +4,12 @@ from users.models import CustomUser
 
 
 class UserLoginForm(AuthenticationForm):
-    username = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'E-mail'}))
+    email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'E-mail'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Введите пароль'}))
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'password')
+        fields = ('email', 'password')
 
 
 class UserRegistrationForm(UserCreationForm):
