@@ -3,7 +3,7 @@ from django.contrib.admin import TabularInline
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
-from .models import Category, Product, ProductImage, Tag
+from .models import Category, Product, ProductImage, Tag, Offer
 
 
 @admin.register(Category)
@@ -138,6 +138,72 @@ class ProductAdmin(admin.ModelAdmin):
                     "is_chosen",
                     "is_limited",
                     "is_deleted",
+                ]
+            },
+        ),
+        (
+            "Время создания и изменения",
+            {
+                "fields": [
+                    "created",
+                    "updated",
+                ]
+            },
+        ),
+    ]
+
+
+@admin.register(Offer)
+class OfferAdmin(admin.ModelAdmin):
+    """
+    Configures admin panel views for Offer.
+    """
+
+    model = Offer
+    list_display = [
+        "description",
+        "priority",
+        "discount_type",
+        "discount_value",
+        "date_start",
+        "date_end",
+        "is_active",
+    ]
+    ordering = [
+        "-created",
+    ]
+    readonly_fields = [
+        "created",
+        "updated",
+    ]
+    fieldsets = [
+        (
+            "Основная информация о скидке",
+            {
+                "fields": [
+                    "description",
+                    "products",
+                    "categories",
+                ]
+            },
+        ),
+        (
+            "Тип и размеры скидки",
+            {
+                "fields": [
+                    "discount_type",
+                    "discount_value",
+                    "priority",
+                ]
+            },
+        ),
+        (
+            "Период действия скидки",
+            {
+                "fields": [
+                    "date_start",
+                    "date_end",
+                    "is_active",
                 ]
             },
         ),
