@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 
 
 class AccountDetailView(TemplateView):
-    template_name = 'users/account.html'
+    template_name = "users/account.html"
 
 
 class UserLoginView(LoginView):
