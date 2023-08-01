@@ -1,14 +1,17 @@
+from django.contrib.auth.views import LogoutView
 from django.urls import path
 
 from users.views import (AccountDetailView, ActionListView, EmailView,
-                         LoginView, PasswordView, ProfileView, RegisterView,
-                         UserProfileUpdateForm)
+                         PasswordView, ProfileView, UserLoginView,
+                         UserProfileUpdateForm, UserRegistrationView)
 
 app_name = "users"
+
 urlpatterns = [
     path("account/", AccountDetailView.as_view(), name="account"),
-    path("registration/", RegisterView.as_view(), name="registration"),
-    path("login/", LoginView.as_view(), name="login"),
+    path("registration/", UserRegistrationView.as_view(), name="registration"),
+    path("login/", UserLoginView.as_view(), name="login"),
+    path("logout/", LogoutView.as_view(), name="logout"),
     path("e-mail/", EmailView.as_view(), name="e-mail"),
     path("password/", PasswordView.as_view(), name="password"),
     path("profile/", ProfileView.as_view(), name="profile"),
