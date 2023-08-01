@@ -3,7 +3,7 @@ from django.contrib.admin import TabularInline
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
-from .models import Category, Product, ProductImage, Tag, Offer
+from .models import Category, Offer, Product, ProductImage, Tag
 
 
 @admin.register(Category)

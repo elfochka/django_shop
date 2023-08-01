@@ -1,8 +1,9 @@
 from datetime import datetime
+
 from django.views.generic import ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
-from .models import Category, Product, Offer
+from .models import Category, Offer, Product
 
 
 class BaseMixin(ContextMixin):
