@@ -1,5 +1,5 @@
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractUser
 
 
 class CustomUserManager(BaseUserManager):
@@ -7,7 +7,7 @@ class CustomUserManager(BaseUserManager):
 
     def _create_user(self, email, password, **extra_fields):
         if not email:
-            raise ValueError('The given email must be set')
+            raise ValueError("The given email must be set")
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -15,24 +15,24 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_user(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
 
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
 
         return self._create_user(email, password, **extra_fields)
 
 
 def get_default_image():
-    return '../static/assets/img/DEF_IMG.png'
+    return "../static/assets/img/DEF_IMG.png"
 
 
 class CustomUser(AbstractUser):
@@ -40,7 +40,7 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=20, null=False, blank=False)
     middle_name = models.CharField(max_length=20, null=True, blank=True)
     last_name = models.CharField(max_length=20, null=True, blank=True)
-    image = models.ImageField(upload_to='avatars/', default=get_default_image)
+    image = models.ImageField(upload_to="avatars/", default=get_default_image)
     phone = models.CharField(max_length=11, null=True, blank=True)
     email = models.EmailField(max_length=200, unique=True)
 
