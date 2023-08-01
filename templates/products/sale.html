@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <ul>
+    {% for offer in offers %}
+      <li>
+        {{ offer.description }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock content %}
