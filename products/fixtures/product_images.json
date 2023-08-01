@@ -1,0 +1,11 @@
+[
+{
+  "model": "products.productimage",
+  "pk": 1,
+  "fields": {
+    "product": 3,
+    "title": "32\" Телевизор Xiaomi E32S Pro 2019 LED, HDR CN, черный",
+    "image": "images/products/orig.jpeg"
+  }
+}
+]

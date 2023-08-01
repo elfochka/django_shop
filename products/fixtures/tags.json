@@ -1,0 +1,107 @@
+[
+{
+  "model": "products.tag",
+  "pk": 1,
+  "fields": {
+    "title": "Video"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 2,
+  "fields": {
+    "title": "Gaming"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 3,
+  "fields": {
+    "title": "Xbox"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 4,
+  "fields": {
+    "title": "Новинка"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 5,
+  "fields": {
+    "title": "Хит сезона"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 6,
+  "fields": {
+    "title": "Музыка"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 7,
+  "fields": {
+    "title": "Для дома"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 8,
+  "fields": {
+    "title": "Творчество"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 9,
+  "fields": {
+    "title": "Pro"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 10,
+  "fields": {
+    "title": "Детям"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 11,
+  "fields": {
+    "title": "Сделай сам"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 12,
+  "fields": {
+    "title": "Классика"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 13,
+  "fields": {
+    "title": "Подарок"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 14,
+  "fields": {
+    "title": "Отпуск"
+  }
+},
+{
+  "model": "products.tag",
+  "pk": 15,
+  "fields": {
+    "title": "Стильно"
+  }
+}
+]
