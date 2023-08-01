@@ -1,16 +1,23 @@
 from django.views.generic import TemplateView
+from users.forms import UserRegistrationForm, UserLoginForm
+from django.views.generic.edit import CreateView
+from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
 
 
 class AccountDetailView(TemplateView):
     template_name = "users/account.html"
 
 
-class RegisterView(TemplateView):
+class UserLoginView(LoginView):
+    template_name = 'users/login.html'
+    form_class = UserLoginForm
+
+
+class UserRegistrationView(CreateView):
+    form_class = UserRegistrationForm
+    success_url = reverse_lazy('users:account')
     template_name = "users/registration.html"
-
-
-class LoginView(TemplateView):
-    template_name = "users/login.html"
 
 
 class EmailView(TemplateView):
