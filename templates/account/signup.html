@@ -1,0 +1,84 @@
+{# Used by `django-allauth` #}
+{# Link to this view: {% url 'account_signup' %} #}
+{% extends "base.html" %}
+{% load static %}
+
+{% block header %}
+  {# No header on this page. #}
+{% endblock header %}
+
+{% block content %}
+  <main class="Middle">
+    <div class="ControlPanel">
+      <div class="wrap">
+        <div class="row ControlPanel-row">
+          <div class="row-block">
+            <div class="row ControlPanel-rowSplit">
+              <div class="row-block hide_700">
+                <ul class="menu menu_img menu_smallImg ControlPanel-menu">
+                  <li class="menu-item">
+                    <a class="menu-link" href="#">
+                      <img src="/static/assets/img/icons/socialHeader/tw.svg" alt="tw.svg"/>
+                    </a>
+                  </li>
+                  <li class="menu-item">
+                    <a class="menu-link" href="#">
+                      <img src="/static/assets/img/icons/socialHeader/in.svg" alt="in.svg"/>
+                    </a>
+                  </li>
+                  <li class="menu-item"><a class="menu-link" href="#">
+                    <img src="/static/assets/img/icons/socialHeader/pt.svg" alt="pt.svg"/>
+                  </a>
+                  </li>
+                  <li class="menu-item">
+                    <a class="menu-link" href="#">
+                      <img src="/static/assets/img/icons/socialHeader/mail.svg" alt="mail.svg"/>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <nav class="row-block">
+            <div class="row ControlPanel-rowSplit">
+              <div class="row-block">
+                <a class="ControlPanel-title" href="{% url 'account_login' %}">
+                  Вход
+                </a>
+                <a class="ControlPanel-title" href="{% url 'account_signup' %}">
+                  Регистрация
+                </a>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="row Header-rowMain">
+        <div class="row-block Header-logo">
+          <a class="logo" href="{% url 'index' %}">
+            <img class="logo-image" src="/static/assets/img/logo.png" alt="logo.png"/>
+          </a>
+        </div>
+      </div>
+      <div class="wrapper">
+        <div class="header">
+          <h3 class="sign-in">
+            Регистрация
+          </h3>
+        </div>
+        <div class="clear"></div>
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <input type="submit" value="Зарегистрироваться" />
+          <a class="registr" href="{% url 'account_login' %}">
+            Вход
+          </a>
+          <div class="clear"></div>
+        </form>
+      </div>
+    </div>
+  </main>
+{% endblock %}
