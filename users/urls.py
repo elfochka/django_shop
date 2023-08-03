@@ -1,13 +1,7 @@
 from django.urls import path
 
-from users.views import (
-    AccountDetailView,
-    ActionListView,
-    EmailView,
-    PasswordView,
-    ProfileView,
-    UserProfileUpdateForm,
-)
+from users.views import (AccountDetailView, ActionListView, EmailView,
+                         PasswordView, ProfileView, UserProfileUpdateForm)
 
 app_name = "users"
 

@@ -2,8 +2,9 @@
 
 import django.contrib.auth.models
 import django.contrib.auth.validators
-from django.db import migrations, models
 import django.utils.timezone
+from django.db import migrations, models
+
 import users.models
 
 
@@ -102,7 +103,8 @@ class Migration(migrations.Migration):
                 (
                     "image",
                     models.ImageField(
-                        default=users.models.get_default_image, upload_to="avatars/"
+                        default=users.models.get_default_profile_image,
+                        upload_to="avatars/",
                     ),
                 ),
                 ("phone", models.CharField(blank=True, max_length=11, null=True)),
