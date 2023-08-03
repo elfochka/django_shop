@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     # Third party apps
     "allauth",
     "allauth.account",
-    "allauth.socialaccount",  # TODO: try removing
     # Our Applications
     "products",
     "orders",
@@ -145,9 +144,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Authentication config
 AUTH_USER_MODEL = "users.CustomUser"
-LOGIN_REDIRECT_URL = reverse_lazy("users:account")
-LOGIN_URL = reverse_lazy("users:login")  # TODO: what's this for?
-ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("account_login")
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
@@ -161,9 +157,12 @@ AUTHENTICATION_BACKENDS = (
 
 SITE_ID = 1
 
+LOGIN_REDIRECT_URL = reverse_lazy("users:account")
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("account_login")
