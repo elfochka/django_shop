@@ -1,6 +1,11 @@
 {# Used by `django-allauth` #}
+{# Link to this view: {% url 'account_login' %} #}
 {% extends "base.html" %}
 {% load static %}
+
+{% block header %}
+  {# No header on this page. #}
+{% endblock header %}
 
 {% block content %}
   <main class="Middle">
@@ -24,11 +29,16 @@
             </div>
           </div>
           <nav class="row-block">
-              <div class="row ControlPanel-rowSplit">
-                  <div class="row-block"><a class="ControlPanel-title" href="login.html">Вход</a>
-                      <a class="ControlPanel-title" href="registr.html">Регистрация</a>
-                  </div>
+            <div class="row ControlPanel-rowSplit">
+              <div class="row-block">
+                <a class="ControlPanel-title" href="{% url 'account_login' %}">
+                  Вход
+                </a>
+                <a class="ControlPanel-title" href="{% url 'account_signup' %}">
+                  Регистрация
+                </a>
               </div>
+            </div>
           </nav>
         </div>
       </div>
@@ -54,6 +64,12 @@
           <div>
             <input type="submit" value="Войти" />
           </div>
+          <a class="forgot-label" href="#">
+            Забыли пароль?
+          </a>
+          <a class="registr" href="{% url 'account_signup' %}">
+            Регистрация
+          </a>
         </form>
       </div>
     </div>

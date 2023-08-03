@@ -147,7 +147,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.CustomUser"
 LOGIN_REDIRECT_URL = reverse_lazy("users:account")
 LOGIN_URL = reverse_lazy("users:login")  # TODO: what's this for?
-ACCOUNT_LOGOUT_REDIRECT_URL = "home"
+ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("account_login")
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
