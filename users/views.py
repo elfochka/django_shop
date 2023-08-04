@@ -1,4 +1,9 @@
-from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, UpdateView
+
+from users.forms import CustomUserChangeForm
+from users.models import CustomUser
 
 
 class AccountDetailView(TemplateView):
@@ -13,12 +18,11 @@ class PasswordView(TemplateView):
     template_name = "users/password.html"
 
 
-class ProfileView(TemplateView):
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    model = CustomUser
     template_name = "users/profile.html"
-
-
-class UserProfileUpdateForm(TemplateView):
-    template_name = "users/profile_update.html"
+    form_class = CustomUserChangeForm
+    success_url = reverse_lazy('users:profile')
 
 
 class ActionListView(TemplateView):
