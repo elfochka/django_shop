@@ -1,4 +1,4 @@
-from django.views.generic import ListView, TemplateView, DetailView
+from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
 from .models import Category, Product
