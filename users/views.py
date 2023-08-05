@@ -9,6 +9,12 @@ from users.models import CustomUser
 class AccountDetailView(TemplateView):
     template_name = "users/account.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['user'] = user
+        return context
+
 
 class EmailView(TemplateView):
     template_name = "users/e-mail.html"
