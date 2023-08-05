@@ -20,9 +20,12 @@ class PasswordView(TemplateView):
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = CustomUser
-    template_name = "users/profile.html"
     form_class = CustomUserChangeForm
+    template_name = "users/profile.html"
     success_url = reverse_lazy('users:profile')
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
 
 class ActionListView(TemplateView):
