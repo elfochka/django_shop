@@ -6,7 +6,7 @@ from users.forms import CustomUserChangeForm
 from users.models import CustomUser
 
 
-class AccountDetailView(TemplateView):
+class AccountDetailView(LoginRequiredMixin, TemplateView):
     template_name = "users/account.html"
 
     def get_context_data(self, **kwargs):
