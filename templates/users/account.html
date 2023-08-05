@@ -15,7 +15,7 @@
                             <div class="NavigateProfile">
                                 <ul class="menu menu_vt">
                                     <li class="menu-item_ACTIVE menu-item">
-                                      <a class="menu-link" href="{% url 'users:profile' %}">Личный кабинет</a>
+                                      <a class="menu-link" href="{% url 'users:account' %}">Личный кабинет</a>
                                     </li>
                                     <li class="menu-item"><a class="menu-link" href="{% url 'users:profile' %}">Профиль</a>
                                     </li>
@@ -35,13 +35,11 @@
                     <div class="Account">
                         <div class="Account-group">
                             <div class="Account-column">
-                                <div class="Account-avatar"><img src="assets/img/content/home/card.jpg" alt="card.jpg" />
+                                <div class="Account-avatar"><img src="{{ user.image.url }}" alt="{{ user.get_full_name }}" />
                                 </div>
                             </div>
                             <div class="Account-column">
-                                <div class="Account-name">Иванов Иван Иванович
-                                </div><a class="Account-editLink" href="{% url 'users:profile_update' %}">Редактировать профиль</a>
-                            </div>
+                                <div class="Account-name">{{ user.username }}
                         </div>
                         <div class="Account-group">
                             <div class="Account-column Account-column_full">
