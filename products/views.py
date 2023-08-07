@@ -3,7 +3,7 @@ from datetime import datetime
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
-from products.models import Category, Offer, Product
+from products.models import Category, Offer, Product, AdBanner
 
 
 class BaseMixin(ContextMixin):
@@ -21,6 +21,11 @@ class BaseMixin(ContextMixin):
 
 class IndexView(BaseMixin, TemplateView):
     template_name = "index.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['banners'] = AdBanner.objects.filter(is_chosen=True)
+        return context_data
 
 
 class CatalogView(BaseMixin, ListView):

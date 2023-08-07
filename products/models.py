@@ -2,6 +2,10 @@ from django.db import models
 from django.templatetags.static import static
 
 
+def get_default_image():
+    return 'default_images/default.jpg'
+
+
 class Category(models.Model):
     """
     Describes product category in eshop.
@@ -254,3 +258,15 @@ class Offer(models.Model):
 
     def __str__(self):
         return self.description[:64]
+
+
+class AdBanner(models.Model):
+    """
+        The AdBanner model represents banners
+        that can be displayed on the main page of an online store
+    """
+    image = models.ImageField(upload_to='media/banners/', verbose_name='banners', default=get_default_image)
+    is_chosen = models.BooleanField(default=False, verbose_name='is chosen')
+    link = models.URLField(max_length=200, verbose_name='link')
+    title = models.TextField(null=False, blank=False, verbose_name='title')
+    content = models.TextField(null=False, blank=False, verbose_name='content')
