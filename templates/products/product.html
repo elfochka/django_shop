@@ -11,15 +11,15 @@
                             <div class="ProductCard-photo">
                                 {% with product.images.all|first as img %}
                                     {% if img %}
-                                        <img src="{{ img.image.url }}" alt="{{ img.image.name }}"></a>
+                                        <img src="{{ img.image_url }}" alt="{{ img.image.name }}">
                                     {% endif %}
                                 {% endwith %}
                             </div>
                             <div class="ProductCard-picts">
                                 {% for img in product.images.all %}
                                     <a class="ProductCard-pict ProductCard-pict_ACTIVE"
-                                       href="{{ img.image.url }}">
-                                        <img src="{{ img.image.url }}" alt="{{ img.image.name }}"></a>
+                                       href="{{ img.image_url }}">
+                                        <img src="{{ img.image_url }}" alt="{{ img.image.name }}"></a>
                                 {% empty %}
                                 {% endfor %}
 
@@ -89,7 +89,7 @@
                                 <span>Продавцы</span>
                             </a>
                             <a class="Tabs-link" href="#addit">
-                                <span>Характеристика</span>
+                                <span>Характеристики</span>
                             </a>
                             <a class="Tabs-link" href="#reviews">
                                 <span>Отзывы (3)</span>
@@ -119,22 +119,22 @@
 
                                 <div class="clearfix">
                                 </div>
-                                    <div class="table">
-                                        <table>
-                                            <tr>
-                                                <th>Характеристика
-                                                </th>
-                                                <th>Значение
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td>Тип устройства
-                                                </td>
-                                                <td>{{ product.category }}
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
+                                <div class="table">
+                                    <table>
+                                        <tr>
+                                            <th>Характеристики
+                                            </th>
+                                            <th>Значение
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td>Тип устройства
+                                            </td>
+                                            <td>{{ product.category }}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                             <div class="Tabs-block" id="sellers">
                                 <div class="Section-content">
