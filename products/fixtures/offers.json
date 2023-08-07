@@ -1,0 +1,136 @@
+[
+{
+  "model": "products.offer",
+  "pk": 1,
+  "fields": {
+    "description": "Скидка 10% на телевизор Xiaomi",
+    "priority": 0,
+    "discount_type": "DP",
+    "discount_value": 10,
+    "date_start": "2023-08-01",
+    "date_end": "2023-08-31",
+    "is_active": true,
+    "created": "2023-08-01T18:43:37.942Z",
+    "updated": "2023-08-01T18:43:37.943Z",
+    "products": [
+      3
+    ],
+    "categories": []
+  }
+},
+{
+  "model": "products.offer",
+  "pk": 2,
+  "fields": {
+    "description": "Скида 11% на стиральные машины и аксессуары к ним",
+    "priority": 0,
+    "discount_type": "DP",
+    "discount_value": 11,
+    "date_start": null,
+    "date_end": null,
+    "is_active": false,
+    "created": "2023-08-01T18:45:19.283Z",
+    "updated": "2023-08-01T18:45:19.283Z",
+    "products": [],
+    "categories": [
+      12,
+      3
+    ]
+  }
+},
+{
+  "model": "products.offer",
+  "pk": 3,
+  "fields": {
+    "description": "Скидка 100 руб. на телефон Нокиа 106",
+    "priority": 0,
+    "discount_type": "DA",
+    "discount_value": 100,
+    "date_start": "2023-08-01",
+    "date_end": "2023-12-31",
+    "is_active": true,
+    "created": "2023-08-01T18:46:52.211Z",
+    "updated": "2023-08-01T18:46:52.211Z",
+    "products": [
+      12
+    ],
+    "categories": []
+  }
+},
+{
+  "model": "products.offer",
+  "pk": 4,
+  "fields": {
+    "description": "Заливной шланг за 1000 руб.",
+    "priority": 0,
+    "discount_type": "FP",
+    "discount_value": 1000,
+    "date_start": "2023-08-01",
+    "date_end": "2023-08-31",
+    "is_active": true,
+    "created": "2023-08-01T18:47:58.399Z",
+    "updated": "2023-08-01T18:47:58.399Z",
+    "products": [
+      15
+    ],
+    "categories": []
+  }
+},
+{
+  "model": "products.offer",
+  "pk": 5,
+  "fields": {
+    "description": "Скидка 3% на все наушники",
+    "priority": 0,
+    "discount_type": "DP",
+    "discount_value": 3,
+    "date_start": "2023-08-15",
+    "date_end": "2023-10-31",
+    "is_active": true,
+    "created": "2023-08-01T18:49:12.762Z",
+    "updated": "2023-08-01T18:50:27.714Z",
+    "products": [],
+    "categories": [
+      2
+    ]
+  }
+},
+{
+  "model": "products.offer",
+  "pk": 6,
+  "fields": {
+    "description": "Скидка 5% на все торшеры",
+    "priority": 0,
+    "discount_type": "DP",
+    "discount_value": 5,
+    "date_start": "2023-08-01",
+    "date_end": "2023-10-30",
+    "is_active": true,
+    "created": "2023-08-01T18:50:14.687Z",
+    "updated": "2023-08-01T18:50:14.687Z",
+    "products": [],
+    "categories": [
+      11
+    ]
+  }
+},
+{
+  "model": "products.offer",
+  "pk": 7,
+  "fields": {
+    "description": "Скидка 1% на кухонную технику",
+    "priority": 0,
+    "discount_type": "DP",
+    "discount_value": 1,
+    "date_start": "2023-08-01",
+    "date_end": "2023-10-31",
+    "is_active": true,
+    "created": "2023-08-01T18:52:07.253Z",
+    "updated": "2023-08-01T18:52:07.253Z",
+    "products": [],
+    "categories": [
+      10
+    ]
+  }
+}
+]
