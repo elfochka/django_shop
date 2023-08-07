@@ -5,14 +5,6 @@ class AccountDetailView(TemplateView):
     template_name = "users/account.html"
 
 
-class RegisterView(TemplateView):
-    template_name = "users/registration.html"
-
-
-class LoginView(TemplateView):
-    template_name = "users/login.html"
-
-
 class EmailView(TemplateView):
     template_name = "users/e-mail.html"
 
