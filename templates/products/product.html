@@ -112,7 +112,7 @@
                                 {% with product.images.all|first as img %}
                                     {% if img %}
                                         <img class="pict pict_right" src="{{ img.image.url }}"
-                                             alt="{{ img.image.name }}"></a>
+                                             alt="{{ img.image.name }}">
                                     {% endif %}
                                 {% endwith %}
                                 {{ product.description }}
