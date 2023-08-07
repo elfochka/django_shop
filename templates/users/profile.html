@@ -41,7 +41,7 @@
                 </div>
                 <div class="Section-content">
                     <div class="Profile">
-                        <form class="form Profile-form" action="{% url 'users:profile' %}" method="post">
+                        <form class="form Profile-form" action="{% url 'users:profile' pk=user.pk %}" method="post">
                             {% csrf_token %}
                             <div class="row">
                                 <div class="row-block">
@@ -56,33 +56,33 @@
                                             <input class="Profile-file form-input" id="avatar" name="avatar" type="file" />
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="form-label" for="name">ФИО
-                                        </label>
-                                        {{ form.username }}
-                                    </div>
                                 </div>
                                 <div class="row-block">
                                     <div class="form-group">
+                                        <label class="form-label" for="name">ФИО
+                                        </label>
+                                        <input class="form-input" id="full_name" name="full_name" type="text" value="{{ user.get_full_name }}" />
+                                    </div>
+                                    <div class="form-group">
                                         <label class="form-label" for="phone">Телефон
                                         </label>
-                                        {{ form.phone }}
+                                        <input class="form-input" id="phone" name="phone" type="text" value="{{ user.phone }}" />
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label" for="mail">E-mail
                                         </label>
                                         {{ form.email }}
                                     </div>
-                                    <div class="form-group">
-                                        <label class="form-label" for="password">Пароль
-                                        </label>
-                                        <input class="form-input" id="password" name="password" type="password" placeholder="Тут можно изменить пароль" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" for="passwordReply">Подтверждение пароля
-                                        </label>
-                                        <input class="form-input" id="passwordReply" name="passwordReply" type="password" placeholder="Введите пароль повторно" />
-                                    </div>
+{#                                    <div class="form-group">#}
+{#                                        <label class="form-label" for="password">Пароль#}
+{#                                        </label>#}
+{#                                        <input class="form-input" id="password" name="password" type="password" placeholder="Тут можно изменить пароль" />#}
+{#                                    </div>#}
+{#                                    <div class="form-group">#}
+{#                                        <label class="form-label" for="passwordReply">Подтверждение пароля#}
+{#                                        </label>#}
+{#                                        <input class="form-input" id="passwordReply" name="passwordReply" type="password" placeholder="Введите пароль повторно" />#}
+{#                                    </div>#}
                                     <div class="form-group">
                                         <div class="Profile-btn">
                                             <button class="btn btn_success">Сохранить
