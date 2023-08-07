@@ -33,6 +33,15 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         return self.request.user
 
+    def form_valid(self, form):
+        full_name = form.cleaned_data.get("full_name")
+        if full_name:
+            first_name, middle_name, last_name = full_name.split(" ", 2)
+            self.object.first_name = first_name
+            self.object.middle_name = middle_name
+            self.object.last_name = last_name
+        return super().form_valid(form)
+
 
 class ActionListView(TemplateView):
     template_name = "users/viewhistory.html"
