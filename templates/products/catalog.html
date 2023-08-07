@@ -12,7 +12,7 @@
                             </strong>
                         </header>
                         <div class="Section-columnContent">
-                            <form class="form" action="#" method="post">
+                            <form class="form" method="get">
                                 <div class="form-group">
                                     <div class="range Section-columnRange">
                                         <input class="range-line" id="price" name="price" type="text" data-type="double"
@@ -28,7 +28,6 @@
                                            placeholder="Название"/>
                                 </div>
                                 <div class="form-group">
-                                    <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
                                 </div>
                                 <div class="form-group">
                                     <label class="toggle">
@@ -43,9 +42,7 @@
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <div class="buttons"><a class="btn btn_square btn_dark btn_narrow"
-                                                            href="#">Фильтр</a>
-                                    </div>
+                                    <button type="submit">Фильтр</button>
                                 </div>
                             </form>
                         </div>
@@ -114,7 +111,8 @@
                     </div>
                     <div class="Pagination">
                         <div class="Pagination-ins"><a class="Pagination-element Pagination-element_prev" href="#"><img
-                                src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="prevPagination.svg"/></a><a
+                                src="{% static 'assets/img/icons/prevPagination.svg' %}"
+                                alt="prevPagination.svg"/></a><a
                                 class="Pagination-element Pagination-element_current" href="#"><span
                                 class="Pagination-text">1</span></a><a class="Pagination-element" href="#"><span
                                 class="Pagination-text">2</span></a><a class="Pagination-element" href="#"><span
