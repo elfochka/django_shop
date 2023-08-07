@@ -3,7 +3,7 @@ from datetime import datetime
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
-from .models import Category, Offer, Product
+from products.models import Category, Offer, Product
 
 
 class BaseMixin(ContextMixin):
