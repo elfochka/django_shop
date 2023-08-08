@@ -3,7 +3,7 @@ from django.templatetags.static import static
 
 
 def get_default_image():
-    return 'default_images/default.jpg'
+    return "default_images/default.jpg"
 
 
 class Category(models.Model):
@@ -261,12 +261,29 @@ class Offer(models.Model):
 
 
 class AdBanner(models.Model):
-    """
-        The AdBanner model represents banners
-        that can be displayed on the main page of an online store
-    """
-    image = models.ImageField(upload_to='media/banners/', verbose_name='banners', default=get_default_image)
-    is_chosen = models.BooleanField(default=False, verbose_name='is chosen')
-    link = models.URLField(max_length=200, verbose_name='link')
-    title = models.TextField(null=False, blank=False, verbose_name='title')
-    content = models.TextField(null=False, blank=False, verbose_name='content')
+
+    image = models.ImageField(
+        upload_to="media/banners/",
+        verbose_name="баннер",
+        default=get_default_image
+    )
+    is_chosen = models.BooleanField(
+        default=False,
+        verbose_name="активен"
+    )
+    link = models.URLField(
+        max_length=200,
+        verbose_name="ссылка"
+    )
+    title = models.TextField(
+        null=False, blank=False,
+        verbose_name="название"
+    )
+    content = models.TextField(
+        null=False, blank=False,
+        verbose_name="контент"
+    )
+
+    class Meta:
+        verbose_name = "баннер"
+        verbose_name_plural = "баннеры"
