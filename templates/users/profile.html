@@ -3,20 +3,6 @@
 
 {% block content %}
     <div class="Middle Middle_top">
-        <div class="Middle-top">
-            <div class="wrap">
-                <div class="Middle-header">
-                    <h1 class="Middle-title">Профиль
-                    </h1>
-                    <ul class="breadcrumbs Middle-breadcrumbs">
-                        <li class="breadcrumbs-item"><a href="{% url 'index' %}">home</a>
-                        </li>
-                        <li class="breadcrumbs-item breadcrumbs-item_current"><span>Профиль</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
         <div class="Section Section_column Section_columnLeft">
             <div class="wrap">
                 <div class="Section-column">
@@ -58,7 +44,7 @@
                                             </div>
                                             <label class="Profile-fileLabel" for="avatar">Выберите аватар
                                             </label>
-                                            {{ form.image }}
+                                            <input class="Profile-file form-input" id="avatar" name="avatar" type="file" />
                                         </div>
                                     </div>
                                 </div>

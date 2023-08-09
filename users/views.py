@@ -50,7 +50,9 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
                 form.instance.middle_name = middle_name
                 form.instance.last_name = last_name
             except ValueError:
-                form.initial["full_name"] = full_name
+                form.instance.first_name = ''
+                form.instance.middle_name = ''
+                form.instance.last_name = ''
                 form.add_error("full_name", "Неверный формат ФИО")
                 return self.form_invalid(form)
         return super().form_valid(form)
