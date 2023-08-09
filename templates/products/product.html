@@ -111,7 +111,7 @@
 
                                 {% with product.images.all|first as img %}
                                     {% if img %}
-                                        <img class="pict pict_right" src="{{ img.image.url }}"
+                                        <img class="pict pict_right" src="{{ img.image_url }}"
                                              alt="{{ img.image.name }}">
                                     {% endif %}
                                 {% endwith %}
@@ -280,6 +280,7 @@
                                     </h3>
                                 </header>
                                 <div class="Comments">
+                                    {% for review in reviews %}
                                     <div class="Comment">
                                         <div class="Comment-column Comment-column_pict">
                                             <div class="Comment-avatar">
@@ -288,36 +289,29 @@
                                         <div class="Comment-column">
                                             <header class="Comment-header">
                                                 <div>
-                                                    <strong class="Comment-title">Александра Бровина
-                                                    </strong><span class="Comment-date">Декабрь 25&#32;&#32;/&#32;&#32;2017&#32;&#32;/&#32;&#32;22:50</span>
+                                                    <strong class="Comment-title">{{ review.author.username }}
+                                                    </strong><span class="Comment-date">{{ review.created }}</span>
                                                 </div>
                                             </header>
-                                            <div class="Comment-content">Lorem ipsum dolor sit amet, consectetuer
-                                                adipiscing
-                                                elit doli. Aenean commodo ligula eget dolor. Aenean massa. Cumtipsu
-                                                sociis
-                                                natoque penatibus et magnis dis parturient montesti, nascetur ridiculus
-                                                mus.
-                                                Donec quam felis, ultricies nec, pellentesque eutu, pretiumem. Nulla
-                                                consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec,
-                                                vulputate eget, arcu. In enim justotuio, rhoncus ut loret, imperdiet a,
-                                                venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
-                                                Integer
-                                                tincidunt. Cras dapibus. Vivamus element semper nisi. Aenean vulputate
-                                                eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae.
+                                            <div class="Comment-content">{{ review.body }}
                                             </div>
                                         </div>
                                     </div>
+                                    {% endfor %}
                                 </div>
+
                                 <header class="Section-header Section-header_product">
                                     <h3 class="Section-title">Добавить отзыв
                                     </h3>
                                 </header>
                                 <div class="Tabs-addComment">
                                     <form class="form" action="#" method="post">
+                                        {% csrf_token %}
+<!--                                        -->
                                         <div class="form-group">
-                                            <textarea class="form-textarea" name="review" id="review"
-                                                      placeholder="Отзыв"></textarea>
+                                            {{ form }}
+<!--                                            <textarea class="form-textarea" name="review" id="review"-->
+<!--                                                      placeholder="Отзыв"></textarea>-->
                                         </div>
 
                                         <div class="form-group">

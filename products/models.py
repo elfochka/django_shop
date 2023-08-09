@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import CustomUser
 from django.templatetags.static import static
 
 
@@ -254,3 +255,47 @@ class Offer(models.Model):
 
     def __str__(self):
         return self.description[:64]
+
+
+class Review(models.Model):
+    """
+    Represents a review of product
+    """
+    product = models.ForeignKey(
+        verbose_name="товар",
+        to=Product,
+        related_name="reviews",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+    )
+    author = models.ForeignKey(
+        verbose_name="автор",
+        to=CustomUser,
+        related_name="reviews",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+    )
+    body = models.TextField(
+        verbose_name="описание",
+        blank=False,
+        null=False,
+    )
+    created = models.DateTimeField(
+        verbose_name="создан",
+        auto_now_add=True,
+    )
+    updated = models.DateTimeField(
+        verbose_name="обновлён",
+        auto_now=True,
+    )
+
+    class Meta:
+        ordering = ["-created"]
+        indexes = [
+            models.Index(fields=["id"]),
+            models.Index(fields=["-created"]),
+        ]
+        verbose_name = "Отзыв"
+        verbose_name_plural = "Отзывы"
