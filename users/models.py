@@ -7,9 +7,7 @@ def get_default_profile_image():
 
 
 class CustomUser(AbstractUser):
-    """
-    Represents user of the shop.
-    """
+    """Represents user of the shop."""
 
     middle_name = models.CharField(
         verbose_name="отчество",

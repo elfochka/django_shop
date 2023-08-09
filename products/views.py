@@ -7,9 +7,7 @@ from products.models import AdBanner, Category, Offer, Product
 
 
 class BaseMixin(ContextMixin):
-    """
-    Put data necessary for base.html template into context.
-    """
+    """Put data necessary for base.html template into context."""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -24,7 +22,7 @@ class IndexView(BaseMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['banners'] = AdBanner.objects.filter(is_chosen=True)
+        context_data["banners"] = AdBanner.objects.filter(is_chosen=True)
         return context_data
 
 
