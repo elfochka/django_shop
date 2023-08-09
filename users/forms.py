@@ -11,6 +11,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 class CustomUserChangeForm(UserChangeForm):
     full_name = forms.CharField(max_length=255, label="ФИО")
+    phone = forms.CharField(max_length=11, label="Телефон", initial="user.phone")
 
     class Meta:
         model = CustomUser
