@@ -3,7 +3,9 @@
 {% block account_section %}
     <div class="Section-content">
         <div class="Profile">
-            <form class="form Profile-form" action="{% url 'users:profile' pk=user.pk %}" method="post"
+            <form class="form Profile-form"
+                  action="{% url 'users:profile' pk=user.pk %}"
+                  method="post"
                   enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row">
@@ -12,52 +14,37 @@
                             <label class="form-label" for="avatar">Аватар
                             </label>
                             <div class="Profile-avatar">
-                                <div class="Profile-img"><img src="{{ user.image.url }}" alt="card.jpg"/>
-                                </div>
-                                <label class="Profile-fileLabel" for="avatar">Выберите аватар
-                                </label>
-                                <input class="Profile-file form-input" id="avatar" name="avatar" type="file"/>
+                                <div class="Profile-img"><img src="{{ user.image.url }}" alt="card.jpg"/></div>
+                                <label class="Profile-fileLabel" for="{{ form.image.id_for_label }}"></label>
+                                {{ form.image }}
                             </div>
                         </div>
                     </div>
                     <div class="row-block">
                         <div class="form-group">
-                            <label class="form-label" for="name">ФИО
-                            </label>
-                            <input class="form-input"
-                                   id="full_name"
-                                   name="full_name"
-                                   type="text"
-                                   placeholder="Введите имя"
-                                   value="{{ form.initial.full_name }}"
-                            />
+                            {{ form.full_name.label_tag }}
+                            {{ form.full_name }}
                             {% if form.full_name.errors %}
                                 <p>{{ form.full_name.errors }}</p>
                             {% endif %}
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="phone">Телефон
-                            </label>
-                            <input class="form-input"
-                                   id="phone"
-                                   name="phone"
-                                   type="text"
-                                   placeholder="Введите номер телефона"
-                                   value="{{ form.phone.value }}"
-                            />
+                            {{ form.phone.label_tag }}
+                            {{ form.phone }}
                             {% if form.phone.errors %}
                                 <p>{{ form.phone.errors }}</p>
                             {% endif %}
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="mail">E-mail
-                            </label>
+                            {{ form.email.label_tag }}
                             {{ form.email }}
+                            {% if form.email.errors %}
+                                <p>{{ form.email.errors }}</p>
+                            {% endif %}
                         </div>
                         <div class="form-group">
                             <div class="Profile-btn">
-                                <button class="btn btn_success">Сохранить
-                                </button>
+                                <button type="submit" class="btn btn_success">Сохранить</button>
                             </div>
                         </div>
                     </div>
