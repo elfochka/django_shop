@@ -3,9 +3,7 @@ from django.templatetags.static import static
 
 
 class Category(models.Model):
-    """
-    Describes product category in eshop.
-    """
+    """Describes product category in eshop."""
 
     title = models.CharField(
         verbose_name="название",
@@ -45,9 +43,7 @@ class Category(models.Model):
 
 
 class Tag(models.Model):
-    """
-    Represents a tag assigned to a product.
-    """
+    """Represents a tag assigned to a product."""
 
     title = models.CharField(
         verbose_name="название",
@@ -67,9 +63,7 @@ class Tag(models.Model):
 
 
 class Product(models.Model):
-    """
-    Describes a product for sale in eshop.
-    """
+    """Describes a product for sale in eshop."""
 
     title = models.CharField(
         verbose_name="название",
@@ -132,9 +126,7 @@ class Product(models.Model):
 
 
 class ProductImage(models.Model):
-    """
-    Represents one of product photos.
-    """
+    """Represents one of product photos."""
 
     product = models.ForeignKey(
         verbose_name="товар",
@@ -166,6 +158,7 @@ class ProductImage(models.Model):
     def image_url(self):
         """
         Return image URL if image file exists.
+
         Otherwise, return URL of the static product image placeholder.
         """
         try:
@@ -180,9 +173,7 @@ class ProductImage(models.Model):
 
 
 class Offer(models.Model):
-    """
-    Represents an offer (discount) in the shop.
-    """
+    """Represents an offer (discount) in the shop."""
 
     class Types(models.TextChoices):
         DISCOUNT_PERCENT = "DP", "Процент скидки"

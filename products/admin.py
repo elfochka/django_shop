@@ -8,9 +8,7 @@ from .models import Category, Offer, Product, ProductImage, Tag
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    """
-    Configures admin panel views for Category.
-    """
+    """Configures admin panel views for Category."""
 
     model = Category
     list_display = [
@@ -27,9 +25,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    """
-    Configures admin panel views for Tag.
-    """
+    """Configures admin panel views for Tag."""
 
     model = Tag
     list_display = [
@@ -39,9 +35,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
-    """
-    Configures admin panel views for ProductImage.
-    """
+    """Configures admin panel views for ProductImage."""
 
     model = ProductImage
     list_display = [
@@ -55,9 +49,7 @@ class ProductImageAdmin(admin.ModelAdmin):
 
 
 class ProductImageInline(TabularInline):
-    """
-    Inline ProductImage row with built-in image preview.
-    """
+    """Inline ProductImage row with built-in image preview."""
 
     model = ProductImage
     fields = [
@@ -70,9 +62,7 @@ class ProductImageInline(TabularInline):
     extra = 0
 
     def image_preview(self, product_image: ProductImage) -> str:
-        """
-        Render image preview.
-        """
+        """Render image preview."""
         if product_image.image:
             return mark_safe(
                 render_to_string(
@@ -89,9 +79,7 @@ class ProductImageInline(TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    """
-    Configures admin panel views for Product.
-    """
+    """Configures admin panel views for Product."""
 
     model = Product
     list_display = [
@@ -155,9 +143,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Offer)
 class OfferAdmin(admin.ModelAdmin):
-    """
-    Configures admin panel views for Offer.
-    """
+    """Configures admin panel views for Offer."""
 
     model = Offer
     list_display = [

@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from django.core.paginator import Paginator
+from django.shortcuts import render
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
@@ -7,9 +9,7 @@ from products.models import Category, Offer, Product
 
 
 class BaseMixin(ContextMixin):
-    """
-    Put data necessary for base.html template into context.
-    """
+    """Put data necessary for base.html template into context."""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -24,6 +24,7 @@ class IndexView(BaseMixin, TemplateView):
 
 
 class CatalogView(BaseMixin, ListView):
+    paginate_by = 6
     model = Product
     template_name = "products/catalog.html"
     queryset = (
@@ -32,6 +33,13 @@ class CatalogView(BaseMixin, ListView):
         .prefetch_related("tags", "images")
     )
     context_object_name = "products"
+
+    def listing(self):
+        catalog = Product.objects.all()
+        paginator = Paginator(catalog, 6)
+        page_number = self.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        return render(self, "products/catalog.html", {"page_obj": page_obj})
 
 
 class ProductDetailsView(BaseMixin, DetailView):
