@@ -1,12 +1,13 @@
 from datetime import datetime
 
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
-from django.shortcuts import redirect
-from django.views.generic.edit import FormView
-from products.models import Category, Offer, Product, Review
+
 from products.forms import ReviewCreationForm
-from django.urls import reverse_lazy
+from products.models import Category, Offer, Product, Review
 
 
 class BaseMixin(ContextMixin):
@@ -37,9 +38,8 @@ class CatalogView(BaseMixin, ListView):
     context_object_name = "products"
 
 
-class ProductDetailsView(BaseMixin, FormView, DetailView):
+class ProductDetailsView(BaseMixin, DetailView):
     template_name = "products/product.html"
-    form_class = ReviewCreationForm
     queryset = (
         Product.objects.filter(is_deleted=False)
         .select_related("category")
@@ -48,29 +48,32 @@ class ProductDetailsView(BaseMixin, FormView, DetailView):
     context_object_name = "product"
 
     def get_success_url(self):
-        return reverse_lazy('products:product', args=(self.kwargs['pk'],))
+        return reverse_lazy("products:product", args=(self.kwargs["pk"],))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = ReviewCreationForm()
-        context['reviews'] = Review.objects.filter(product_id=self.kwargs['pk']).all()
+        context["form"] = ReviewCreationForm()
+        context["reviews"] = Review.objects.filter(product=self.object)
         return context
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect("account_login")
         self.object = self.get_object()
-        form = self.get_form()
+        form = ReviewCreationForm(request.POST)
         if form.is_valid():
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
     def form_valid(self, form):
-        form.instance.author_id = self.request.user.id
-        form.instance.product_id = self.kwargs['pk']
+        form.instance.author = self.request.user
+        form.instance.product = self.object
         form.save()
-        return super().form_valid(form)
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class CompareView(BaseMixin, TemplateView):

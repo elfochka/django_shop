@@ -1,6 +1,7 @@
 from django.db import models
-from users.models import CustomUser
 from django.templatetags.static import static
+
+from users.models import CustomUser
 
 
 class Category(models.Model):
