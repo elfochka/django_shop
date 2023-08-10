@@ -1,7 +1,9 @@
-from django.views.generic import ListView, TemplateView
+from datetime import datetime
+
+from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
-from .models import Category, Product
+from products.models import Category, Offer, Product
 
 
 class BaseMixin(ContextMixin):
@@ -32,13 +34,26 @@ class CatalogView(BaseMixin, ListView):
     context_object_name = "products"
 
 
-class ProductDetailsView(BaseMixin, TemplateView):
+class ProductDetailsView(BaseMixin, DetailView):
     template_name = "products/product.html"
+    queryset = (
+        Product.objects.filter(is_deleted=False)
+        .select_related("category")
+        .prefetch_related("tags", "images")
+    )
+    context_object_name = "product"
 
 
 class CompareView(BaseMixin, TemplateView):
     template_name = "products/compare.html"
 
 
-class SaleView(BaseMixin, TemplateView):
+class SaleView(BaseMixin, ListView):
+    model = Offer
     template_name = "products/sale.html"
+    queryset = Offer.objects.filter(
+        is_active=True,
+        date_start__lte=datetime.now(),
+        date_end__gte=datetime.now(),
+    ).prefetch_related("products", "categories")
+    context_object_name = "offers"

@@ -177,3 +177,80 @@ class ProductImage(models.Model):
         except FileNotFoundError:
             url = static("/assets/img/product-placeholder.png")
         return url
+
+
+class Offer(models.Model):
+    """
+    Represents an offer (discount) in the shop.
+    """
+
+    class Types(models.TextChoices):
+        DISCOUNT_PERCENT = "DP", "Процент скидки"
+        DISCOUNT_AMOUNT = "DA", "Сумма скидки"
+        FIXED_PRICE = "FP", "Фиксированная стоимость"
+
+    products = models.ManyToManyField(
+        verbose_name="товары",
+        to=Product,
+        related_name="offers",
+        blank=True,
+    )
+    categories = models.ManyToManyField(
+        verbose_name="категории",
+        to=Category,
+        related_name="offers",
+        blank=True,
+    )
+    description = models.TextField(
+        verbose_name="описание",
+        blank=True,
+    )
+    priority = models.PositiveIntegerField(
+        verbose_name="приоритет",
+        blank=False,
+        null=False,
+        default=0,
+    )
+    discount_type = models.CharField(
+        verbose_name="механизм скидки",
+        max_length=2,
+        choices=Types.choices,
+        default=Types.DISCOUNT_PERCENT,
+    )
+    discount_value = models.PositiveIntegerField(
+        verbose_name="размер скидки (руб. или %)",
+    )
+    date_start = models.DateField(
+        verbose_name="дата начала",
+        blank=True,
+        null=True,
+    )
+    date_end = models.DateField(
+        verbose_name="дата завершения",
+        blank=True,
+        null=True,
+    )
+    is_active = models.BooleanField(
+        verbose_name="активна",
+        default=False,
+    )
+    created = models.DateTimeField(
+        verbose_name="создана",
+        auto_now_add=True,
+    )
+    updated = models.DateTimeField(
+        verbose_name="обновлена",
+        auto_now=True,
+    )
+
+    class Meta:
+        ordering = ["-created"]
+        indexes = [
+            models.Index(fields=["id"]),
+            models.Index(fields=["-created"]),
+        ]
+        verbose_name = "скидка"
+        verbose_name_plural = "скидки"
+
+    def __str__(self):
+        return self.description[:64]
