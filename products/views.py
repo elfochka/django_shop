@@ -1,17 +1,15 @@
 from datetime import datetime
 
+from django.core.paginator import Paginator
+from django.shortcuts import render
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
 from products.models import Category, Offer, Product
-from django.core.paginator import Paginator
-from django.shortcuts import render
 
 
 class BaseMixin(ContextMixin):
-    """
-    Put data necessary for base.html template into context.
-    """
+    """Put data necessary for base.html template into context."""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
