@@ -39,5 +39,9 @@ class CustomUser(AbstractUser):
         verbose_name = "пользователь"
         verbose_name_plural = "пользователи"
 
+    def get_full_name(self):
+        full_name = f"{self.first_name} {self.middle_name} {self.last_name}".strip()
+        return full_name
+
     def __str__(self):
         return self.email
