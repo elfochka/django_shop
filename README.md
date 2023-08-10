@@ -49,8 +49,7 @@ python -m manage loaddata products/fixtures/*.json
 
 Для корректного отображения на страницах сайта значков категорий, хранящихся в фикстуре, необходимо скачать и 
 распаковать в директорию `uploads/` файл
-[uploads.zip](https://gitlab.skillbox.ru/kurator_skillbox/python_django_team28/uploads/2837c4a863d29c74996a8ce5e73e37d7/uploads.zip).
-
+[uploads.zip] (https://gitlab.skillbox.ru/kurator_skillbox/python_django_team28/uploads/96678c36fea204b24026a331341429d1/uploads.zip)
 ### Запуск в режиме разработки и отладки
 
 Для запуска проекта необходимо запустить базу данных PostgreSQL, активировать виртуальное окружение, при необходимости, 
