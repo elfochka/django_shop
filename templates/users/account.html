@@ -9,7 +9,8 @@
                     </div>
                 </div>
                 <div class="Account-column">
-                    <div class="Account-name">{{ user.get_full_name }}
+                    <div class="Account-name">
+                        {% if user.get_full_name %} {{ user.get_full_name }} {% else %} {{ user.email }} {% endif %}
                     </div>
                     <a class="Account-editLink" href="{% url 'users:profile' pk=user.pk %}">Редактировать профиль</a>
                 </div>

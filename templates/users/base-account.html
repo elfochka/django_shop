@@ -16,8 +16,8 @@
                                     <li class="menu-item">
                                         <a class="menu-link" href="{% url 'users:account' %}">Личный кабинет</a>
                                     </li>
-                                    <li class="">
-                                        <a class="menu-link" href="{% url 'users:profile' pk=user.pk %}">Профиль</a>
+                                    <li class="menu-item">
+                                        <a class="menu-link" href="{% url 'users:profile' user.id %}">Профиль</a>
                                     </li>
                                     <li class="menu-item">
                                         <a class="menu-link" href="#">История заказов</a>
