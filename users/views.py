@@ -1,8 +1,18 @@
-from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, UpdateView
+
+from users.forms import CustomUserChangeForm
+from users.models import CustomUser
 
 
-class AccountDetailView(TemplateView):
+class AccountDetailView(LoginRequiredMixin, TemplateView):
     template_name = "users/account.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user
+        return context
 
 
 class EmailView(TemplateView):
@@ -13,12 +23,16 @@ class PasswordView(TemplateView):
     template_name = "users/password.html"
 
 
-class ProfileView(TemplateView):
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    model = CustomUser
+    form_class = CustomUserChangeForm
     template_name = "users/profile.html"
+    success_url = reverse_lazy("users:account")
 
-
-class UserProfileUpdateForm(TemplateView):
-    template_name = "users/profile_update.html"
+    def get_initial(self):
+        initial = super().get_initial()
+        initial["full_name"] = self.request.user.get_full_name()
+        return initial
 
 
 class ActionListView(TemplateView):

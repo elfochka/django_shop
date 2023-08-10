@@ -139,7 +139,7 @@
                       <img class="CartBlock-img" src="{% static 'assets/img/icons/loon-icon.svg' %}" alt="loon-icon.svg"/>
                     </button>
                     <div class="dropdown-content">
-                      <a class="dropdown-content-a" href="{% url 'users:profile' %}">
+                      <a class="dropdown-content-a" href="{% url 'users:account' %}">
                         Личный кабинет
                       </a>
                       {% if user.is_staff %}
