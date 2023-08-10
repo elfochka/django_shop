@@ -1,6 +1,8 @@
 import re
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+
 from django import forms
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+
 from users.models import CustomUser
 
 
@@ -13,19 +15,19 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomUserChangeForm(UserChangeForm):
     full_name = forms.CharField(
         max_length=255, label="ФИО",
-        widget=forms.TextInput(attrs={'placeholder': 'Введите полное имя'})
+        widget=forms.TextInput(attrs={"placeholder": "Введите полное имя"})
     )
     image = forms.ImageField(
         required=False,
-        widget=forms.FileInput(attrs={'class': 'Profile-file form-input'})
+        widget=forms.FileInput(attrs={"class": "Profile-file form-input"})
     )
     email = forms.EmailField(
         max_length=255, required=False, label="Адрес эл. почты",
-        widget=forms.EmailInput(attrs={'placeholder': 'Введите адрес эл. почты'})
+        widget=forms.EmailInput(attrs={"placeholder": "Введите адрес эл. почты"})
     )
     phone = forms.CharField(
-        label='Введите номер телефона',
-        widget=forms.TextInput(attrs={'placeholder': '89881234567'})
+        label="Введите номер телефона",
+        widget=forms.TextInput(attrs={"placeholder": "89881234567"})
     )
 
     class Meta:
