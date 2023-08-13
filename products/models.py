@@ -1,6 +1,8 @@
 from django.db import models
 from django.templatetags.static import static
 
+from users.models import CustomUser
+
 
 def get_default_image():
     return "default_images/default.jpg"
@@ -252,7 +254,6 @@ class Offer(models.Model):
 
 
 class AdBanner(models.Model):
-
     image = models.ImageField(
         upload_to="media/banners/",
         verbose_name="баннер",
@@ -278,3 +279,44 @@ class AdBanner(models.Model):
     class Meta:
         verbose_name = "баннер"
         verbose_name_plural = "баннеры"
+
+
+class Review(models.Model):
+    product = models.ForeignKey(
+        verbose_name="товар",
+        to=Product,
+        related_name="reviews",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+    )
+    author = models.ForeignKey(
+        verbose_name="автор",
+        to=CustomUser,
+        related_name="reviews",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+    )
+    body = models.TextField(
+        verbose_name="описание",
+        blank=False,
+        null=False,
+    )
+    created = models.DateTimeField(
+        verbose_name="создан",
+        auto_now_add=True,
+    )
+    updated = models.DateTimeField(
+        verbose_name="обновлён",
+        auto_now=True,
+    )
+
+    class Meta:
+        ordering = ["-created"]
+        indexes = [
+            models.Index(fields=["id"]),
+            models.Index(fields=["-created"]),
+        ]
+        verbose_name = "Отзыв"
+        verbose_name_plural = "Отзывы"
