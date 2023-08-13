@@ -6,7 +6,6 @@ import products.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("products", "0003_offer"),
     ]
@@ -42,13 +41,5 @@ class Migration(migrations.Migration):
             model_name="offer",
             name="updated",
             field=models.DateTimeField(auto_now=True, verbose_name="обновлена"),
-        ),
-        migrations.AddIndex(
-            model_name="offer",
-            index=models.Index(fields=["id"], name="products_of_id_9ebed4_idx"),
-        ),
-        migrations.AddIndex(
-            model_name="offer",
-            index=models.Index(fields=["-created"], name="products_of_created_b90585_idx"),
         ),
     ]
