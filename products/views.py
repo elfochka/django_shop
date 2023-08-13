@@ -27,7 +27,20 @@ class IndexView(BaseMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data["banners"] = AdBanner.objects.filter(is_chosen=True)
+
+        # TODO: не знаю как правильно фильтровать если нету цен
+        featured_categories = Category.objects.filter(is_chosen=True)[:3]
+        context_data['featured_categories'] = featured_categories
+
+        popular_products = Product.objects.filter(is_deleted=False).order_by('?')[:8]
+        context_data['popular_products'] = popular_products
+
+        limited_edition_products = Product.objects.filter(is_limited=True, is_deleted=False).order_by('?')[:16]
+        context_data['limited_edition_products'] = limited_edition_products
+
+        banners = AdBanner.objects.filter(is_chosen=True)
+        context_data['banners'] = banners
+
         return context_data
 
 
