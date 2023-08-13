@@ -4,6 +4,10 @@ from django.templatetags.static import static
 from users.models import CustomUser
 
 
+def get_default_image():
+    return "default_images/default.jpg"
+
+
 class Category(models.Model):
     """Describes product category in eshop."""
 
@@ -247,6 +251,35 @@ class Offer(models.Model):
 
     def __str__(self):
         return self.description[:64]
+
+
+class AdBanner(models.Model):
+
+    image = models.ImageField(
+        upload_to="media/banners/",
+        verbose_name="баннер",
+        default=get_default_image
+    )
+    is_chosen = models.BooleanField(
+        default=False,
+        verbose_name="активен"
+    )
+    link = models.URLField(
+        max_length=200,
+        verbose_name="ссылка"
+    )
+    title = models.TextField(
+        null=False, blank=False,
+        verbose_name="название"
+    )
+    content = models.TextField(
+        null=False, blank=False,
+        verbose_name="контент"
+    )
+
+    class Meta:
+        verbose_name = "баннер"
+        verbose_name_plural = "баннеры"
 
 
 class Review(models.Model):
