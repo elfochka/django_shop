@@ -1,11 +1,14 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
-from products.models import Category, Offer, Product
+from products.forms import ReviewCreationForm
+from products.models import AdBanner, Category, Offer, Product, Review
 
 
 class BaseMixin(ContextMixin):
@@ -24,11 +27,12 @@ class IndexView(BaseMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         """
-        Put current "Limited offer" chosen product into context.
+        Put current "Limited offer" chosen product and Ad banner into context.
         """
         context = super().get_context_data(**kwargs)
         chosen_product = Product.objects.filter(is_chosen=True).first()
         context["chosen_product"] = chosen_product
+        context["banners"] = AdBanner.objects.filter(is_chosen=True)
         return context
 
 
@@ -59,6 +63,34 @@ class ProductDetailsView(BaseMixin, DetailView):
         .prefetch_related("tags", "images")
     )
     context_object_name = "product"
+
+    def get_success_url(self):
+        return reverse_lazy("products:product", args=(self.kwargs["pk"],))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = ReviewCreationForm()
+        context["reviews"] = Review.objects.filter(product=self.object)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect("account_login")
+        self.object = self.get_object()
+        form = ReviewCreationForm(request.POST)
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.product = self.object
+        form.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class CompareView(BaseMixin, TemplateView):
