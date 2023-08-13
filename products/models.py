@@ -254,7 +254,6 @@ class Offer(models.Model):
 
 
 class AdBanner(models.Model):
-
     image = models.ImageField(
         upload_to="media/banners/",
         verbose_name="баннер",
@@ -283,9 +282,6 @@ class AdBanner(models.Model):
 
 
 class Review(models.Model):
-    """
-    Represents a review of product
-    """
     product = models.ForeignKey(
         verbose_name="товар",
         to=Product,
