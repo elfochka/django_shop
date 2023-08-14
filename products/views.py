@@ -26,30 +26,12 @@ class IndexView(BaseMixin, TemplateView):
     template_name = "index.html"
 
     def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-
-        # TODO: не знаю как правильно фильтровать если нету цен
-        featured_categories = Category.objects.filter(is_chosen=False)[:3]
-        featured_categories_data = []
-
-        for category in featured_categories:
-            category_products = Product.objects.filter(category=category, is_deleted=False)
-
-            featured_categories_data.append({
-                'category': category,
-                'products': category_products
-            })
-
-        context_data['featured_categories'] = featured_categories_data
-
-        popular_products = Product.objects.filter(is_deleted=False).order_by('?')[:8]
-        context_data['popular_products'] = popular_products
-
-        limited_edition_products = Product.objects.filter(is_limited=True, is_deleted=False).order_by('?')[:16]
-        context_data['limited_edition_products'] = limited_edition_products
-
-        banners = AdBanner.objects.filter(is_chosen=True)
-        context_data['banners'] = banners
+        context_data = {
+            "featured_categories": Category.get_featured_categories(),
+            "popular_products": Product.get_popular_products(),
+            "limited_edition_products": Product.get_limited_edition_products(),
+            "banners": AdBanner.get_banners()
+        }
 
         return context_data
 

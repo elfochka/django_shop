@@ -44,6 +44,10 @@ class Category(models.Model):
         verbose_name = "категория"
         verbose_name_plural = "категории"
 
+    @classmethod
+    def get_featured_categories(cls):
+        return cls.objects.filter(is_chosen=True)[:3]
+
     def __str__(self):
         return self.title if not self.parent else f"{self.parent.title} / {self.title}"
 
@@ -126,6 +130,14 @@ class Product(models.Model):
         ]
         verbose_name = "товар"
         verbose_name_plural = "товары"
+
+    @classmethod
+    def get_popular_products(cls):
+        return cls.objects.filter(is_deleted=False).order_by('?')[:8]
+
+    @classmethod
+    def get_limited_edition_products(cls):
+        return cls.objects.filter(is_limited=True, is_deleted=False).order_by('?')[:16]
 
     def __str__(self):
         return self.title
@@ -279,6 +291,10 @@ class AdBanner(models.Model):
     class Meta:
         verbose_name = "баннер"
         verbose_name_plural = "баннеры"
+
+    @classmethod
+    def get_banners(cls):
+        return cls.objects.filter(is_chosen=True)
 
 
 class Review(models.Model):
