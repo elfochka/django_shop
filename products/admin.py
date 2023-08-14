@@ -3,7 +3,7 @@ from django.contrib.admin import TabularInline
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
-from .models import Category, Offer, Product, ProductImage, Tag
+from .models import AdBanner, Category, Offer, Product, ProductImage, Tag
 
 
 @admin.register(Category)
@@ -203,3 +203,10 @@ class OfferAdmin(admin.ModelAdmin):
             },
         ),
     ]
+
+
+class AdBannerAdmin(admin.ModelAdmin):
+    list_display = ["title", "is_chosen", "content", "image", "link"]
+
+
+admin.site.register(AdBanner, AdBannerAdmin)

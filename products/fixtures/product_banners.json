@@ -1,0 +1,68 @@
+[
+  {
+    "model": "products.adbanner",
+    "pk": 1,
+    "fields": {
+      "image": "media/banners/slider.png",
+      "is_chosen": true,
+      "link": "http://127.0.0.1:8000/products/catalog/",
+      "title": "MAVIC PRO 5 DRON",
+      "content": "Get the best dron you ever seen!"
+    }
+  },
+  {
+    "model": "products.adbanner",
+    "pk": 2,
+    "fields": {
+      "image": "media/banners/bigGoods2.jpg",
+      "is_chosen": true,
+      "link": "http://127.0.0.1:8000/products/catalog/",
+      "title": "Lenovo IdeaPad Gaming 3",
+      "content": "Increase your gaming chances with the Lenovo IdeaPad Gaming 3 laptop. It is equipped with an Intel Core processor, NVIDIA GeForce GTX graphics card, 60 Hz screen refresh rate and a gaming keyboard."
+    }
+  },
+  {
+    "model": "products.adbanner",
+    "pk": 3,
+    "fields": {
+      "image": "media/banners/bigGoods.png",
+      "is_chosen": true,
+      "link": "http://127.0.0.1:8000/products/catalog/",
+      "title": "HP PRO 15.6\"",
+      "content": "Designed for long-lasting performance, the stylish HP 15 Windows 11 Home 15.6\" Notebook PC features a long-life 41Wh Li-Ion battery to keep you connected, entertained and productive all day ."
+    }
+  },
+  {
+    "model": "products.adbanner",
+    "pk": 4,
+    "fields": {
+      "image": "media/banners/card.jpg",
+      "is_chosen": true,
+      "link": "http://127.0.0.1:8000/products/catalog/",
+      "title": "ASUS VivoBook Go",
+      "content": "Experience a new level of productivity and entertainment wherever you are! ASUS VivoBook Go - a laptop that gives you complete freedom and comfort in every situation."
+    }
+  },
+  {
+    "model": "products.adbanner",
+    "pk": 5,
+    "fields": {
+      "image": "media/banners/videoca.png",
+      "is_chosen": true,
+      "link": "http://127.0.0.1:8000/products/catalog/",
+      "title": "VIDEO CARd GeForce RTX 3060",
+      "content": "Every game lover wants to enjoy the best visual effects and smoothness in the game, that's why MSI created a graphics card that will provide this opportunity"
+    }
+  },
+  {
+    "model": "products.adbanner",
+    "pk": 6,
+    "fields": {
+      "image": "media/banners/bigGoods2_E72BsLd.jpg",
+      "is_chosen": true,
+      "link": "http://127.0.0.1:8000/products/catalog/",
+      "title": "DELL INSPIRON 15.6\"",
+      "content": "With a nature-inspired slim design and recycled materials, the Inspiron 15 not only looks unique, it's also eco-friendly. The Dell Comfort View screen provides a great visual experience and the reliability of the AMD Ryzen 5 5500U processor. It is a good choice for both work and study."
+    }
+  }
+]
