@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
-from products.forms import ReviewCreationForm
+from products.forms import ProductFilterForm, ReviewCreationForm
 from products.models import AdBanner, Category, Offer, Product, Review
 
 
@@ -46,6 +46,52 @@ class CatalogView(BaseMixin, ListView):
         .prefetch_related("tags", "images")
     )
     context_object_name = "products"
+
+    def get_queryset(self):
+        queryset = (
+            Product.objects.filter(is_deleted=False)
+            .select_related("category")
+            .prefetch_related("tags", "images")
+        )
+
+        form = ProductFilterForm(self.request.GET)
+
+        if form.is_valid():
+            product_name = form.cleaned_data.get("product_name")
+            # !Ждём реализации модели ProductPosition и нужно раскомментить, что бы фильтр полностью работал.
+            # in_stock = form.cleaned_data.get("in_stock")
+            # free_shipping = form.cleaned_data.get("free_shipping")
+            # price_range = self.request.GET.get("price")
+
+            if product_name:
+                queryset = queryset.filter(title__icontains=product_name)
+
+            # !Ждём реализации модели ProductPosition и нужно раскомментить, что бы фильтр полностью работал.
+            # if in_stock:
+            #     queryset = queryset.annotate(total_quantity=Sum("positions__quantity"))
+            #     queryset = queryset.filter(total_quantity__gt=0)
+
+            # if free_shipping:
+            #     queryset = queryset.filter(free_shipping=True)
+
+            # if price_range:
+            #     min_price, max_price = map(int, price_range.split(";"))
+            #     queryset = queryset.filter(positions__price__gte=min_price, positions__price__lte=max_price)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        price_range = self.request.GET.get("price")
+        if price_range:
+            min_price, max_price = map(int, price_range.split(";"))
+        else:
+            min_price = 7
+            max_price = 27
+        context["min_price"] = min_price
+        context["max_price"] = max_price
+        context["filter_form"] = ProductFilterForm(self.request.GET)
+        return context
 
     def listing(self):
         catalog = Product.objects.all()
