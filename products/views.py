@@ -26,9 +26,14 @@ class IndexView(BaseMixin, TemplateView):
     template_name = "index.html"
 
     def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        context_data["banners"] = AdBanner.objects.filter(is_chosen=True)
-        return context_data
+        """
+        Put current "Limited offer" chosen product and Ad banner into context.
+        """
+        context = super().get_context_data(**kwargs)
+        chosen_product = Product.objects.filter(is_chosen=True).first()
+        context["chosen_product"] = chosen_product
+        context["banners"] = AdBanner.objects.filter(is_chosen=True)
+        return context
 
 
 class CatalogView(BaseMixin, ListView):
