@@ -133,11 +133,11 @@ class Product(models.Model):
 
     @classmethod
     def get_popular_products(cls):
-        return cls.objects.filter(is_deleted=False).order_by('?')[:8]
+        return cls.objects.filter(is_deleted=False).order_by("?")[:8]
 
     @classmethod
     def get_limited_edition_products(cls):
-        return cls.objects.filter(is_limited=True, is_deleted=False).order_by('?')[:16]
+        return cls.objects.filter(is_limited=True, is_deleted=False).order_by("?")[:16]
 
     def __str__(self):
         return self.title
