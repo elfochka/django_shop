@@ -34,6 +34,14 @@ class IndexView(BaseMixin, TemplateView):
         context["chosen_product"] = chosen_product
         context["banners"] = AdBanner.objects.filter(is_chosen=True)
         return context
+        context_data = {
+            "featured_categories": Category.get_featured_categories(),
+            "popular_products": Product.get_popular_products(),
+            "limited_edition_products": Product.get_limited_edition_products(),
+            "banners": AdBanner.get_banners()
+        }
+
+        return context_data
 
 
 class CatalogView(BaseMixin, ListView):
