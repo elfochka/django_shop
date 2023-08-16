@@ -1,0 +1,22 @@
+{% extends "users/base-account.html" %}
+
+ {% block account_section %}
+       <div class="Section-content">
+        <div class="Profile">
+          <h2>
+            История просмотра товаров
+          </h2>
+
+        <ul>
+          {% for action in actions %}
+            <li>
+            <a href="{% url 'products:product' action.target_id %}">
+              {{ action.target }}
+            </a>
+            &middot; {{ action.created }}
+            </li>
+          {% endfor %}
+        </ul>
+        </div>
+       </div>
+ {% endblock %}

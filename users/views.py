@@ -1,9 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, UpdateView
+from django.views.generic import TemplateView, UpdateView, ListView
 
 from users.forms import CustomUserChangeForm
 from users.models import CustomUser
+from products.models import Action
 
 
 class AccountDetailView(LoginRequiredMixin, TemplateView):
@@ -35,5 +36,18 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         return initial
 
 
-class ActionListView(TemplateView):
+class ActionListView(LoginRequiredMixin, ListView):
+    model = Action
     template_name = "users/viewhistory.html"
+    queryset = Action.objects.all()
+    context_object_name = "actions"
+
+    def get_queryset(self):
+        """
+        Get last 20 product views for authenticated user.
+        """
+        queryset = Action.objects.filter(
+            user=self.request.user,
+            verb=Action.Verb.VIEW_PRODUCT,
+        )[:20]
+        return queryset
