@@ -7,9 +7,9 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
-from products.utils import create_action
 from products.forms import ProductFilterForm, ReviewCreationForm
-from products.models import AdBanner, Category, Offer, Product, Review, Action
+from products.models import Action, AdBanner, Category, Offer, Product, Review
+from products.utils import create_action
 
 
 class BaseMixin(ContextMixin):
@@ -132,14 +132,14 @@ class ProductDetailsView(BaseMixin, DetailView):
         """
         Create Action instance for authenticated user to track product viewing history.
         """
-    
+
         if self.request.user.is_authenticated:
             create_action(
                 user=self.request.user,
                 verb=Action.Verb.VIEW_PRODUCT,
                 target=self.get_object(),
             )
-    
+
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

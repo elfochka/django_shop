@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, UpdateView, ListView
+from django.views.generic import ListView, TemplateView, UpdateView
 
+from products.models import Action
 from users.forms import CustomUserChangeForm
 from users.models import CustomUser
-from products.models import Action
 
 
 class AccountDetailView(LoginRequiredMixin, TemplateView):
