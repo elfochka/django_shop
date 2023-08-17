@@ -136,7 +136,7 @@ class ProductDetailsView(BaseMixin, DetailView):
         if self.request.user.is_authenticated:
             create_action(
                 user=self.request.user,
-                verb=Action.Verb.VIEW_PRODUCT,
+                verb=Action.VIEW_PRODUCT,
                 target=self.get_object(),
             )
 

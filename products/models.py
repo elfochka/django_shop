@@ -345,15 +345,14 @@ class Action(models.Model):
     Model to store user actions in connection with "target" database models.
 
     user: user who made the action
-    verb: what was done; use verb definitions from Action.Verb
+    verb: what was done; use constants from Action model
     created: date/time of action
     target_ct: this will tell us the model for the relationship
     target_id: a field to store primary key of the related object
     target: a field to define and manage the generic relation using two previous fields
     """
 
-    class Verb:
-        VIEW_PRODUCT = "просмотрен товар"
+    VIEW_PRODUCT = "просмотрен товар"
 
     user = models.ForeignKey(
         verbose_name="пользователь",
@@ -388,8 +387,4 @@ class Action(models.Model):
     class Meta:
         verbose_name = "действие"
         verbose_name_plural = "действия"
-        indexes = [
-            models.Index(fields=["-created"]),
-            models.Index(fields=["target_ct", "target_id"]),
-        ]
         ordering = ["-created"]

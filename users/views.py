@@ -39,15 +39,11 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 class ActionListView(LoginRequiredMixin, ListView):
     model = Action
     template_name = "users/viewhistory.html"
-    queryset = Action.objects.all()
+    queryset = Action.objects.filter(verb=Action.VIEW_PRODUCT)
     context_object_name = "actions"
 
     def get_queryset(self):
         """
         Get last 20 product views for authenticated user.
         """
-        queryset = Action.objects.filter(
-            user=self.request.user,
-            verb=Action.Verb.VIEW_PRODUCT,
-        )[:20]
-        return queryset
+        return self.queryset.filter(user=self.request.user)[:20]
