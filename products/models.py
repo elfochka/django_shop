@@ -336,3 +336,74 @@ class Review(models.Model):
         ]
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"
+
+
+class Seller(models.Model):
+    title = models.CharField(
+        verbose_name="Название",
+        max_length=255,
+    )
+    description = models.TextField(verbose_name="Описание")
+    image = models.ImageField(
+        verbose_name="Изображение",
+        upload_to="sellers/",
+    )
+    address = models.CharField(
+        verbose_name="Адрес",
+        max_length=255,
+    )
+    phone = models.CharField(
+        verbose_name="Телефон",
+        max_length=20,
+    )
+    email = models.EmailField(verbose_name="Email")
+    created = models.DateTimeField(
+        verbose_name="Дата создания",
+        auto_now_add=True,
+    )
+    updated = models.DateTimeField(
+        verbose_name="Дата обновления",
+        auto_now=True,
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Продавец"
+        verbose_name_plural = "Продавцы"
+
+
+class ProductPosition(models.Model):
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        verbose_name="Товар",
+    )
+    seller = models.ForeignKey(
+        Seller,
+        on_delete=models.CASCADE,
+        related_name="positions",
+        verbose_name="Продавец",
+    )
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name="Цена",
+    )
+    quantity = models.PositiveIntegerField(verbose_name="Количество на складе")
+    created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания",
+    )
+    updated = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Дата обновления",
+    )
+
+    def __str__(self):
+        return f"{self.product.title} - {self.seller.title}"
+
+    class Meta:
+        verbose_name = "Товарная позиция"
+        verbose_name_plural = "Товарные позиции"
