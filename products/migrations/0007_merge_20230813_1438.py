@@ -4,10 +4,9 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('products', '0004_adbanner_alter_offer_options_alter_offer_created_and_more'),
-        ('products', '0006_alter_review_author'),
+        ("products", "0004_adbanner_alter_offer_options_alter_offer_created_and_more"),
+        ("products", "0006_alter_review_author"),
     ]
 
     operations = [
