@@ -31,17 +31,14 @@ class IndexView(BaseMixin, TemplateView):
         Put current "Limited offer" chosen product and Ad banner into context.
         """
         context = super().get_context_data(**kwargs)
-        chosen_product = Product.objects.filter(is_chosen=True).first()
-        context["chosen_product"] = chosen_product
-        context["banners"] = AdBanner.objects.filter(is_chosen=True)
-        return context
         context_data = {
+            "chosen_product": Product.objects.filter(is_chosen=True).first(),
             "featured_categories": Category.get_featured_categories(),
             "popular_products": Product.get_popular_products(),
             "limited_edition_products": Product.get_limited_edition_products(),
             "banners": AdBanner.get_banners()
         }
-
+        context.update(context_data)
         return context_data
 
 
