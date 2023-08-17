@@ -6,6 +6,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
+from django.db.models import Q
 
 from products.forms import ProductFilterForm, ReviewCreationForm
 from products.models import AdBanner, Category, Offer, Product, Review
@@ -73,6 +74,16 @@ class CatalogView(BaseMixin, ListView):
 
             if product_name:
                 queryset = queryset.filter(title__icontains=product_name)
+
+            query = self.request.GET.get("query")
+            if query:
+                queryset = queryset.filter(
+                    Q(title__icontains=query) | Q(description__icontains=query)
+                )
+                # Надо ли осуществлять поиск по описанию товара или только по названию?
+            category = self.request.GET.get("category")
+            if category:
+                queryset = queryset.filter(category=category)
 
             # !Ждём реализации модели ProductPosition и нужно раскомментить, что бы фильтр полностью работал.
             # if in_stock:
