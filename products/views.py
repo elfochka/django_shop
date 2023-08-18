@@ -1,12 +1,12 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
-from django.db.models import Q
 
 from products.forms import ProductFilterForm, ReviewCreationForm
 from products.models import AdBanner, Category, Offer, Product, Review
@@ -27,9 +27,7 @@ class IndexView(BaseMixin, TemplateView):
     template_name = "index.html"
 
     def get_context_data(self, **kwargs):
-        """
-        Put current "Limited offer" chosen product and Ad banner into context.
-        """
+        """Put current "Limited offer" chosen product and Ad banner into context."""
         context = super().get_context_data(**kwargs)
         chosen_product = Product.objects.filter(is_chosen=True).first()
         context["chosen_product"] = chosen_product
