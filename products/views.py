@@ -76,9 +76,9 @@ class CatalogView(BaseMixin, ListView):
             query = self.request.GET.get("query")
             if query:
                 queryset = queryset.filter(
-                    Q(title__icontains=query) | Q(description__icontains=query)
+                    Q(title__icontains=query) | Q(title__icontains=query.capitalize())
+                                              | Q(title__icontains=query.lower())
                 )
-                # Надо ли осуществлять поиск по описанию товара или только по названию?
             category = self.request.GET.get("category")
             if category:
                 queryset = queryset.filter(category=category)
