@@ -30,17 +30,17 @@ class Order(models.Model):
     """Model for storing orders."""
 
     PAYMENT_CHOICES = (
-        ('cash', 'Наличные'),
-        ('card', 'Карта'),
+        ("cash", "Наличные"),
+        ("card", "Карта"),
     )
 
     STATUS_CHOICES = (
-        ('created', 'Сформирован'),
-        ('unpaid', 'Не оплачен'),
-        ('paid', 'Оплачен'),
-        ('shipped', 'В пути'),
-        ('delivered', 'Доставлен'),
-        ('returned', 'Возвращен'),
+        ("created", "Сформирован"),
+        ("unpaid", "Не оплачен"),
+        ("paid", "Оплачен"),
+        ("shipped", "В пути"),
+        ("delivered", "Доставлен"),
+        ("returned", "Возвращен"),
     )
 
     client = models.ForeignKey(
@@ -62,7 +62,7 @@ class Order(models.Model):
     status = models.CharField(
         verbose_name="статус заказа",
         choices=STATUS_CHOICES,
-        default='created',
+        default="created",
         max_length=10,
     )
     is_paid = models.BooleanField(
@@ -110,11 +110,11 @@ class OrderItem(models.Model):
         verbose_name="заказ",
         on_delete=models.CASCADE,
     )
-    product_position = models.ForeignKey(
-        ProductPosition,
-        verbose_name="позиция товара",
-        on_delete=models.CASCADE,
-    )
+    # product_position = models.ForeignKey(
+    #     ProductPosition,
+    #     verbose_name="позиция товара",
+    #     on_delete=models.CASCADE,
+    # )
     price = models.DecimalField(
         verbose_name="цена",
         max_digits=10,
@@ -128,5 +128,5 @@ class OrderItem(models.Model):
         verbose_name = "позиция заказа"
         verbose_name_plural = "позиции заказа"
 
-    def __str__(self):
-        return f"Order {self.order.id}, Product: {self.product_position.title}"
+    # def __str__(self):
+    #     return f"Order {self.order.id}, Product: {self.product_position.title}"
