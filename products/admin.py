@@ -3,7 +3,8 @@ from django.contrib.admin import TabularInline
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
-from .models import AdBanner, Category, Offer, Product, ProductImage, Tag
+from .models import (AdBanner, Category, Offer, Product, ProductImage,
+                     ProductPosition, Seller, Tag)
 
 
 @admin.register(Category)
@@ -210,3 +211,45 @@ class AdBannerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(AdBanner, AdBannerAdmin)
+
+
+@admin.register(Seller)
+class SellerAdmin(admin.ModelAdmin):
+    list_display = [
+        "title",
+        "address",
+        "phone",
+        "email",
+        "created",
+        "updated",
+    ]
+    search_fields = ["title", "address", "phone", "email"]
+    readonly_fields = ["created", "updated"]
+    ordering = ["-created"]
+
+    fieldsets = [
+        ("Основная информация", {"fields": ["title", "description", "image", "address", "phone", "email"]}),
+        ("Время создания и изменения", {"fields": ["created", "updated"]}),
+    ]
+
+
+@admin.register(ProductPosition)
+class ProductPositionAdmin(admin.ModelAdmin):
+    list_display = [
+        "product",
+        "seller",
+        "price",
+        "quantity",
+        "created",
+        "updated",
+    ]
+    search_fields = ["product__title", "seller__title"]
+    list_filter = ["seller", "product"]
+    readonly_fields = ["created", "updated"]
+    ordering = ["-created"]
+
+    fieldsets = [
+        ("Продукт и продавец", {"fields": ["product", "seller"]}),
+        ("Цена и количество", {"fields": ["price", "quantity"]}),
+        ("Время создания и изменения", {"fields": ["created", "updated"]}),
+    ]
