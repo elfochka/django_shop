@@ -8,8 +8,9 @@ from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
 from products.forms import ProductFilterForm, ReviewCreationForm
-from products.models import Action, AdBanner, Category, Offer, Product, Review
-from products.utils import create_action
+from products.models import AdBanner, Category, Offer, Product, Review
+from users.models import Action
+from users.utils import create_action
 
 
 class BaseMixin(ContextMixin):

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserChangeForm, CustomUserCreationForm
-from .models import CustomUser
+from .models import Action, CustomUser
 
 
 @admin.register(CustomUser)
@@ -41,3 +41,10 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     )
+
+
+@admin.register(Action)
+class ActionAdmin(admin.ModelAdmin):
+    list_display = ["user", "verb", "target", "created"]
+    list_filter = ["created"]
+    search_fields = ["verb"]

@@ -3,7 +3,7 @@ import datetime
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
-from products.models import Action
+from users.models import Action
 
 
 def create_action(user, verb: str, target=None) -> None:
