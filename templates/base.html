@@ -194,7 +194,7 @@
                 <div class="CategoriesButton-content">
                   {% for category in categories %}
                     <div class="CategoriesButton-link">
-                      <a href="{% url 'products:catalog' %}">
+                      <a href="{% url 'products:catalog'%}?category={{ category.id }}" >
                         <div class="CategoriesButton-icon">
                           <img src="{{ category.image.url }}" alt="{{ category.title }}"/>
                         </div>
@@ -202,23 +202,23 @@
                           {{ category.title }}
                         </span>
                       </a>
-                      {% if category.subcategories.all.count %}
-                        <a class="CategoriesButton-arrow" href="#"></a>
-                        <div class="CategoriesButton-submenu">
-                          {% for subcategory in category.subcategories.all %}
-                            <a class="CategoriesButton-link" href="{% url 'products:catalog' %}">
-                              <div class="CategoriesButton-icon">
-                                <img src="{{ subcategory.image.url }}" alt="{{ subcategory.title }}"/>
-                              </div>
-                              <span class="CategoriesButton-text">
-                                {{ subcategory.title }}
-                              </span>
-                            </a>
-                          {% endfor %}
-                        </div>
-                      {% endif %}
-                    </div>
-                  {% endfor %}
+                    {% if category.subcategories.all.count %}
+                      <a class="CategoriesButton-arrow" href="#"></a>
+                      <div class="CategoriesButton-submenu">
+                        {% for subcategory in category.subcategories.all %}
+                        <a class="CategoriesButton-link" href="{% url 'products:catalog' %}?category={{ subcategory.id }}">
+                          <div class="CategoriesButton-icon">
+                            <img src="{{ subcategory.image.url }}" alt="{{ subcategory.title }}"/>
+                          </div>
+                          <span class="CategoriesButton-text">
+                            {{ subcategory.title }}
+                          </span>
+                        </a>
+                        {% endfor %}
+                      </div>
+                        {% endif %}
+                      </div>
+                    {% endfor %}
                 </div>
               </div>
             </div>
@@ -227,7 +227,8 @@
             </div>
             <div class="Header-search">
               <div class="search">
-                <form class="form form_search" action="#" method="post">
+                <form class="form form_search" action="/products/catalog" method="GET">
+                  {% csrf_token %}
                   <input class="search-input" id="query" name="query" type="text" placeholder="NVIDIA GeForce RTX 3060"/>
                   <button class="search-button" type="submit" name="search" id="search">
                     <img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>

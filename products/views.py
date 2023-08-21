@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
@@ -26,9 +27,7 @@ class IndexView(BaseMixin, TemplateView):
     template_name = "index.html"
 
     def get_context_data(self, **kwargs):
-        """
-        Put current "Limited offer" chosen product and Ad banner into context.
-        """
+        """Put current "Limited offer" chosen product and Ad banner into context."""
         context = super().get_context_data(**kwargs)
         context_data = {
             "chosen_product": Product.objects.filter(is_chosen=True).first(),
@@ -70,6 +69,16 @@ class CatalogView(BaseMixin, ListView):
 
             if product_name:
                 queryset = queryset.filter(title__icontains=product_name)
+
+            query = self.request.GET.get("query")
+            if query:
+                queryset = queryset.filter(
+                    Q(title__icontains=query) | Q(title__icontains=query.capitalize())
+                                              | Q(title__icontains=query.lower())
+                )
+            category = self.request.GET.get("category")
+            if category:
+                queryset = queryset.filter(category=category)
 
             # !Ждём реализации модели ProductPosition и нужно раскомментить, что бы фильтр полностью работал.
             # if in_stock:
