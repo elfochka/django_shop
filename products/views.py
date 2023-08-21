@@ -10,6 +10,8 @@ from django.views.generic.base import ContextMixin
 
 from products.forms import ProductFilterForm, ReviewCreationForm
 from products.models import AdBanner, Category, Offer, Product, Review
+from users.models import Action
+from users.utils import create_action
 
 
 class BaseMixin(ContextMixin):
@@ -132,6 +134,20 @@ class ProductDetailsView(BaseMixin, DetailView):
         context["form"] = ReviewCreationForm()
         context["reviews"] = Review.objects.filter(product=self.object)
         return context
+
+    def get(self, request, *args, **kwargs):
+        """
+        Create Action instance for authenticated user to track product viewing history.
+        """
+
+        if self.request.user.is_authenticated:
+            create_action(
+                user=self.request.user,
+                verb=Action.VIEW_PRODUCT,
+                target=self.get_object(),
+            )
+
+        return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
