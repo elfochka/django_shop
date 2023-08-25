@@ -156,13 +156,15 @@
                     <div class="Cards">
                         {% for product in popular_products %}
                             <div class="Card">
-                                <a class="Card-picture" href="#">
+                                <a class="Card-picture" href="{% url 'products:product' pk=product.pk %}">
                                     <img src="{% static 'assets/img/content/home/card.jpg' %}"
                                          alt="card.jpg"/>
                                 </a>
                                 <div class="Card-content">
                                     <strong class="Card-title">
-                                        <a href="#">{{ product.title|slice:":36" }}</a>
+                                        <a href="{% url 'products:product' pk=product.pk %}">
+                                            {{ product.title|slice:":36" }}
+                                        </a>
                                     </strong>
                                     <div class="Card-description">
                                         <div class="Card-cost">
@@ -201,13 +203,16 @@
                                 <div class="Slider-item">
                                     <div class="Slider-content">
                                         <div class="Card">
-                                            <a class="Card-picture" href="#">
+                                            <a class="Card-picture"
+                                               href="{% url 'products:product' pk=edition_product.pk %}">
                                                 <img src="{% static 'assets/img/content/home/card.jpg' %}"
                                                      alt="card.jpg"/>
                                             </a>
                                             <div class="Card-content">
                                                 <strong class="Card-title">
-                                                    <a href="#">{{ edition_product.title|slice:":48" }}</a>
+                                                    <a href="{% url 'products:product' pk=edition_product.pk %}">
+                                                        {{ edition_product.title|slice:":48" }}
+                                                    </a>
                                                 </strong>
                                                 <div class="Card-description">
                                                     <div class="Card-cost">
