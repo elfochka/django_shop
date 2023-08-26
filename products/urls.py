@@ -9,6 +9,6 @@ urlpatterns = [
     path("catalog//<int:page>", CatalogView.listing, name="catalog-by-page"),
     path("product/<int:pk>/", ProductDetailsView.as_view(), name="product"),
     path("compare/", CompareView.as_view(), name="compare"),
-    path('add_to_comparison/<int:pk>/', add_to_comparison, name='add_to_comparison'),
+    path("add_to_comparison/<int:pk>/", add_to_comparison, name="add_to_comparison"),
     path("sale/", SaleView.as_view(), name="sale"),
 ]

@@ -1,9 +1,9 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator
-from django.db.models import Q, Avg
+from django.db.models import Avg, Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
@@ -48,16 +48,16 @@ class CatalogView(BaseMixin, ListView):
     template_name = "products/catalog.html"
     queryset = (
         Product.objects.filter(is_deleted=False)
-            .select_related("category")
-            .prefetch_related("tags", "images")
+        .select_related("category")
+        .prefetch_related("tags", "images")
     )
     context_object_name = "products"
 
     def get_queryset(self):
         queryset = (
             Product.objects.filter(is_deleted=False)
-                .select_related("category")
-                .prefetch_related("tags", "images")
+            .select_related("category")
+            .prefetch_related("tags", "images")
         )
 
         form = ProductFilterForm(self.request.GET)
@@ -121,8 +121,8 @@ class ProductDetailsView(BaseMixin, DetailView):
     template_name = "products/product.html"
     queryset = (
         Product.objects.filter(is_deleted=False)
-            .select_related("category")
-            .prefetch_related("tags", "images")
+        .select_related("category")
+        .prefetch_related("tags", "images")
     )
     context_object_name = "product"
 
@@ -170,23 +170,22 @@ class ProductDetailsView(BaseMixin, DetailView):
 
 
 def add_to_comparison(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    comparison_products = request.session.get('comparison_products', [])
+    comparison_products = request.session.get("comparison_products", [])
     if len(comparison_products) >= 4:
-        del request.session['comparison_products']
+        del request.session["comparison_products"]
         comparison_products = []
     if pk in comparison_products:
         comparison_products.remove(pk)
-        request.session['comparison_products'] = comparison_products
+        request.session["comparison_products"] = comparison_products
     else:
         comparison_products.append(pk)
-        request.session['comparison_products'] = comparison_products
+        request.session["comparison_products"] = comparison_products
 
-    referer = request.META.get('HTTP_REFERER', None)
+    referer = request.META.get("HTTP_REFERER", None)
     if referer:
         return HttpResponseRedirect(referer)
     else:
-        return redirect('products:catalog')
+        return redirect("products:catalog")
 
 
 class CompareView(BaseMixin, TemplateView):
@@ -194,12 +193,12 @@ class CompareView(BaseMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        comparison_ids = self.request.session.get('comparison_products', [])
+        comparison_ids = self.request.session.get("comparison_products", [])
         products_to_compare = Product.objects.filter(id__in=comparison_ids)
-        show_differences = self.request.GET.get('show_differences', 'true').lower() == 'true'
+        show_differences = self.request.GET.get("show_differences", "true").lower() == "true"
 
         if len(products_to_compare) < 2:
-            context['error_message'] = 'Недостаточно данных для сравнения'
+            context["error_message"] = "Недостаточно данных для сравнения"
             return context
 
         all_categories_equal = all(p.category == products_to_compare[0].category for p in products_to_compare)
@@ -211,7 +210,7 @@ class CompareView(BaseMixin, TemplateView):
                 if key not in product_features or product_features[key] != products_to_compare[0].features[key]:
                     common_features[key] = False
 
-            average_price = product.productposition_set.aggregate(Avg('price'))['price__avg']
+            average_price = product.productposition_set.aggregate(Avg("price"))["price__avg"]
 
             if average_price is not None:
                 offers = Offer.objects.filter(
@@ -245,16 +244,16 @@ class CompareView(BaseMixin, TemplateView):
 
         if not has_common_features and not all_categories_equal:
             context[
-                'impossible_to_compare'] = 'Величина мира и его явлений такова, ' \
-                                           'что все попытки сравнения между несравнимыми ' \
-                                           'вещами лишь уменьшают их уникальность.'
-            context['products'] = products_to_compare
+                "impossible_to_compare"] = "Величина мира и его явлений такова, " \
+                                           "что все попытки сравнения между несравнимыми " \
+                                           "вещами лишь уменьшают их уникальность."
+            context["products"] = products_to_compare
             return context
 
-        context['products'] = products_to_compare
-        context['all_categories_equal'] = all_categories_equal
-        context['highlighted_keys'] = highlighted_keys
-        context['show_differences'] = show_differences
+        context["products"] = products_to_compare
+        context["all_categories_equal"] = all_categories_equal
+        context["highlighted_keys"] = highlighted_keys
+        context["show_differences"] = show_differences
 
         return context
 
