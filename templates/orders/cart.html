@@ -6,7 +6,7 @@
     <div class="Section">
       <div class="wrap">
         {% if cart|length %}
-        <form class="form Cart" action="#" method="post">
+        <div class="form Cart">
 
           {% for item in cart %}
             <div class="Cart-product">
@@ -36,6 +36,31 @@
                   </div>
                 </div>
               </div>
+
+              <div class="Cart-block Cart-block_row">
+                <div class="Cart-block Cart-block_seller">
+                </div>
+                <div class="Cart-block Cart-block_amount">
+                  <div class="Cart-amount">
+                    <div class="Amount">
+                      <button class="Amount-remove" type="button">
+                      </button>
+                      <input class="Amount-input form-input" name="amount" type="text" value="1" />
+                      <button class="Amount-add" type="button">
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="Cart-block Cart-block_delete">
+                  <form action="{% url 'products:cart_remove' item.product_position.pk %}" method="post">
+                    {% csrf_token %}
+                    <button class="Cart-delete" type="submit">
+                      <img src="{% static 'assets/img/icons/card/delete.svg' %}" alt="Удалить товар из корзины" />
+                    </button>
+                  </form>
+                </div>
+              </div>
+
             </div>
           {% endfor %}
 
@@ -54,7 +79,7 @@
               </a>
             </div>
           </div>
-        </form>
+        </div>
         {% else %}
           <h2>Ваша корзина пока пуста!</h2>
         {% endif %}

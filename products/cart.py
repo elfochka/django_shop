@@ -58,16 +58,16 @@ class Cart:
         """
         self.session.modified = True
 
-    def remove(self, product: Product):
+    def remove(self, product_position: ProductPosition):
         """
         Remove a product_position from the cart.
 
-        :param product: product_position to remove from the cart.
+        :param product_position: product_position to remove from the cart.
         """
-        product_id = str(product.id)
+        product_position_id = str(product_position.id)
 
-        if product_id in self.cart:
-            del self.cart[product_id]
+        if product_position_id in self.cart:
+            del self.cart[product_position_id]
             self.save()
 
     def __iter__(self):

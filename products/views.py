@@ -215,15 +215,15 @@ def cart_add(request: HttpRequest, product_id: int) -> HttpResponse:
 
 
 @require_POST
-def cart_remove(request: HttpRequest, product_id) -> HttpResponse:
+def cart_remove(request: HttpRequest, product_position_id) -> HttpResponse:
     """
-    View to remove products from the cart.
+    View to remove product positions from the cart.
     """
     cart = Cart(request)
-    product = get_object_or_404(Product, id=product_id)
-    cart.remove(product=product)
+    product_position = get_object_or_404(ProductPosition, id=product_position_id)
+    cart.remove(product_position=product_position)
 
-    return redirect("cart:cart_detail")
+    return redirect("products:cart_detail")
 
 
 class CartDetailView(BaseMixin, TemplateView):
