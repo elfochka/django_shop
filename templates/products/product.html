@@ -38,23 +38,29 @@
                             <div class="ProductCard-text">
                                 {{ product.description|truncatechars:300 }}
                             </div>
+
+                          <form action="{% url 'products:cart_add' product.id %}" method="post">
                             <div class="ProductCard-cart">
+                              <form>
+                                {% csrf_token %}
                                 <div class="ProductCard-cartElement ProductCard-cartElement_amount">
                                     <div class="Amount Amount_product">
                                         <button class="Amount-remove" type="button">
                                         </button>
-                                        <input class="Amount-input form-input" name="amount" type="text" value="1"/>
+                                        <input class="Amount-input form-input" name="quantity" type="text" value="1" id="id_quantity" required/>
+                                        <input type="hidden" name="is_override" id="id_is_override">
                                         <button class="Amount-add" type="button">
                                         </button>
                                     </div>
                                 </div>
                                 <div class="ProductCard-cartElement">
-                                    <a class="btn btn_primary" href="#modal_open">
+                                    <button class="btn btn_primary" type="submit">
                                         <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
                                              alt="cart_white.svg"/>
                                         <span class="btn-content">Купить</span>
-                                    </a>
+                                    </button>
                                 </div>
+                              </form>
                                 <div id="modal_open" class="my_modal">
                                     <div class="my_modal-dialog">
                                         <div class="my_modal-content">
@@ -69,6 +75,7 @@
                                     </div>
                                 </div>
                             </div>
+                          </form>
                             <div class="ProductCard-footer">
                                 <div class="ProductCard-tags">
                                     <strong class="ProductCard-tagsTitle">Тэги:</strong>

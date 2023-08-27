@@ -2,14 +2,16 @@ from datetime import datetime
 
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
-from products.forms import ProductFilterForm, ReviewCreationForm
-from products.models import AdBanner, Category, Offer, Product, Review
+from products.cart import Cart
+from products.forms import AddProductToCartForm, ProductFilterForm, ReviewCreationForm
+from products.models import AdBanner, Category, Offer, Product, Review, ProductPosition
 from users.models import Action
 from users.utils import create_action
 
@@ -36,7 +38,7 @@ class IndexView(BaseMixin, TemplateView):
             "featured_categories": Category.get_featured_categories(),
             "popular_products": Product.get_popular_products(),
             "limited_edition_products": Product.get_limited_edition_products(),
-            "banners": AdBanner.get_banners()
+            "banners": AdBanner.get_banners(),
         }
         context.update(context_data)
         return context_data
@@ -75,8 +77,9 @@ class CatalogView(BaseMixin, ListView):
             query = self.request.GET.get("query")
             if query:
                 queryset = queryset.filter(
-                    Q(title__icontains=query) | Q(title__icontains=query.capitalize())
-                                              | Q(title__icontains=query.lower())
+                    Q(title__icontains=query)
+                    | Q(title__icontains=query.capitalize())
+                    | Q(title__icontains=query.lower())
                 )
             category = self.request.GET.get("category")
             if category:
@@ -182,3 +185,63 @@ class SaleView(BaseMixin, ListView):
         date_end__gte=datetime.now(),
     ).prefetch_related("products", "categories")
     context_object_name = "offers"
+
+
+@require_POST
+def cart_add(request: HttpRequest, product_id: int) -> HttpResponse:
+    """
+    View for adding product_position positions to the cart or updating quantities for already added products.
+    """
+    cart = Cart(request)
+    # Get random product position for the selected product
+    product_position = ProductPosition.objects.filter(product_id=product_id).first()
+    form = AddProductToCartForm(request.POST)
+
+    if form.is_valid():
+        data = form.cleaned_data
+        cart.add(
+            product_position=product_position,
+            quantity=data["quantity"],
+            override_quantity=data["is_override"],
+        )
+
+    # Redirect to product page, and open the modal
+    return redirect(
+        reverse_lazy("products:product", kwargs={"pk": product_id}) + "#modal_open"
+    )
+
+
+@require_POST
+def cart_remove(request: HttpRequest, product_id) -> HttpResponse:
+    """
+    View to remove products from the cart.
+    """
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
+    cart.remove(product=product)
+
+    return redirect("cart:cart_detail")
+
+
+def cart_detail(request: HttpRequest) -> HttpResponse:
+    """
+    Cart detail view.
+    """
+    cart = Cart(request)
+
+    for item in cart:
+        # Create a form for each item in the cart with it's initial quantity
+        item["update_quantity_form"] = AddProductToCartForm(
+            initial={
+                "quantity": item["quantity"],
+                "override": True,
+            }
+        )
+
+    return render(
+        request,
+        "orders/cart.html",
+        {
+            "cart": cart,
+        },
+    )

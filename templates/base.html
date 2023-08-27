@@ -154,10 +154,10 @@
                   </div>
                 {% endif %}
 
-                <a class="CartBlock-block" href="cart.html">
+                <a class="CartBlock-block" href="{% url 'products:cart_detail' %}">
                   <img class="CartBlock-img" src="{% static 'assets/img/icons/cart.svg' %}" alt="cart.svg"/>
                   <span class="CartBlock-amount">
-                    0
+                    {{ cart|length }}
                   </span>
                 </a>
                 <div class="CartBlock-block">
