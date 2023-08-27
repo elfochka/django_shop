@@ -42,13 +42,20 @@
                 </div>
                 <div class="Cart-block Cart-block_amount">
                   <div class="Cart-amount">
-                    <div class="Amount">
-                      <button class="Amount-remove" type="button">
+                    <form action="{% url 'products:cart_add' item.product_position.product.id %}" method="post">
+                      {% csrf_token %}
+                      <div class="Amount">
+                        <button class="Amount-remove" type="button">
+                        </button>
+                        <input class="Amount-input form-input" name="quantity" type="text" value="{{ item.quantity }}" id="id_quantity" required />
+                        <input type="hidden" name="is_override" id="id_is_override" value="True">
+                        <button class="Amount-add" type="button">
+                        </button>
+                      </div>
+                      <button type="submit">
+                        Пересчитать
                       </button>
-                      <input class="Amount-input form-input" name="amount" type="text" value="1" />
-                      <button class="Amount-add" type="button">
-                      </button>
-                    </div>
+                    </form>
                   </div>
                 </div>
                 <div class="Cart-block Cart-block_delete">

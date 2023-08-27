@@ -208,6 +208,10 @@ def cart_add(request: HttpRequest, product_id: int) -> HttpResponse:
             override_quantity=data["is_override"],
         )
 
+        # We  only set `is_override` to True in cart detailed view, so redirect user there
+        if data["is_override"]:
+            return redirect("products:cart_detail")
+
     # Redirect to product page, and open the modal
     return redirect(
         reverse_lazy("products:product", kwargs={"pk": product_id}) + "#modal_open"
@@ -228,19 +232,3 @@ def cart_remove(request: HttpRequest, product_position_id) -> HttpResponse:
 
 class CartDetailView(BaseMixin, TemplateView):
     template_name = "orders/cart.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        cart = Cart(self.request)
-        for item in cart:
-            # Create a form for each item in the cart with it's initial quantity
-            item["update_quantity_form"] = AddProductToCartForm(
-                initial={
-                    "quantity": item["quantity"],
-                    "override": True,
-                }
-            )
-
-        context["cart"] = cart
-        return context

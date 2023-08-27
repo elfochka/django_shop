@@ -29,6 +29,7 @@ class Cart:
     ) -> None:
         """
         Add a product position to the cart or update it's quantity.
+        We add product position from the product view, and override it's quantity from cart detail view.
 
         :param product_position: the product instance to add or update in the cart.
         :param quantity: optional integer with the product quantity.
@@ -48,6 +49,9 @@ class Cart:
             self.cart[product_position_id]["quantity"] = quantity
         else:
             self.cart[product_position_id]["quantity"] += quantity
+
+        if self.cart[product_position_id]["quantity"] == 0:
+            del self.cart[product_position_id]
 
         self.save()
 

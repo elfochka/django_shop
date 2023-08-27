@@ -41,7 +41,6 @@
 
                           <form action="{% url 'products:cart_add' product.id %}" method="post">
                             <div class="ProductCard-cart">
-                              <form>
                                 {% csrf_token %}
                                 <div class="ProductCard-cartElement ProductCard-cartElement_amount">
                                     <div class="Amount Amount_product">
@@ -60,7 +59,6 @@
                                         <span class="btn-content">Купить</span>
                                     </button>
                                 </div>
-                              </form>
                                 <div id="modal_open" class="my_modal">
                                     <div class="my_modal-dialog">
                                         <div class="my_modal-content">
