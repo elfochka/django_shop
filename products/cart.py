@@ -75,7 +75,9 @@ class Cart:
         Iterate over the items in the cart and get the product positions from the database.
         """
         product_position_ids = self.cart.keys()
-        product_positions = ProductPosition.objects.filter(id__in=product_position_ids)
+        product_positions = ProductPosition.objects.filter(
+            id__in=product_position_ids
+        ).select_related("product")
         cart = self.cart.copy()
 
         # Add database model instances to the cart

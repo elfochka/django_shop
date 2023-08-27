@@ -195,8 +195,11 @@ def cart_add(request: HttpRequest, product_id: int) -> HttpResponse:
     cart = Cart(request)
     # Get random product position for the selected product
     product_position = ProductPosition.objects.filter(product_id=product_id).first()
-    form = AddProductToCartForm(request.POST)
+    # If there's no product position for this product, redirect user back to the product page
+    if not product_position:
+        return redirect(reverse_lazy("products:product", kwargs={"pk": product_id}))
 
+    form = AddProductToCartForm(request.POST)
     if form.is_valid():
         data = form.cleaned_data
         cart.add(
@@ -223,25 +226,21 @@ def cart_remove(request: HttpRequest, product_id) -> HttpResponse:
     return redirect("cart:cart_detail")
 
 
-def cart_detail(request: HttpRequest) -> HttpResponse:
-    """
-    Cart detail view.
-    """
-    cart = Cart(request)
+class CartDetailView(BaseMixin, TemplateView):
+    template_name = "orders/cart.html"
 
-    for item in cart:
-        # Create a form for each item in the cart with it's initial quantity
-        item["update_quantity_form"] = AddProductToCartForm(
-            initial={
-                "quantity": item["quantity"],
-                "override": True,
-            }
-        )
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    return render(
-        request,
-        "orders/cart.html",
-        {
-            "cart": cart,
-        },
-    )
+        cart = Cart(self.request)
+        for item in cart:
+            # Create a form for each item in the cart with it's initial quantity
+            item["update_quantity_form"] = AddProductToCartForm(
+                initial={
+                    "quantity": item["quantity"],
+                    "override": True,
+                }
+            )
+
+        context["cart"] = cart
+        return context

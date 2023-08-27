@@ -7,33 +7,54 @@
       <div class="wrap">
         {% if cart|length %}
         <form class="form Cart" action="#" method="post">
-          <div class="Cart-product">
+
+          {% for item in cart %}
+            <div class="Cart-product">
               <div class="Cart-block Cart-block_row">
-                  <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img" src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
+                <div class="Cart-block Cart-block_pict">
+                  <a class="Cart-pict" href="{% url 'products:product' item.product_position.product.pk %}">
+                    {% with item.product_position.product.images.all|first as img %}
+                      {% if img %}
+                        <img class="Cart-img" src="{{ img.image_url }}" alt="{{ item.product_position }}" />
+                      {% else %}
+                        <img class="Cart-img" src="{% static "assets/img/product-placeholder.png" %}" alt="{{ item.product_position }}" />
+                      {% endif %}
+                    {% endwith %}
+                  </a>
+                </div>
+                <div class="Cart-block Cart-block_info">
+                  <a class="Cart-title" href="{% url 'products:product' item.product_position.product.pk %}">
+                    {{ item.product_position }}
+                  </a>
+                  <div class="Cart-desc">
+                    {{ item.product_position.product.description|truncatechars:512 }}
                   </div>
-                  <div class="Cart-block Cart-block_info"><a class="Cart-title" href="#">Ноутбук</a>
-                      <div class="Cart-desc">Это супер ноутбук, 3 гб. 4 ядра
-                      </div>
+                </div>
+                <div class="Cart-block Cart-block_price">
+                  <div class="Cart-price">
+                    {{ item.total_price }}
                   </div>
-                  <div class="Cart-block Cart-block_price">
-                      <div class="Cart-price">80.00$
-                      </div>
-                  </div>
+                </div>
               </div>
-          </div>
+            </div>
+          {% endfor %}
 
           <div class="Cart-total">
-              <div class="Cart-block Cart-block_total">
-                  <strong class="Cart-title">Итого:
-                  </strong><span class="Cart-price">200.99$</span>
-              </div>
-              <div class="Cart-block"><a class="btn btn_success btn_lg" href="order.html">Оформить заказ</a>
-              </div>
+            <div class="Cart-block Cart-block_total">
+              <strong class="Cart-title">
+                Итого:
+              </strong>
+              <span class="Cart-price">
+                {{ cart.get_total_price }}
+              </span>
+            </div>
+            <div class="Cart-block">
+              <a class="btn btn_success btn_lg" href="order.html">
+                Оформить заказ
+              </a>
+            </div>
           </div>
         </form>
-          {% for item in cart %}
-            {{ item }}<br>
-          {% endfor %}
         {% else %}
           <h2>Ваша корзина пока пуста!</h2>
         {% endif %}
