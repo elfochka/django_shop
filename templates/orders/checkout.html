@@ -66,9 +66,10 @@
         </div>
 
         <div class="Section-content">
-          <form class="form" action="#" method="post">
 
-            {% if step == "1" %}
+          {% if step == "1" %}
+            <form class="form" action="{% url 'orders:checkout' %}?step=1" method="post">
+              {% csrf_token %}
               <div class="Order-block Order-block_OPEN" id="step1">
                 <header class="Section-header Section-header_sm">
                   <h2 class="Section-title">
@@ -101,7 +102,7 @@
                       <label class="form-label" for="mail">
                         E-mail
                       </label>
-                      <input class="form-input" id="mail" name="mail" type="text" data-validate="require" placeholder="user@domain.ru"
+                      <input class="form-input" id="email" name="email" type="text" data-validate="require" placeholder="user@domain.ru"
                              {% if user.email %}
                              value="{{ user.email }}"
                              {% endif %}
@@ -131,14 +132,20 @@
                   </div>
                 </div>
                 <div class="Order-footer">
-                  <a class="btn btn_success Order-next" href="#step2">
+                  <button class="btn btn_success" type="submit">
                     Дальше
-                  </a>
+                  </button>
                 </div>
               </div>
-            {% endif %}
+            </form>
 
-            {% if step == "2" %}
+            <!-- TODO: remove demo -->
+            {{ form.as_p }}
+          {% endif %}
+
+          {% if step == "2" %}
+            <form class="form" action="{% url 'orders:checkout' %}?step=2" method="post">
+              {% csrf_token %}
               <div class="Order-block Order-block_OPEN" id="step2">
                 <header class="Section-header Section-header_sm">
                   <h2 class="Section-title">
@@ -178,14 +185,20 @@
                   <textarea class="form-textarea" name="address" id="address"></textarea>
                 </div>
                 <div class="Order-footer">
-                  <a class="btn btn_success Order-next" href="#step3">
+                  <button class="btn btn_success" type="submit">
                     Дальше
-                  </a>
+                  </button>
                 </div>
               </div>
-            {% endif %}
+            </form>
 
-            {% if step == "3" %}
+            <!-- TODO: remove demo -->
+            {{ form.as_p }}
+          {% endif %}
+
+          {% if step == "3" %}
+            <form class="form" action="{% url 'orders:checkout' %}?step=3" method="post">
+              {% csrf_token %}
               <div class="Order-block Order-block_OPEN" id="step3">
                 <header class="Section-header Section-header_sm">
                   <h2 class="Section-title">
@@ -195,7 +208,7 @@
                 <div class="form-group">
                   <div>
                     <label class="toggle">
-                      <input type="radio" name="pay" value="online" checked="checked" />
+                      <input type="radio" name="payment" value="online" checked="checked" />
                       <span class="toggle-box"></span>
                       <span class="toggle-text">
                         Онлайн картой
@@ -204,7 +217,7 @@
                   </div>
                   <div>
                     <label class="toggle">
-                      <input type="radio" name="pay" value="someone" />
+                      <input type="radio" name="payment" value="someone" />
                       <span class="toggle-box"></span>
                       <span class="toggle-text">
                         Онлайн со случайного чужого счета
@@ -213,145 +226,145 @@
                   </div>
                 </div>
                 <div class="Order-footer">
-                  <a class="btn btn_success Order-next" href="#step4">
+                  <button class="btn btn_succes" type="submit">
                     Дальше
-                  </a>
+                  </button>
                 </div>
               </div>
-            {% endif %}
+            </form>
+          {% endif %}
 
-            {% if step == "4" %}
-              <div class="Order-block Order-block_OPEN" id="step4">
-                <header class="Section-header Section-header_sm">
-                  <h2 class="Section-title">
-                    Шаг 4. Подтверждение заказа
-                  </h2>
-                </header>
-                <div class="Order-infoBlock">
-                  <div class="Order-personal">
-                    <div class="row">
-                      <div class="row-block">
-                        <div class="Order-info">
-                          <div class="Order-infoType">
-                            ФИО:
-                          </div>
-                          <div class="Order-infoContent">
-                            Иванов Иван Иванович
-                          </div>
+          {% if step == "4" %}
+            <div class="Order-block Order-block_OPEN" id="step4">
+              <header class="Section-header Section-header_sm">
+                <h2 class="Section-title">
+                  Шаг 4. Подтверждение заказа
+                </h2>
+              </header>
+              <div class="Order-infoBlock">
+                <div class="Order-personal">
+                  <div class="row">
+                    <div class="row-block">
+                      <div class="Order-info">
+                        <div class="Order-infoType">
+                          ФИО:
                         </div>
-                        <div class="Order-info">
-                          <div class="Order-infoType">
-                            Телефон:
-                          </div>
-                          <div class="Order-infoContent">
-                            +7000000000
-                          </div>
-                        </div>
-                        <div class="Order-info">
-                          <div class="Order-infoType">
-                            E-mail:
-                          </div>
-                          <div class="Order-infoContent">
-                            send@test.test
-                          </div>
+                        <div class="Order-infoContent">
+                          Иванов Иван Иванович
                         </div>
                       </div>
-                      <div class="row-block">
-                        <div class="Order-info Order-info_delivery">
-                          <div class="Order-infoType">
-                            Тип доставки:
-                          </div>
-                          <div class="Order-infoContent">
-                            Обычная доставка
-                          </div>
+                      <div class="Order-info">
+                        <div class="Order-infoType">
+                          Телефон:
                         </div>
-                        <div class="Order-info">
-                          <div class="Order-infoType">
-                            Город:
-                          </div>
-                          <div class="Order-infoContent">
-                            Москва
-                          </div>
+                        <div class="Order-infoContent">
+                          +7000000000
                         </div>
-                        <div class="Order-info">
-                          <div class="Order-infoType">
-                            Адрес:
-                          </div>
-                          <div class="Order-infoContent">
-                            Ул. Академика Арцимовича, д. 10, кв. 10
-                          </div>
+                      </div>
+                      <div class="Order-info">
+                        <div class="Order-infoType">
+                          E-mail:
                         </div>
-                        <div class="Order-info Order-info_pay">
-                          <div class="Order-infoType">
-                            Оплата:
-                          </div>
-                          <div class="Order-infoContent">
-                            Онлайн картой
-                          </div>
+                        <div class="Order-infoContent">
+                          send@test.test
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row-block">
+                      <div class="Order-info Order-info_delivery">
+                        <div class="Order-infoType">
+                          Тип доставки:
+                        </div>
+                        <div class="Order-infoContent">
+                          Обычная доставка
+                        </div>
+                      </div>
+                      <div class="Order-info">
+                        <div class="Order-infoType">
+                          Город:
+                        </div>
+                        <div class="Order-infoContent">
+                          Москва
+                        </div>
+                      </div>
+                      <div class="Order-info">
+                        <div class="Order-infoType">
+                          Адрес:
+                        </div>
+                        <div class="Order-infoContent">
+                          Ул. Академика Арцимовича, д. 10, кв. 10
+                        </div>
+                      </div>
+                      <div class="Order-info Order-info_pay">
+                        <div class="Order-infoType">
+                          Оплата:
+                        </div>
+                        <div class="Order-infoContent">
+                          Онлайн картой
                         </div>
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  <div class="Cart Cart_order">
+                <div class="Cart Cart_order">
 
-                    {% for item in cart  %}
-                      <div class="Cart-product">
-                        <div class="Cart-block Cart-block_row">
-                          <div class="Cart-block Cart-block_pict">
-                            <a class="Cart-pict" href="{% url 'products:product' item.product_position.product.pk %}">
-                              {% with item.product_position.product.images.all|first as img %}
-                                {% if img %}
-                                  <img class="Cart-img" src="{{ img.image_url }}" alt="{{ item.product_position }}" />
-                                {% else %}
-                                  <img class="Cart-img" src="{% static "assets/img/product-placeholder.png" %}" alt="{{ item.product_position }}" />
-                                {% endif %}
-                              {% endwith %}
-                            </a>
-                          </div>
-                          <div class="Cart-block Cart-block_info">
-                            <a class="Cart-title" href="{% url 'products:product' item.product_position.product.pk %}">
-                              {{ item.product_position }}
-                            </a>
-                            <div class="Cart-desc">
-                              {{ item.product_position.product.description|truncatechars:256 }}
-                            </div>
-                          </div>
-                          <div class="Cart-block Cart-block_price">
-                            <div class="Cart-price">
-                              {{ item.total_price }}
-                            </div>
+                  {% for item in cart  %}
+                    <div class="Cart-product">
+                      <div class="Cart-block Cart-block_row">
+                        <div class="Cart-block Cart-block_pict">
+                          <a class="Cart-pict" href="{% url 'products:product' item.product_position.product.pk %}">
+                            {% with item.product_position.product.images.all|first as img %}
+                              {% if img %}
+                                <img class="Cart-img" src="{{ img.image_url }}" alt="{{ item.product_position }}" />
+                              {% else %}
+                                <img class="Cart-img" src="{% static "assets/img/product-placeholder.png" %}" alt="{{ item.product_position }}" />
+                              {% endif %}
+                            {% endwith %}
+                          </a>
+                        </div>
+                        <div class="Cart-block Cart-block_info">
+                          <a class="Cart-title" href="{% url 'products:product' item.product_position.product.pk %}">
+                            {{ item.product_position }}
+                          </a>
+                          <div class="Cart-desc">
+                            {{ item.product_position.product.description|truncatechars:256 }}
                           </div>
                         </div>
-                        <div class="Cart-block Cart-block_row">
-                          <div class="Cart-block Cart-block_amount">
-                            {{ item.quantity }}
+                        <div class="Cart-block Cart-block_price">
+                          <div class="Cart-price">
+                            {{ item.total_price }}
                           </div>
                         </div>
                       </div>
-                    {% endfor %}
+                      <div class="Cart-block Cart-block_row">
+                        <div class="Cart-block Cart-block_amount">
+                          {{ item.quantity }}
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
 
-                    <div class="Cart-total">
-                      <div class="Cart-block Cart-block_total">
-                        <strong class="Cart-title">
-                          Итого:
-                        </strong>
-                        <span class="Cart-price">
-                          {{ cart.get_total_price }}
-                        </span>
-                      </div>
-                      <div class="Cart-block">
-                        <button class="btn btn_primary btn_lg" type="submit">
-                          Оплатить
-                        </button>
-                      </div>
+                  <div class="Cart-total">
+                    <div class="Cart-block Cart-block_total">
+                      <strong class="Cart-title">
+                        Итого:
+                      </strong>
+                      <span class="Cart-price">
+                        {{ cart.get_total_price }}
+                      </span>
+                    </div>
+                    <div class="Cart-block">
+                      <button class="btn btn_primary btn_lg" type="submit">
+                        Оплатить
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-            {% endif %}
+            </div>
+          {% endif %}
 
-          </form>
         </div>
       </div>
     </div>
