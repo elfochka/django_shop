@@ -78,36 +78,16 @@
                 </header>
                 <div class="row">
                   <div class="row-block">
-                    <div class="form-group">
-                      <label class="form-label" for="name">
-                        ФИО
-                      </label>
-                      <input class="form-input" id="name" name="name" type="text" placeholder="Фамилия Имя Отчество"
-                             {% if user.get_full_name %}
-                             value="{{ user.get_full_name }}"
-                             {% endif %}
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="phone">
-                        Телефон
-                      </label>
-                      <input class="form-input" id="phone" name="phone" type="text" placeholder="+78121234567"
-                             {% if user.phone %}
-                             value="{{ user.phone }}"
-                             {% endif %}
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="mail">
-                        E-mail
-                      </label>
-                      <input class="form-input" id="email" name="email" type="text" data-validate="require" placeholder="user@domain.ru"
-                             {% if user.email %}
-                             value="{{ user.email }}"
-                             {% endif %}
-                      />
-                    </div>
+
+                    <!-- Step 1 - My auto-generated form -->
+                    {% for field in form %}
+                      <div class="form-group">
+                        <label class="form-label" for="{{ field.auto_id }}">
+                          {{ field.label }}
+                        </label>
+                        {{ field }}
+                      </div>
+                    {% endfor %}
                   </div>
 
                   <div class="row-block">
@@ -124,9 +104,10 @@
                         </label>
                         <input class="form-input" id="passwordReply" name="passwordReply" type="password" placeholder="Введите пароль повторно" />
                       </div>
-                      <div class="form-group"><a class="btn btn_muted Order-btnReg" href="#">
-                        Я уже зарегистрирован
-                      </a>
+                      <div class="form-group">
+                        <a class="btn btn_muted Order-btnReg" href="#">
+                         Я уже зарегистрирован
+                        </a>
                       </div>
                     {% endif %}
                   </div>
@@ -138,52 +119,28 @@
                 </div>
               </div>
             </form>
-
-            <!-- TODO: remove demo -->
-            {{ form.as_p }}
           {% endif %}
 
           {% if step == "2" %}
             <form class="form" action="{% url 'orders:checkout' %}?step=2" method="post">
               {% csrf_token %}
-              <div class="Order-block Order-block_OPEN" id="step2">
+                <div class="Order-block Order-block_OPEN" id="step2">
                 <header class="Section-header Section-header_sm">
                   <h2 class="Section-title">
                     Шаг 2. Способ доставки
                   </h2>
                 </header>
-                <div class="form-group">
-                  <div>
-                    <label class="toggle">
-                      <input type="radio" name="delivery" value="ordinary" checked="checked" />
-                      <span class="toggle-box"></span>
-                      <span class="toggle-text">
-                        Обычная доставка
-                      </span>
+
+                <!-- Step 2 - My auto-generated form -->
+                {% for field in form %}
+                  <div class="form-group">
+                    <label class="form-label" for="{{ field.auto_id }}">
+                      {{ field.label }}
                     </label>
+                    {{ field }}
                   </div>
-                  <div>
-                    <label class="toggle">
-                      <input type="radio" name="delivery" value="express" />
-                      <span class="toggle-box"></span>
-                      <span class="toggle-text">
-                        Экспресс доставка
-                      </span>
-                    </label>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="city">
-                    Город
-                  </label>
-                  <input class="form-input" id="city" name="city" type="text" />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="address">
-                    Адрес
-                  </label>
-                  <textarea class="form-textarea" name="address" id="address"></textarea>
-                </div>
+                {% endfor %}
+
                 <div class="Order-footer">
                   <button class="btn btn_success" type="submit">
                     Дальше
@@ -191,9 +148,6 @@
                 </div>
               </div>
             </form>
-
-            <!-- TODO: remove demo -->
-            {{ form.as_p }}
           {% endif %}
 
           {% if step == "3" %}
@@ -205,26 +159,17 @@
                     Шаг 3. Способ оплаты
                   </h2>
                 </header>
-                <div class="form-group">
-                  <div>
-                    <label class="toggle">
-                      <input type="radio" name="payment" value="online" checked="checked" />
-                      <span class="toggle-box"></span>
-                      <span class="toggle-text">
-                        Онлайн картой
-                      </span>
+
+                <!-- Step 3 - My auto-generated form -->
+                {% for field in form %}
+                  <div class="form-group">
+                    <label class="form-label" for="{{ field.auto_id }}">
+                      {{ field.label }}
                     </label>
+                    {{ field }}
                   </div>
-                  <div>
-                    <label class="toggle">
-                      <input type="radio" name="payment" value="someone" />
-                      <span class="toggle-box"></span>
-                      <span class="toggle-text">
-                        Онлайн со случайного чужого счета
-                      </span>
-                    </label>
-                  </div>
-                </div>
+                {% endfor %}
+
                 <div class="Order-footer">
                   <button class="btn btn_succes" type="submit">
                     Дальше

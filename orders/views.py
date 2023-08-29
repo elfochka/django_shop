@@ -22,7 +22,38 @@ class CheckoutView(BaseMixin, FormView):
         """Put step number into context."""
         context = super().get_context_data(**kwargs)
         context["step"] = self.request.GET.get("step", "1")
+
+        # TODO: On step 4, put session data into context
+
         return context
+
+    def get_form(self, form_class=None):
+        if self.request.method == "GET":
+            # TODO: set form defaults for all steps
+            if self.request.GET.get("step") == "1":
+                return CheckoutStep1(
+                    initial={
+                        "name": self.request.user.get_full_name(),
+                        "phone": self.request.user.phone,
+                        "email": self.request.user.email,
+                    }
+                )
+
+            if self.request.GET.get("step") == "2":
+                return CheckoutStep2(
+                    initial={
+                        "delivery": "ordinary",
+                    }
+                )
+
+            if self.request.GET.get("step") == "3":
+                return CheckoutStep3(
+                    initial={
+                        "payment": "online",
+                    }
+                )
+
+        return super().get_form(form_class)
 
     def get(self, request, *args, **kwargs):
         step = self.request.GET.get("step")
