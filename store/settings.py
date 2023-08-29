@@ -170,3 +170,4 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("account_login")
 
 CART_SESSION_ID = "cart"
+ORDER_SESSION_ID = "order"

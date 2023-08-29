@@ -1,6 +1,6 @@
-from django.views import View
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse
+from django.conf import settings
 
 from products.views import BaseMixin
 from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3
@@ -19,17 +19,17 @@ class CheckoutView(BaseMixin, FormView):
         self.step = None
 
     def get_context_data(self, **kwargs):
-        """Put step number into context."""
+        """Put step number and sessiond data into context."""
         context = super().get_context_data(**kwargs)
         context["step"] = self.request.GET.get("step", "1")
-
-        # TODO: On step 4, put session data into context
-
+        context["order"] = self.request.session.get(
+            settings.ORDER_SESSION_ID, default={}
+        )
         return context
 
     def get_form(self, form_class=None):
         if self.request.method == "GET":
-            # TODO: set form defaults for all steps
+            # TODO: set form defaults for all steps using session data
             if self.request.GET.get("step") == "1":
                 return CheckoutStep1(
                     initial={
@@ -58,6 +58,7 @@ class CheckoutView(BaseMixin, FormView):
     def get(self, request, *args, **kwargs):
         step = self.request.GET.get("step")
 
+        # TODO: refactor using dictionary
         if step == "1":
             self.form_class = CheckoutStep1
 
@@ -74,31 +75,33 @@ class CheckoutView(BaseMixin, FormView):
         # Save step value for use in `get_success_url()`
         self.step = step
 
+        order = request.session.get(settings.ORDER_SESSION_ID, "")
+        if not order:
+            request.session[settings.ORDER_SESSION_ID] = {}
+
         if step == "1":
             self.form_class = CheckoutStep1
             form = CheckoutStep1(request.POST)
             if form.is_valid():
-                print("Name.:", form.cleaned_data["name"])
-                print("Phone:", form.cleaned_data["phone"])
-                print("Email:", form.cleaned_data["email"])
-                # TODO: Save name and phone into session
+                order["name"] = form.cleaned_data["name"]
+                order["phone"] = form.cleaned_data["phone"]
+                order["email"] = form.cleaned_data["email"]
 
         if step == "2":
             self.form_class = CheckoutStep2
             form = CheckoutStep2(request.POST)
             if form.is_valid():
-                print("Delivery.:", form.cleaned_data["delivery"])
-                print("City.....:", form.cleaned_data["city"])
-                print("Address..:", form.cleaned_data["address"])
-                # TODO: Save stuff into session
-                # TODO: Handle form errors
+                order["delivery"] = form.cleaned_data["delivery"]
+                order["city"] = form.cleaned_data["city"]
+                order["address"] = form.cleaned_data["address"]
 
         if step == "3":
             self.form_class = CheckoutStep3
             form = CheckoutStep3(request.POST)
             if form.is_valid():
-                print("Payment:", form.cleaned_data["payment"])
+                order["payment"] = form.cleaned_data["payment"]
 
+        request.session.modified = True
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self):

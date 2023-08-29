@@ -195,7 +195,7 @@
                           ФИО:
                         </div>
                         <div class="Order-infoContent">
-                          Иванов Иван Иванович
+                          {{ order.name }}
                         </div>
                       </div>
                       <div class="Order-info">
@@ -203,7 +203,7 @@
                           Телефон:
                         </div>
                         <div class="Order-infoContent">
-                          +7000000000
+                          {{ order.phone }}
                         </div>
                       </div>
                       <div class="Order-info">
@@ -211,7 +211,7 @@
                           E-mail:
                         </div>
                         <div class="Order-infoContent">
-                          send@test.test
+                          {{ order.email }}
                         </div>
                       </div>
                     </div>
@@ -221,7 +221,7 @@
                           Тип доставки:
                         </div>
                         <div class="Order-infoContent">
-                          Обычная доставка
+                          {{ order.delivery }}
                         </div>
                       </div>
                       <div class="Order-info">
@@ -229,7 +229,7 @@
                           Город:
                         </div>
                         <div class="Order-infoContent">
-                          Москва
+                          {{ order.city }}
                         </div>
                       </div>
                       <div class="Order-info">
@@ -237,7 +237,7 @@
                           Адрес:
                         </div>
                         <div class="Order-infoContent">
-                          Ул. Академика Арцимовича, д. 10, кв. 10
+                          {{ order.address }}
                         </div>
                       </div>
                       <div class="Order-info Order-info_pay">
@@ -245,7 +245,7 @@
                           Оплата:
                         </div>
                         <div class="Order-infoContent">
-                          Онлайн картой
+                          {{ order.payment }}
                         </div>
                       </div>
                     </div>
