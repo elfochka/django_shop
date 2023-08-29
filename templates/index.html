@@ -102,10 +102,10 @@
                             <div class="Card-description">
                               <div class="Card-cost">
                                 <span class="Card-priceOld">
-                                  $115.00
+                                  ${{ chosen_product.get_max_price }}
                                 </span>
                                 <span class="Card-price">
-                                  $85.00
+                                  ${{ chosen_product.get_min_price }}
                                 </span>
                               </div>
                               <div class="Card-category">
@@ -168,7 +168,9 @@
                                     </strong>
                                     <div class="Card-description">
                                         <div class="Card-cost">
-                                            <span class="Card-price">$199</span>
+                                            <span class="Card-price">
+                                                ${{ product.get_min_price }}
+                                            </span>
                                         </div>
                                         <div class="Card-category">{{ product.category }}
                                         </div>
@@ -216,7 +218,9 @@
                                                 </strong>
                                                 <div class="Card-description">
                                                     <div class="Card-cost">
-                                                        <span class="Card-price">$199</span>
+                                                        <span class="Card-price">
+                                                            ${{ edition_product.get_min_price }}
+                                                        </span>
                                                     </div>
                                                     <div class="Card-category">{{ limited_product.category }}
                                                     </div>
