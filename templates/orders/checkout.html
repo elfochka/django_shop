@@ -277,95 +277,52 @@
                       </div>
                     </div>
                   </div>
+
                   <div class="Cart Cart_order">
-                    <div class="Cart-product">
-                      <div class="Cart-block Cart-block_row">
-                        <div class="Cart-block Cart-block_pict">
-                          <a class="Cart-pict" href="#">
-                            <img class="Cart-img" src="assets/img/content/home/card.jpg" alt="card.jpg" />
-                          </a>
-                        </div>
-                        <div class="Cart-block Cart-block_info">
-                          <a class="Cart-title" href="#">
-                            Ноутбук
-                          </a>
-                          <div class="Cart-desc">
-                            Это супер ноутбук, 3 гб. 4 ядра
+
+                    {% for item in cart  %}
+                      <div class="Cart-product">
+                        <div class="Cart-block Cart-block_row">
+                          <div class="Cart-block Cart-block_pict">
+                            <a class="Cart-pict" href="{% url 'products:product' item.product_position.product.pk %}">
+                              {% with item.product_position.product.images.all|first as img %}
+                                {% if img %}
+                                  <img class="Cart-img" src="{{ img.image_url }}" alt="{{ item.product_position }}" />
+                                {% else %}
+                                  <img class="Cart-img" src="{% static "assets/img/product-placeholder.png" %}" alt="{{ item.product_position }}" />
+                                {% endif %}
+                              {% endwith %}
+                            </a>
+                          </div>
+                          <div class="Cart-block Cart-block_info">
+                            <a class="Cart-title" href="{% url 'products:product' item.product_position.product.pk %}">
+                              {{ item.product_position }}
+                            </a>
+                            <div class="Cart-desc">
+                              {{ item.product_position.product.description|truncatechars:256 }}
+                            </div>
+                          </div>
+                          <div class="Cart-block Cart-block_price">
+                            <div class="Cart-price">
+                              {{ item.total_price }}
+                            </div>
                           </div>
                         </div>
-                        <div class="Cart-block Cart-block_price">
-                          <div class="Cart-price">
-                            80.00$
-                          </div>
-                        </div>
-                      </div>
-                      <div class="Cart-block Cart-block_row">
-                        <div class="Cart-block Cart-block_amount">
-                          1 шт.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="Cart-product">
-                      <div class="Cart-block Cart-block_row">
-                        <div class="Cart-block Cart-block_pict">
-                          <a class="Cart-pict" href="#">
-                            <img class="Cart-img" src="assets/img/content/sale/product.png" alt="product.png" />
-                          </a>
-                        </div>
-                        <div class="Cart-block Cart-block_info">
-                          <a class="Cart-title" href="#">
-                            Планшет
-                          </a>
-                          <div class="Cart-desc">
-                            Это планшет с современным железом. Процессор последнего поколения
-                          </div>
-                        </div>
-                        <div class="Cart-block Cart-block_price">
-                          <div class="Cart-price">
-                            40.99$
+                        <div class="Cart-block Cart-block_row">
+                          <div class="Cart-block Cart-block_amount">
+                            {{ item.quantity }}
                           </div>
                         </div>
                       </div>
-                      <div class="Cart-block Cart-block_row">
-                        <div class="Cart-block Cart-block_amount">
-                          1 шт.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="Cart-product">
-                      <div class="Cart-block Cart-block_row">
-                        <div class="Cart-block Cart-block_pict">
-                          <a class="Cart-pict" href="#">
-                            <img class="Cart-img" src="assets/img/content/home/card.jpg" alt="card.jpg" />
-                          </a>
-                        </div>
-                        <div class="Cart-block Cart-block_info">
-                          <a class="Cart-title" href="#">
-                            Ноутбук
-                          </a>
-                          <div class="Cart-desc">
-                            Это супер ноутбук, 3 гб. 4 ядра
-                          </div>
-                        </div>
-                        <div class="Cart-block Cart-block_price">
-                          <div class="Cart-price">
-                            80.00$
-                          </div>
-                        </div>
-                      </div>
-                      <div class="Cart-block Cart-block_row">
-                        <div class="Cart-block Cart-block_amount">
-                          1 шт.
-                        </div>
-                      </div>
-                    </div>
+                    {% endfor %}
+
                     <div class="Cart-total">
                       <div class="Cart-block Cart-block_total">
                         <strong class="Cart-title">
                           Итого:
                         </strong>
                         <span class="Cart-price">
-                          200.99$
+                          {{ cart.get_total_price }}
                         </span>
                       </div>
                       <div class="Cart-block">
