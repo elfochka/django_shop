@@ -1,5 +1,7 @@
 from django import forms
 
+from .models import Deliver
+
 
 class CheckoutStep1(forms.Form):
     name = forms.CharField(label="ФИО")
@@ -12,16 +14,7 @@ class CheckoutStep1(forms.Form):
 
 
 class CheckoutStep2(forms.Form):
-    CHOICES = [
-        ("ordinary", "Обычная доставка"),
-        ("express", "Экспресс доставка"),
-    ]
-
-    delivery = forms.ChoiceField(
-        label="Доставка",
-        widget=forms.RadioSelect,
-        choices=CHOICES,
-    )
+    delivery = None
     city = forms.CharField(label="Город")
     address = forms.CharField(
         label="Адрес",
@@ -29,6 +22,16 @@ class CheckoutStep2(forms.Form):
     )
 
     city.widget.attrs.update({"class": "form-input"})
+
+    def __init__(self, *args, **kwargs):
+        """Put all delivery options from the database into form field choices."""
+        super().__init__(*args, **kwargs)
+        deliveries = Deliver.objects.all()
+        self.fields["delivery"] = forms.ChoiceField(
+            label="Доставка",
+            widget=forms.RadioSelect,
+            choices=[(delivery.pk, delivery.title) for delivery in deliveries],
+        )
 
 
 class CheckoutStep3(forms.Form):

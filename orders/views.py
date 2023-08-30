@@ -4,6 +4,7 @@ from django.conf import settings
 
 from products.views import BaseMixin
 from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3
+from .models import Deliver
 
 
 class CartView(TemplateView):
@@ -31,6 +32,11 @@ class CheckoutView(BaseMixin, FormView):
         context["order"] = self.request.session.get(
             settings.ORDER_SESSION_ID, default={}
         )
+
+        # Put delivery instance into context
+        if context["order"]["delivery"]:
+            delivery_instance = Deliver.objects.get(pk=context["order"]["delivery"])
+            context["order"]["delivery"] = delivery_instance
         return context
 
     def get_form(self, form_class=None):
