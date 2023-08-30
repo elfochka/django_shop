@@ -36,29 +36,28 @@ class CheckoutView(BaseMixin, FormView):
     def get_form(self, form_class=None):
         """Fill form for current step with initial values taken from `order` dict in the session."""
         if self.request.method == "GET":
-            # TODO: set form defaults for all steps using session data
-            if self.request.GET.get("step") == "1":
-                return CheckoutStep1(
-                    initial={
-                        "name": self.request.user.get_full_name(),
-                        "phone": self.request.user.phone,
-                        "email": self.request.user.email,
-                    }
-                )
+            request_user_name = ""
+            request_user_phone = ""
+            request_user_email = ""
 
-            if self.request.GET.get("step") == "2":
-                return CheckoutStep2(
-                    initial={
-                        "delivery": "ordinary",
-                    }
-                )
+            if self.request.user.is_authenticated:
+                request_user_name = self.request.user.get_full_name()
+                request_user_phone = self.request.user.phone
+                request_user_email = self.request.user.email
 
-            if self.request.GET.get("step") == "3":
-                return CheckoutStep3(
-                    initial={
-                        "payment": "online",
-                    }
-                )
+            order = self.request.session.get(settings.ORDER_SESSION_ID, {})
+            initial_values = {
+                "name": order.get("name", None) or request_user_name,
+                "phone": order.get("phone", None) or request_user_phone,
+                "email": order.get("email", None) or request_user_email,
+                "delivery": order.get("delivery", "ordinary"),
+                "city": order.get("city", ""),
+                "address": order.get("address", ""),
+                "payment": order.get("payment", "online"),
+            }
+            step = self.request.GET.get("step", "1")
+            if step in self.form_classes.keys():
+                return self.form_classes[step](initial=initial_values)
 
         return super().get_form(form_class)
 
