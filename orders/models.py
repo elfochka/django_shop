@@ -1,7 +1,7 @@
 from django.db import models
 
-from users.models import CustomUser
 from products.models import ProductPosition
+from users.models import CustomUser
 
 
 class Deliver(models.Model):

@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.http import HttpRequest
 
-from products.models import ProductPosition, Product
+from products.models import ProductPosition
 
 
 class Cart:

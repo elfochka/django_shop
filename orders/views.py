@@ -1,12 +1,14 @@
-from django.views.generic import TemplateView, FormView
-from django.urls import reverse
-from django.conf import settings
 from decimal import Decimal
 
+from django.conf import settings
+from django.urls import reverse
+from django.views.generic import FormView, TemplateView
+
+from products.models import ProductPosition
 from products.views import BaseMixin
+
 from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3, CheckoutStep4
 from .models import Deliver, Order, OrderItem
-from products.models import ProductPosition
 
 
 class CartView(TemplateView):
@@ -16,12 +18,18 @@ class CartView(TemplateView):
 class CheckoutView(BaseMixin, FormView):
     template_name = "orders/checkout.html"
     form_class = CheckoutStep1
+
+    STEP_1_CLIENT_INFO = "1"
+    STEP_2_DELIVERY_OPTIONS = "2"
+    STEP_3_PAYMENT_OPTIONS = "3"
+    STEP_4_SUBMIT_ORDER = "4"
+
     # Form classes for each step
     form_classes = {
-        "1": CheckoutStep1,
-        "2": CheckoutStep2,
-        "3": CheckoutStep3,
-        "4": CheckoutStep4,
+        STEP_1_CLIENT_INFO: CheckoutStep1,
+        STEP_2_DELIVERY_OPTIONS: CheckoutStep2,
+        STEP_3_PAYMENT_OPTIONS: CheckoutStep3,
+        STEP_4_SUBMIT_ORDER: CheckoutStep4,
     }
 
     def __init__(self, **kwargs):
@@ -32,7 +40,7 @@ class CheckoutView(BaseMixin, FormView):
     def get_context_data(self, **kwargs):
         """Put step number and sessiond data into context."""
         context = super().get_context_data(**kwargs)
-        context["step"] = self.request.GET.get("step", "1")
+        context["step"] = self.request.GET.get("step", self.STEP_1_CLIENT_INFO)
         context["order"] = self.request.session.get(
             settings.ORDER_SESSION_ID, default={}
         )
@@ -66,7 +74,7 @@ class CheckoutView(BaseMixin, FormView):
                 "payment": order.get("payment", "online"),
                 "comment": order.get("comment", ""),
             }
-            step = self.request.GET.get("step", "1")
+            step = self.request.GET.get("step", self.STEP_1_CLIENT_INFO)
             if step in self.form_classes.keys():
                 return self.form_classes[step](initial=initial_values)
 
@@ -74,7 +82,7 @@ class CheckoutView(BaseMixin, FormView):
 
     def get(self, request, *args, **kwargs):
         """Set form for current step."""
-        step = self.request.GET.get("step", "1")
+        step = self.request.GET.get("step", self.STEP_1_CLIENT_INFO)
         if step in self.form_classes.keys():
             self.form_class = self.form_classes[step]
 
@@ -82,7 +90,7 @@ class CheckoutView(BaseMixin, FormView):
 
     def post(self, request, *args, **kwargs):
         """Save input from the form into `order` dict in the session."""
-        step = self.request.GET.get("step", "1")
+        step = self.request.GET.get("step", self.STEP_1_CLIENT_INFO)
         # Save step value for use in `get_success_url()`
         self.step = step
 
@@ -101,7 +109,7 @@ class CheckoutView(BaseMixin, FormView):
 
         request.session.modified = True
 
-        if step == "4":
+        if step == self.STEP_4_SUBMIT_ORDER:
             # Final step - create Order, OrderItem model instances
             client = self.request.user if self.request.user.is_authenticated else None
             delivery = Deliver.objects.get(pk=order["delivery"])
@@ -147,7 +155,7 @@ class CheckoutView(BaseMixin, FormView):
         """
         Redirect user to the next step and to the payment view after the last step.
         """
-        if self.step == "4":
+        if self.step == self.STEP_4_SUBMIT_ORDER:
             return "{url}?order_id={order_id}".format(
                 url=reverse("orders:payment"),
                 order_id=self.order_id,
