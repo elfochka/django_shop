@@ -40,3 +40,10 @@ class CheckoutStep3(forms.Form):
         widget=forms.RadioSelect,
         choices=Order.PAYMENT_CHOICES,
     )
+
+
+class CheckoutStep4(forms.Form):
+    comment = forms.CharField(
+        label="Комментарий к заказу",
+        widget=forms.Textarea(attrs={"rows": 3, "class": "form-input"}),
+    )

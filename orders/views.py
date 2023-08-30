@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.conf import settings
 
 from products.views import BaseMixin
-from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3
+from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3, CheckoutStep4
 from .models import Deliver
 
 
@@ -19,11 +19,13 @@ class CheckoutView(BaseMixin, FormView):
         "1": CheckoutStep1,
         "2": CheckoutStep2,
         "3": CheckoutStep3,
+        "4": CheckoutStep4,
     }
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.step = None
+        self.order_id = None
 
     def get_context_data(self, **kwargs):
         """Put step number and sessiond data into context."""
@@ -60,6 +62,7 @@ class CheckoutView(BaseMixin, FormView):
                 "city": order.get("city", ""),
                 "address": order.get("address", ""),
                 "payment": order.get("payment", "online"),
+                "comment": order.get("comment", ""),
             }
             step = self.request.GET.get("step", "1")
             if step in self.form_classes.keys():
@@ -95,12 +98,25 @@ class CheckoutView(BaseMixin, FormView):
                     order[key] = form.cleaned_data[key]
 
         request.session.modified = True
+
+        if step == "4":
+            # Final step - create Order, OrderItem model instances
+            print("Step 4:", order)
+            # ...
+            self.order_id = "123456"
+
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self):
         """
-        Redirect user to the next step.
+        Redirect user to the next step and to the payment view after the last step.
         """
+        if self.step == "4":
+            return "{url}?order_id={order_id}".format(
+                url=reverse("orders:payment"),
+                order_id=self.order_id,
+            )
+
         next_step = int(self.step) + 1
         return "{url}?step={step}".format(
             url=reverse("orders:checkout"),
