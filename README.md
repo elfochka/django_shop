@@ -34,8 +34,9 @@ DB_PORT=5432
 
 ### Фикстуры
 
-Файлы с фикстурами находятся в директории `products/fixtures/`, и разбиты по моделям: `products.json`,
-`categories.json`,  `tags.json`, `product_images.json`, `product_banners.json`, `seller.json`, `product_position.json`.
+Файлы с фикстурами находятся в директориях `products/fixtures/`, `orders/fixtures/`, и разбиты по моделям: `products.
+json`, `categories.json`,  `tags.json`, `product_images.json`, `product_banners.json`, `seller.json`, 
+`product_position.json`, `deliveries.json`.
 
 #### Загрузка данных из фикстур в БД
 
@@ -43,6 +44,7 @@ DB_PORT=5432
 
 ```bash
 python -m manage loaddata products/fixtures/*.json
+python -m manage loaddata orders/fixtures/*.json
 ```
 
 #### Загрузка значков для категорий из фикстуры
