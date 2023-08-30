@@ -1,10 +1,12 @@
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse
 from django.conf import settings
+from decimal import Decimal
 
 from products.views import BaseMixin
 from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3, CheckoutStep4
-from .models import Deliver
+from .models import Deliver, Order, OrderItem
+from products.models import ProductPosition
 
 
 class CartView(TemplateView):
@@ -36,7 +38,7 @@ class CheckoutView(BaseMixin, FormView):
         )
 
         # Put delivery instance into context
-        if context["order"]["delivery"]:
+        if context["order"].get("delivery"):
             delivery_instance = Deliver.objects.get(pk=context["order"]["delivery"])
             context["order"]["delivery"] = delivery_instance
         return context
@@ -101,9 +103,43 @@ class CheckoutView(BaseMixin, FormView):
 
         if step == "4":
             # Final step - create Order, OrderItem model instances
-            print("Step 4:", order)
-            # ...
-            self.order_id = "123456"
+            client = self.request.user if self.request.user.is_authenticated else None
+            delivery = Deliver.objects.get(pk=order["delivery"])
+
+            # Create Order instance
+            order_instance = Order.objects.create(
+                client=client,
+                delivery=delivery,
+                payment=order["payment"],
+                status="created",
+                name=order["name"],
+                phone=order["phone"],
+                email=order["email"],
+                city=order["city"],
+                address=order["address"],
+                comment=order["comment"],
+            )
+            self.order_id = order_instance.pk
+
+            # Create OrderItem instances
+            cart = self.request.session[settings.CART_SESSION_ID]
+            for product_position_id in cart.keys():
+                product_position_instance = ProductPosition.objects.get(
+                    pk=product_position_id
+                )
+                quantity = int(cart[product_position_id]["quantity"])
+                price = Decimal(cart[product_position_id]["price"])
+                total_price = price * quantity
+                OrderItem.objects.create(
+                    order=order_instance,
+                    product_position=product_position_instance,
+                    price=total_price,
+                    quantity=quantity,
+                )
+
+            # Reset cart
+            self.request.session[settings.CART_SESSION_ID] = {}
+            self.request.session.modified = True
 
         return super().post(request, *args, **kwargs)
 

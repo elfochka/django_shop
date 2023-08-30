@@ -13,6 +13,7 @@ class DeliverAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     model = Order
     list_display = [
+        "id",
         "client",
         "delivery",
         "payment",

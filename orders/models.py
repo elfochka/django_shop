@@ -48,6 +48,8 @@ class Order(models.Model):
         CustomUser,
         verbose_name="клиент",
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
     delivery = models.ForeignKey(
         Deliver,
@@ -140,4 +142,4 @@ class OrderItem(models.Model):
         verbose_name_plural = "позиции заказа"
 
     def __str__(self):
-        return f"Order {self.order.id}, Product: {self.product_position.title}"
+        return f"Order {self.order.id}, Product: {self.product_position}"
