@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Deliver
+from .models import Deliver, Order
 
 
 class CheckoutStep1(forms.Form):
@@ -35,13 +35,8 @@ class CheckoutStep2(forms.Form):
 
 
 class CheckoutStep3(forms.Form):
-    CHOICES = [
-        ("online", "Онлайн картой"),
-        ("someone", "Онлайн со случайного чужого счета"),
-    ]
-
     payment = forms.ChoiceField(
         label="Способ оплаты",
         widget=forms.RadioSelect,
-        choices=CHOICES,
+        choices=Order.PAYMENT_CHOICES,
     )

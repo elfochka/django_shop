@@ -30,8 +30,8 @@ class Order(models.Model):
     """Model for storing orders."""
 
     PAYMENT_CHOICES = (
-        ("cash", "Наличные"),
-        ("card", "Карта"),
+        ("online", "Онлайн картой"),
+        ("someone", "Онлайн со случайного чужого счета"),
     )
 
     STATUS_CHOICES = (
@@ -77,9 +77,7 @@ class Order(models.Model):
         verbose_name="имя",
         max_length=255,
     )
-    email = models.EmailField(
-        verbose_name="электронная почта"
-    )
+    email = models.EmailField(verbose_name="электронная почта")
     phone = models.CharField(
         verbose_name="телефон",
         max_length=11,
@@ -120,9 +118,7 @@ class OrderItem(models.Model):
         max_digits=10,
         decimal_places=2,
     )
-    quantity = models.PositiveIntegerField(
-        verbose_name="количество"
-    )
+    quantity = models.PositiveIntegerField(verbose_name="количество")
 
     class Meta:
         verbose_name = "позиция заказа"
