@@ -86,6 +86,9 @@
                           {{ field.label }}
                         </label>
                         {{ field }}
+                        <span style="color: red;">
+                          {{ field.errors }}
+                        </span>
                       </div>
                     {% endfor %}
                   </div>

@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 
 from .models import Deliver, Order
@@ -6,11 +8,18 @@ from .models import Deliver, Order
 class CheckoutStep1(forms.Form):
     name = forms.CharField(label="ФИО")
     phone = forms.CharField(label="Телефон")
-    email = forms.CharField(label="E-mail")
+    email = forms.EmailField(label="E-mail")
 
     name.widget.attrs.update({"class": "form-input"})
     phone.widget.attrs.update({"class": "form-input"})
     email.widget.attrs.update({"class": "form-input"})
+
+    def clean_phone(self):
+        phone_number = self.cleaned_data.get("phone")
+        if phone_number:
+            if not re.match(r"^(?:\+7|8)[0-9]{10}$", phone_number):
+                raise forms.ValidationError("Неверный формат номера телефона")
+        return phone_number
 
 
 class CheckoutStep2(forms.Form):
@@ -45,5 +54,6 @@ class CheckoutStep3(forms.Form):
 class CheckoutStep4(forms.Form):
     comment = forms.CharField(
         label="Комментарий к заказу",
+        required=False,
         widget=forms.Textarea(attrs={"rows": 3, "class": "form-input"}),
     )
