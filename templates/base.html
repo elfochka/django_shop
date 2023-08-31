@@ -117,7 +117,7 @@
                     </a>
                   </li>
                   <li class="menu-item">
-                    <a class="menu-link" href="comparison.html">
+                    <a class="menu-link" href="{% url 'products:compare' %}">
                       Сравнение
                     </a>
                   </li>
@@ -157,12 +157,12 @@
                 <a class="CartBlock-block" href="{% url 'products:cart_detail' %}">
                   <img class="CartBlock-img" src="{% static 'assets/img/icons/cart.svg' %}" alt="cart.svg"/>
                   <span class="CartBlock-amount">
-                    0
+                    {{ cart|length }}
                   </span>
                 </a>
                 <div class="CartBlock-block">
                   <span class="CartBlock-price">
-                    0.00$
+                    {{ cart.get_total_price }} руб.
                   </span>
                 </div>
               </div>
@@ -270,7 +270,7 @@
                 </a>
               </li>
               <li class="menu-item">
-                <a class="menu-link" href="#">
+                <a class="menu-link" href="{% url 'products:compare' %}">
                   Сравнение
                 </a>
               </li>

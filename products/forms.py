@@ -35,3 +35,14 @@ class ProductFilterForm(forms.Form):
         label="",
         widget=forms.TextInput(attrs={"class": "form-input form-input_full", "placeholder": "Название"})
     )
+
+
+class AddProductToCartForm(forms.Form):
+    """
+    Form to add products to the cart or override quantity of product_position already  in the cart.
+    """
+
+    quantity = forms.IntegerField()
+    is_override = forms.BooleanField(
+        required=False, initial=False, widget=forms.HiddenInput
+    )
