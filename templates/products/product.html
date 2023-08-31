@@ -38,7 +38,7 @@
                             <div class="ProductCard-text">
                                 {{ product.description|truncatechars:300 }}
                             </div>
-
+{#                                                    TODO: не могу сделать что бы выбирался определенный продавец#}
                           <form action="{% url 'products:cart_add' product.id %}" method="post">
                             <div class="ProductCard-cart">
                                 {% csrf_token %}
@@ -162,14 +162,21 @@
                                                         >
                                                             {{ position.seller.title }}
                                                         </a>
-                                                        <div class="ProductCard-cartElement" style="margin-top: 10px;">
-                                                            <a class="btn btn_primary" href="#modal_open">
-                                                                <img class="btn-icon"
-                                                                     src="{% static 'assets/img/icons/card/cart_white.svg' %}"
-                                                                     alt="cart_white.svg"/>
-                                                                <span class="btn-content">Купить</span>
-                                                            </a>
-                                                        </div>
+{#                                                    TODO: не могу сделать что бы выбирался определенный продавец#}
+                                                        <form action="{% url 'products:cart_add' product.id %}" method="post">
+                                                            <div class="ProductCard-cartElement" style="margin-top: 10px;">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="quantity" value="1" required>
+                                                                <input type="hidden" name="is_override" id="id_is_override">
+                                                                <input type="hidden" name="seller_id" value="{{ position.seller.id }}">
+                                                                <button class="btn btn_primary" type="submit">
+                                                                    <img class="btn-icon"
+                                                                         src="{% static 'assets/img/icons/card/cart_white.svg' %}"
+                                                                         alt="cart_white.svg"/>
+                                                                    <span class="btn-content">Купить</span>
+                                                                </button>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                     <div class="row-block">
                                                         <div class="Order-info Order-info_delivery">
@@ -210,10 +217,8 @@
                                                         <a class="Order-title" href="#">
                                                             {{ position.seller.title }}
                                                         </a>
-                                                        <!-- Добавьте другие поля продавца, такие как адрес, телефон и т.д. -->
                                                     </div>
                                                     <div class="row-block">
-                                                        <!-- Ваш код для отображения информации о доставке и оплате -->
                                                     </div>
                                                 </div>
                                             </div>
