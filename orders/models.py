@@ -1,5 +1,6 @@
 from django.db import models
 
+from products.models import ProductPosition
 from users.models import CustomUser
 
 
@@ -30,8 +31,8 @@ class Order(models.Model):
     """Model for storing orders."""
 
     PAYMENT_CHOICES = (
-        ("cash", "Наличные"),
-        ("card", "Карта"),
+        ("online", "Онлайн картой"),
+        ("someone", "Онлайн со случайного чужого счета"),
     )
 
     STATUS_CHOICES = (
@@ -47,6 +48,8 @@ class Order(models.Model):
         CustomUser,
         verbose_name="клиент",
         on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
     delivery = models.ForeignKey(
         Deliver,
@@ -65,6 +68,29 @@ class Order(models.Model):
         default="created",
         max_length=10,
     )
+    name = models.CharField(
+        verbose_name="имя",
+        max_length=255,
+    )
+    phone = models.CharField(
+        verbose_name="телефон",
+        max_length=11,
+    )
+    email = models.EmailField(verbose_name="электронная почта")
+    city = models.CharField(
+        verbose_name="город",
+        max_length=255,
+    )
+    address = models.CharField(
+        verbose_name="адрес",
+        max_length=512,
+    )
+    comment = models.CharField(
+        verbose_name="комментарий к заказу",
+        max_length=512,
+        blank=True,
+        null=True,
+    )
     is_paid = models.BooleanField(
         verbose_name="оплачен",
         default=False,
@@ -72,17 +98,6 @@ class Order(models.Model):
     is_deleted = models.BooleanField(
         verbose_name="удален",
         default=False,
-    )
-    name = models.CharField(
-        verbose_name="имя",
-        max_length=255,
-    )
-    email = models.EmailField(
-        verbose_name="электронная почта"
-    )
-    phone = models.CharField(
-        verbose_name="телефон",
-        max_length=11,
     )
     created = models.DateTimeField(
         verbose_name="создан",
@@ -110,23 +125,21 @@ class OrderItem(models.Model):
         verbose_name="заказ",
         on_delete=models.CASCADE,
     )
-    # product_position = models.ForeignKey(
-    #     ProductPosition,
-    #     verbose_name="позиция товара",
-    #     on_delete=models.CASCADE,
-    # )
+    product_position = models.ForeignKey(
+        ProductPosition,
+        verbose_name="позиция товара",
+        on_delete=models.CASCADE,
+    )
     price = models.DecimalField(
         verbose_name="цена",
         max_digits=10,
         decimal_places=2,
     )
-    quantity = models.PositiveIntegerField(
-        verbose_name="количество"
-    )
+    quantity = models.PositiveIntegerField(verbose_name="количество")
 
     class Meta:
         verbose_name = "позиция заказа"
         verbose_name_plural = "позиции заказа"
 
-    # def __str__(self):
-    #     return f"Order {self.order.id}, Product: {self.product_position.title}"
+    def __str__(self):
+        return f"Order {self.order.id}, Product: {self.product_position}"

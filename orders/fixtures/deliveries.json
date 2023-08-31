@@ -1,0 +1,18 @@
+[
+{
+  "model": "orders.deliver",
+  "pk": 1,
+  "fields": {
+    "title": "Обычная доставка",
+    "price": "200.00"
+  }
+},
+{
+  "model": "orders.deliver",
+  "pk": 2,
+  "fields": {
+    "title": "Экспресс доставка",
+    "price": "500.00"
+  }
+}
+]

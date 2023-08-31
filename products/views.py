@@ -10,8 +10,10 @@ from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import ContextMixin
 
 from products.cart import Cart
-from products.forms import AddProductToCartForm, ProductFilterForm, ReviewCreationForm
-from products.models import AdBanner, Category, Offer, Product, Review, ProductPosition
+from products.forms import (AddProductToCartForm, ProductFilterForm,
+                            ReviewCreationForm)
+from products.models import (AdBanner, Category, Offer, Product,
+                             ProductPosition, Review)
 from users.models import Action
 from users.utils import create_action
 
