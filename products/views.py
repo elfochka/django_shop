@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Avg, Q
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -174,8 +174,93 @@ class ProductDetailsView(BaseMixin, DetailView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
+def add_to_comparison(request, pk):
+    comparison_products = request.session.get("comparison_products", [])
+    if len(comparison_products) >= 4:
+        del request.session["comparison_products"]
+        comparison_products = []
+    if pk in comparison_products:
+        comparison_products.remove(pk)
+        request.session["comparison_products"] = comparison_products
+    else:
+        comparison_products.append(pk)
+        request.session["comparison_products"] = comparison_products
+
+    referer = request.META.get("HTTP_REFERER", None)
+    if referer:
+        return HttpResponseRedirect(referer)
+    else:
+        return redirect("products:catalog")
+
+
 class CompareView(BaseMixin, TemplateView):
     template_name = "products/compare.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        comparison_ids = self.request.session.get("comparison_products", [])
+        products_to_compare = Product.objects.filter(id__in=comparison_ids)
+        show_differences = self.request.GET.get("show_differences", "true").lower() == "true"
+
+        if len(products_to_compare) < 2:
+            context["error_message"] = "Недостаточно данных для сравнения"
+            return context
+
+        all_categories_equal = all(p.category == products_to_compare[0].category for p in products_to_compare)
+        common_features = {key: True for key in (products_to_compare[0].features or {}).keys()}
+
+        for product in products_to_compare:
+            product_features = product.features or {}
+            for key in common_features.keys():
+                if key not in product_features or product_features[key] != products_to_compare[0].features[key]:
+                    common_features[key] = False
+
+            average_price = product.productposition_set.aggregate(Avg("price"))["price__avg"]
+
+            if average_price is not None:
+                offers = Offer.objects.filter(
+                    is_active=True,
+                    date_start__lte=datetime.today(),
+                    date_end__gte=datetime.today(),
+                ).filter(
+                    Q(products__in=[product]) |
+                    Q(categories__in=[product.category])
+                )
+
+                for offer in offers:
+                    if offer.discount_type == Offer.Types.DISCOUNT_PERCENT:
+                        average_price -= (average_price * offer.discount_value) / 100
+                    elif offer.discount_type == Offer.Types.DISCOUNT_AMOUNT:
+                        average_price -= offer.discount_value
+                    elif offer.discount_type == Offer.Types.FIXED_PRICE:
+                        average_price = offer.discount_value
+
+                product.calculated_price = round(average_price, 2)
+
+        highlighted_keys = [key for key, value in common_features.items() if value]
+
+        common_keys = set(products_to_compare[0].features.keys()) if products_to_compare[0].features else set()
+
+        for product in products_to_compare[1:]:
+            product_keys = set(product.features.keys()) if product.features else set()
+            common_keys.intersection_update(product_keys)
+
+        has_common_features = bool(common_keys)
+
+        if not has_common_features and not all_categories_equal:
+            context[
+                "impossible_to_compare"] = "Величина мира и его явлений такова, " \
+                                           "что все попытки сравнения между несравнимыми " \
+                                           "вещами лишь уменьшают их уникальность."
+            context["products"] = products_to_compare
+            return context
+
+        context["products"] = products_to_compare
+        context["all_categories_equal"] = all_categories_equal
+        context["highlighted_keys"] = highlighted_keys
+        context["show_differences"] = show_differences
+
+        return context
 
 
 class SaleView(BaseMixin, ListView):

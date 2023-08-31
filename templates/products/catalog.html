@@ -99,7 +99,8 @@
                                             {{ product.category }}
                                         </div>
                                         <div class="Card-hover">
-                                            <a class="Card-btn" href="#">
+                                            <a class="Card-btn"
+                                               href="{% url 'products:add_to_comparison' pk=product.pk %}">
                                                 <img src="{% static 'assets/img/icons/exchange.svg' %}"
                                                      alt="exchange.svg"/>
                                             </a>
