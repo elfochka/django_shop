@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Min, Max
+from django.db.models import Max, Min
 from django.templatetags.static import static
 
 from users.models import CustomUser
