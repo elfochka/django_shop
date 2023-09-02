@@ -1,14 +1,16 @@
 from decimal import Decimal
 
 from django.conf import settings
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, TemplateView
+from django.views.generic.edit import FormView
 
 from products.models import ProductPosition
 from products.views import BaseMixin
 
-from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3, CheckoutStep4
+from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3, CheckoutStep4, CardNumberForm
 from .models import Deliver, Order, OrderItem
+from .tasks import check_card_number
 
 
 class CartView(TemplateView):
@@ -168,8 +170,30 @@ class CheckoutView(BaseMixin, FormView):
         )
 
 
-class PaymentView(TemplateView):
-    template_name = "orders/payment.html"
+class PaymentView(TemplateView, FormView):
+    form_class = CardNumberForm
+    success_url = reverse_lazy("orders:progress-payment")
+
+    def get_template_names(self):
+        order = self.request.session.get(settings.ORDER_SESSION_ID, "")
+        if order["payment"] == "online":
+            return ["orders/payment.html"]
+        else:
+            return ["orders/paymentsomeone.html"]
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            card_number = form.cleaned_data["card_number"]
+            check_card_number.delay(card_number)
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    # def form_valid(self, form):
+    #     card_number = form.cleaned_data["card_number"]
+    #     check_card_number.delay(card_number)
+    #     return super().form_valid(form)
 
 
 class ProgressPaymentView(TemplateView):
