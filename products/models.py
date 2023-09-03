@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Max, Min
 from django.templatetags.static import static
 
 from users.models import CustomUser
@@ -138,6 +139,12 @@ class Product(models.Model):
     @classmethod
     def get_limited_edition_products(cls):
         return cls.objects.filter(is_limited=True, is_deleted=False).order_by("?")[:16]
+
+    def get_min_price(self):
+        return self.productposition_set.aggregate(lowest_price=Min("price"))["lowest_price"]
+
+    def get_max_price(self):
+        return self.productposition_set.aggregate(highest_price=Max("price"))["highest_price"]
 
     def __str__(self):
         return self.title

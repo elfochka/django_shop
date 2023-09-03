@@ -138,6 +138,7 @@ class ProductDetailsView(BaseMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["form"] = ReviewCreationForm()
         context["reviews"] = Review.objects.filter(product=self.object)
+        context["product_positions"] = self.object.productposition_set.all()
         return context
 
     def get(self, request, *args, **kwargs):
