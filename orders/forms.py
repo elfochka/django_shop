@@ -10,9 +10,11 @@ class CheckoutStep1(forms.Form):
     phone = forms.CharField(label="Телефон")
     email = forms.EmailField(label="E-mail")
 
-    name.widget.attrs.update({"class": "form-input"})
-    phone.widget.attrs.update({"class": "form-input"})
-    email.widget.attrs.update({"class": "form-input"})
+    name.widget.attrs.update({"class": "form-input", "placeholder": "Ф.И.О."})
+    phone.widget.attrs.update({"class": "form-input", "placeholder": "Номер телефона"})
+    email.widget.attrs.update(
+        {"class": "form-input", "placeholder": "username@domain.ru"}
+    )
 
     def clean_phone(self):
         phone_number = self.cleaned_data.get("phone")
@@ -27,10 +29,12 @@ class CheckoutStep2(forms.Form):
     city = forms.CharField(label="Город")
     address = forms.CharField(
         label="Адрес",
-        widget=forms.Textarea(attrs={"rows": 3, "class": "form-input"}),
+        widget=forms.Textarea(
+            attrs={"rows": 3, "class": "form-input", "placeholder": "Адрес доставки"}
+        ),
     )
 
-    city.widget.attrs.update({"class": "form-input"})
+    city.widget.attrs.update({"class": "form-input", "placeholder": "Город доставки"})
 
     def __init__(self, *args, **kwargs):
         """Put all delivery options from the database into form field choices."""
@@ -55,5 +59,11 @@ class CheckoutStep4(forms.Form):
     comment = forms.CharField(
         label="Комментарий к заказу",
         required=False,
-        widget=forms.Textarea(attrs={"rows": 3, "class": "form-input"}),
+        widget=forms.Textarea(
+            attrs={
+                "rows": 3,
+                "class": "form-input",
+                "placeholder": "Ваш комментарий к заказу",
+            }
+        ),
     )
