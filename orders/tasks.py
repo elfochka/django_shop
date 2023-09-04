@@ -1,11 +1,10 @@
 from store.celery import app
-import time
+from django.shortcuts import redirect
 
 
 @app.task
-def check_card_number(card_number: int):
-    time.sleep(3)
-    if card_number % 2 == 0 and not str(card_number).endswith('0'):
-        return 'ok'
+def check_card_number(card_number):
+    if int(card_number.replace(" ", "")) % 2 == 0 and not card_number.endswith('0'):
+        return redirect("orders:cart")
     else:
-        return 'error'
+        return redirect("orders:cart")

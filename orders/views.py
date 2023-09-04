@@ -172,7 +172,6 @@ class CheckoutView(BaseMixin, FormView):
 
 class PaymentView(TemplateView, FormView):
     form_class = CardNumberForm
-    success_url = reverse_lazy("orders:progress-payment")
 
     def get_template_names(self):
         order = self.request.session.get(settings.ORDER_SESSION_ID, "")
@@ -180,6 +179,9 @@ class PaymentView(TemplateView, FormView):
             return ["orders/payment.html"]
         else:
             return ["orders/paymentsomeone.html"]
+
+    def get_success_url(self):
+        return reverse_lazy("orders:progress-payment")
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -189,11 +191,6 @@ class PaymentView(TemplateView, FormView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
-
-    # def form_valid(self, form):
-    #     card_number = form.cleaned_data["card_number"]
-    #     check_card_number.delay(card_number)
-    #     return super().form_valid(form)
 
 
 class ProgressPaymentView(TemplateView):
