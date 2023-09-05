@@ -170,7 +170,7 @@ class CheckoutView(BaseMixin, FormView):
         )
 
 
-class PaymentView(TemplateView, FormView):
+class PaymentView(FormView):
     form_class = CardNumberForm
 
     def get_template_names(self):
@@ -186,8 +186,6 @@ class PaymentView(TemplateView, FormView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
-            card_number = form.cleaned_data["card_number"]
-            check_card_number.delay(card_number)
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
