@@ -38,8 +38,7 @@
                             <div class="ProductCard-text">
                                 {{ product.description|truncatechars:300 }}
                             </div>
-{#                                                    TODO: не могу сделать что бы выбирался определенный продавец#}
-                          <form action="{% url 'products:cart_add' product.id %}" method="post">
+                          <form action="{% url 'products:cart_add_product' product.id %}" method="post">
                             <div class="ProductCard-cart">
                                 {% csrf_token %}
                                 <div class="ProductCard-cartElement ProductCard-cartElement_amount">
@@ -162,8 +161,7 @@
                                                         >
                                                             {{ position.seller.title }}
                                                         </a>
-{#                                                    TODO: не могу сделать что бы выбирался определенный продавец#}
-                                                        <form action="{% url 'products:cart_add' product.id %}" method="post">
+                                                        <form action="{% url 'products:cart_add_product_position' position.id %}" method="post">
                                                             <div class="ProductCard-cartElement" style="margin-top: 10px;">
                                                                 {% csrf_token %}
                                                                 <input type="hidden" name="quantity" value="1" required>

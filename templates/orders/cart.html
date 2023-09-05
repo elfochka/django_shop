@@ -42,7 +42,7 @@
                 </div>
                 <div class="Cart-block Cart-block_amount">
                   <div class="Cart-amount">
-                    <form action="{% url 'products:cart_add' item.product_position.product.id %}" method="post">
+                    <form action="{% url 'products:cart_add_product_position' item.product_position.id %}" method="post">
                       {% csrf_token %}
                       <div class="Amount">
                         <button class="Amount-remove" type="button">
