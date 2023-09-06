@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator
-from django.db.models import Avg, Q
+from django.db.models import Avg, Q, Min, Max, Sum, Count
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -16,6 +16,8 @@ from products.models import (AdBanner, Category, Offer, Product,
                              ProductPosition, Review)
 from users.models import Action
 from users.utils import create_action
+
+from django.db.models import Exists, OuterRef
 
 
 class BaseMixin(ContextMixin):
@@ -68,10 +70,11 @@ class CatalogView(BaseMixin, ListView):
 
         if form.is_valid():
             product_name = form.cleaned_data.get("product_name")
-            # !Ждём реализации модели ProductPosition и нужно раскомментить, что бы фильтр полностью работал.
-            # in_stock = form.cleaned_data.get("in_stock")
-            # free_shipping = form.cleaned_data.get("free_shipping")
-            # price_range = self.request.GET.get("price")
+            in_stock = form.cleaned_data.get("in_stock")
+            free_shipping = form.cleaned_data.get("free_shipping")
+            price_range = self.request.GET.get("price")
+            sort_param = self.request.GET.get("sort_param")
+            tag_chosen = self.request.GET.get("tags")
 
             if product_name:
                 queryset = queryset.filter(title__icontains=product_name)
@@ -87,31 +90,73 @@ class CatalogView(BaseMixin, ListView):
             if category:
                 queryset = queryset.filter(category=category)
 
-            # !Ждём реализации модели ProductPosition и нужно раскомментить, что бы фильтр полностью работал.
-            # if in_stock:
-            #     queryset = queryset.annotate(total_quantity=Sum("positions__quantity"))
-            #     queryset = queryset.filter(total_quantity__gt=0)
+            if in_stock:
+                queryset = queryset.annotate(total_quantity=Sum("productposition__quantity"))
+                queryset = queryset.filter(total_quantity__gt=0)
 
-            # if free_shipping:
-            #     queryset = queryset.filter(free_shipping=True)
+            if free_shipping:
+                queryset = queryset.filter(productposition__free_shipping=True)
 
-            # if price_range:
-            #     min_price, max_price = map(int, price_range.split(";"))
-            #     queryset = queryset.filter(positions__price__gte=min_price, positions__price__lte=max_price)
+            if price_range:
+                min_price, max_price = map(int, price_range.split(";"))
+                queryset = queryset.annotate(price=Min("productposition__price"))
+                queryset = queryset.filter(price__gte=min_price, price__lte=max_price)
+
+            if sort_param == "pop_l2h":
+                queryset = queryset.annotate(count_orders=Count("productposition__orderitem__order"))
+                queryset = queryset.order_by("count_orders")
+            elif sort_param == "pop_h2l":
+                queryset = queryset.annotate(count_orders=Count("productposition__orderitem__order"))
+                queryset = queryset.order_by("-count_orders")
+
+            if sort_param == "price_l2h":
+                queryset = queryset.order_by("productposition__price")
+            elif sort_param == "price_h2l":
+                queryset = queryset.order_by("-productposition__price")
+
+            if sort_param == "review_l2h":
+                queryset = queryset.annotate(count_reviews=Count("reviews"))
+                queryset = queryset.order_by("count_reviews")
+            elif sort_param == "review_h2l":
+                queryset = queryset.annotate(count_reviews=Count("reviews"))
+                queryset = queryset.order_by("-count_reviews")
+
+            if sort_param == "new_l2h":
+                queryset = queryset.order_by("updated")
+            elif sort_param == "new_h2l":
+                queryset = queryset.order_by("-updated")
+
+            if tag_chosen:
+                queryset = queryset.filter(tags=tag_chosen)
 
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         price_range = self.request.GET.get("price")
+        min_price_of_all = ProductPosition.objects.values('price').aggregate(Min('price'))['price__min']
+        max_price_of_all = ProductPosition.objects.values('price').aggregate(Max('price'))['price__max']
+        sort_param = self.request.GET.get("sort_param")
         if price_range:
             min_price, max_price = map(int, price_range.split(";"))
         else:
-            min_price = 7
-            max_price = 27
+            min_price = min_price_of_all
+            max_price = max_price_of_all
         context["min_price"] = min_price
         context["max_price"] = max_price
+        context["min_price_of_all"] = min_price_of_all
+        context["max_price_of_all"] = max_price_of_all
+        context["sort_param"] = sort_param
         context["filter_form"] = ProductFilterForm(self.request.GET)
+
+        payload = ""
+        for k, list_ in self.request.GET.lists():
+            if k == "page":
+                continue
+            for v in list_:
+                payload += "&" + k + "=" + v
+        context["payload"] = payload
+
         return context
 
     def listing(self):
