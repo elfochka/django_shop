@@ -53,24 +53,32 @@
             </div>
         </div>
 
+
         <div class="wrapper">
             <div class="header">
-                <h3 class="sign-in">Восстановление пароля (2/2)</h3>
-                <h5>Придумайте новый пароль для учетной записи</h5>
+                <h3 class="sign-in">Восстановление пароля (1/2)</h3>
+                <h5>Для восстановления пароля введите адрес электронной почты, на которую зарегистрирована учетная
+                    запись</h5>
             </div>
-            <form action="{% url 'users:password' %}?code={{ code }}" method="post">
-                {% csrf_token %}
-                <div>
-                    <input type="hidden" name="code" value="{{ code }}"/>
-                    <input type="password" name="pass" id="name" placeholder="Пароль"/>
-                </div>
-                <div>
-                    <input type="submit" value="Сохранить пароль"/>
-                </div>
-            </form>
-        </div>
 
-    </div>
+            {% if request.session.verification_error %}
+                <div class="error-message">
+                    {{ request.session.verification_error }}
+                </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'users:verify_code' %}">
+                {% csrf_token %}
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="code">Verification Code:</label>
+                <input type="text" id="code" name="code" required>
+
+                <input type="submit" value="Verify">
+            </form>
+
+        </div>
 
     </div>
     </main>

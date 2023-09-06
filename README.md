@@ -100,3 +100,12 @@ crontab -l
   коробки". Для подстановки ссылок на страницы входа, регистрации, выхода в шаблонах, необходимо использовать 
   соответственно `{% url 'account_login' %}`, `{% url 'account_signup' %}`, `{% url 'account_logout' %}`. Шаблоны 
   страниц входа и регистрации находятся в `templates/account/`.
+
+### Настройка SMTP-сервера.
+Добавить в файл `.env` необходимые значения переменных окружения, например:
+```bash
+EMAIL_HOST='your-smtp-server.com'
+EMAIL_HOST_USER = 'your-email@example.com'
+EMAIL_HOST_PASSWORD = 'your-email-password'
+EMAIL_PORT=587
+```
