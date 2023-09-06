@@ -4,7 +4,7 @@ from django.conf import settings
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, TemplateView
 from django.views.generic.edit import FormView
-
+from django.shortcuts import redirect
 from products.models import ProductPosition
 from products.views import BaseMixin
 
@@ -181,7 +181,7 @@ class PaymentView(FormView):
             return ["orders/paymentsomeone.html"]
 
     def get_success_url(self):
-        return reverse_lazy("orders:progress-payment")
+        return reverse_lazy("orders:progress-payment", args=[self.request.POST.get("card_number", '0')])
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -193,6 +193,15 @@ class PaymentView(FormView):
 
 class ProgressPaymentView(TemplateView):
     template_name = "orders/progress-payment.html"
+
+    def get(self, request, *args, **kwargs):
+        check_num = check_card_number.delay(kwargs.get("card_number"))
+        result = check_num.get()
+
+        if result:
+            return redirect("orders:cart") #Редирект для теста
+        else:
+            return redirect("orders:orders") #Редирект для теста
 
 
 class OrderListView(TemplateView):

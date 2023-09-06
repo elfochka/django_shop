@@ -172,3 +172,4 @@ ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("account_login")
 CART_SESSION_ID = "cart"
 ORDER_SESSION_ID = "order"
 CELERY_BROKER_URL = "amqp://celuser:celpass@localhost:5672/mycelhost"
+CELERY_RESULT_BACKEND = "rpc://localhost"
