@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
+from django.contrib.auth import authenticate, login
 
 from products.models import ProductPosition
 from products.views import BaseMixin
@@ -112,6 +113,31 @@ class CheckoutView(BaseMixin, FormView):
                     order[key] = form.cleaned_data[key]
 
         request.session.modified = True
+
+        # Handle user login (existing user with "email" and "password1")
+        if (
+            step == self.STEP_1_CLIENT_INFO
+            and not self.request.user.is_authenticated
+            and order.get("password1")
+            and not order.get("password2")
+        ):
+            # Login user and proceed to step 2 (email & password1 pair checked in the form clean method,
+            # so it should be valid here).
+            user = authenticate(
+                self.request,
+                email=order["email"],
+                password=order["password1"],
+            )
+            if user:
+                # Store order and cart dicts from session in the copy
+                order_copy = order.copy()
+                cart_copy = self.request.session[settings.CART_SESSION_ID].copy()
+                print("Copies:", order_copy, cart_copy)
+                # Login user, session data will be lost
+                login(self.request, user)
+                # Restore order and cart in session from copies
+                self.request.session[settings.CART_SESSION_ID] = cart_copy
+                self.request.session[settings.ORDER_SESSION_ID] = order_copy
 
         if step == self.STEP_4_SUBMIT_ORDER:
             # Final step - create Order, OrderItem model instances

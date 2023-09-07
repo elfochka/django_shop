@@ -1,6 +1,7 @@
 import re
 
 from django import forms
+from django.contrib.auth import authenticate
 
 from .models import Deliver, Order
 
@@ -9,11 +10,25 @@ class CheckoutStep1(forms.Form):
     name = forms.CharField(label="ФИО")
     phone = forms.CharField(label="Телефон")
     email = forms.EmailField(label="E-mail")
+    password1 = forms.CharField(label="Пароль", required=False)
+    password2 = forms.CharField(label="Повторите пароль", required=False)
 
     name.widget.attrs.update({"class": "form-input", "placeholder": "Ф.И.О."})
     phone.widget.attrs.update({"class": "form-input", "placeholder": "Номер телефона"})
     email.widget.attrs.update(
         {"class": "form-input", "placeholder": "username@domain.ru"}
+    )
+    password1.widget.attrs.update(
+        {
+            "class": "form-input",
+            "placeholder": "Ваш пароль – для входа или регистрации",
+        }
+    )
+    password2.widget.attrs.update(
+        {
+            "class": "form-input",
+            "placeholder": "Повторите пароль – только для регистрации!",
+        }
     )
 
     def clean_phone(self):
@@ -22,6 +37,31 @@ class CheckoutStep1(forms.Form):
             if not re.match(r"^(?:\+7|8)[0-9]{10}$", phone_number):
                 raise forms.ValidationError("Неверный формат номера телефона")
         return phone_number
+
+    def clean_password1(self):
+        """Check if the user with email and password1 actually exists in database."""
+        email = self.cleaned_data.get("email")
+        password1 = self.data.get("password1")
+        password2 = self.data.get("password2")
+
+        if password2 and password2 != password1:
+            raise forms.ValidationError("Введённые пароли должны совпадать!")
+
+        if (
+            password1
+            and not password2
+            and not authenticate(None, email=email, password=password1)
+        ):
+            raise forms.ValidationError("Пароль неверный.")
+
+        return password1
+
+    def clean_password2(self):
+        password1 = self.data.get("password1")
+        password2 = self.data.get("password2")
+        if password2 and password2 != password1:
+            raise forms.ValidationError("Введённые пароли должны совпадать!")
+        return password2
 
 
 class CheckoutStep2(forms.Form):
