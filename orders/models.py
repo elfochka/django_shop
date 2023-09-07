@@ -11,11 +11,17 @@ class Deliver(models.Model):
         verbose_name="название",
         max_length=512,
     )
-
     price = models.DecimalField(
         verbose_name="цена",
         max_digits=10,
         decimal_places=2,
+    )
+    free_threshold = models.DecimalField(
+        verbose_name="порог бесплатной доставки",
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
     )
 
     class Meta:
