@@ -56,18 +56,6 @@ class EmailView(TemplateView):
 class EmailSentView(TemplateView):
     template_name = "users/e-mail_sent.html"
 
-    # def post(self, request, *args, **kwargs):
-    #     email = request.POST.get("email")
-    #     code = request.POST.get("code")
-    #     cached_code = cache.get(f"reset_code_{email}")
-    #
-    #     if code == cached_code:
-    #         redirect_url = f"{reverse('users:password')}?code={code}"
-    #         return HttpResponseRedirect(redirect_url)
-    #     else:
-    #         request.session["verification_error"] = "Invalid verification code."
-    #         return HttpResponseRedirect(reverse("users:email_sent"))
-
 
 class PasswordView(TemplateView):
     template_name = "users/password.html"

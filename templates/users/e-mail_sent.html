@@ -60,23 +60,6 @@
                 <h5>Письмо с кодом для восстановления пароля успешно отправлено</h5>
             </div>
 
-{#            {% if request.session.verification_error %}#}
-{#                <div class="error-message">#}
-{#                    {{ request.session.verification_error }}#}
-{#                </div>#}
-{#            {% endif %}#}
-{##}
-{#            <form method="post" action="{% url 'users:verify_code' %}">#}
-{#                {% csrf_token %}#}
-{#                <label for="email">Email:</label>#}
-{#                <input type="email" id="email" name="email" required>#}
-{##}
-{#                <label for="code">Verification Code:</label>#}
-{#                <input type="text" id="code" name="code" required>#}
-{##}
-{#                <input type="submit" value="Verify">#}
-{#            </form>#}
-
         </div>
 
     </div>
