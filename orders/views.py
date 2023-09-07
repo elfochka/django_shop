@@ -1,14 +1,14 @@
 from decimal import Decimal
 
 from django.conf import settings
+from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
-from django.contrib.auth import authenticate, login
 
+from products.cart import Cart
 from products.models import ProductPosition
 from products.views import BaseMixin
-from products.cart import Cart
 from users.models import CustomUser
 
 from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3, CheckoutStep4

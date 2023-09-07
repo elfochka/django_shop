@@ -3,8 +3,9 @@ import re
 from django import forms
 from django.contrib.auth import authenticate
 
-from .models import Deliver, Order
 from users.models import CustomUser
+
+from .models import Deliver, Order
 
 
 class CheckoutStep1(forms.Form):
