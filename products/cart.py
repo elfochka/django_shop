@@ -107,10 +107,7 @@ class Cart:
         products_price = self.get_total_products_price()
         sellers_qty = len(set([item["product_position"].seller.pk for item in self]))
 
-        # We assume that delivery with pk=2 is express
-        is_express = delivery.pk == 2
-
-        if not is_express:
+        if not delivery.is_express:
             if products_price < delivery.free_threshold or sellers_qty > 1:
                 return delivery.price
             if products_price > delivery.free_threshold and sellers_qty == 1:

@@ -23,6 +23,10 @@ class Deliver(models.Model):
         null=True,
         blank=True,
     )
+    is_express = models.BooleanField(
+        verbose_name="экспресс доставка",
+        default=False,
+    )
 
     class Meta:
         ordering = ["title"]

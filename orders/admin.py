@@ -7,7 +7,7 @@ from .models import Deliver, Order, OrderItem
 @admin.register(Deliver)
 class DeliverAdmin(admin.ModelAdmin):
     model = Deliver
-    list_display = ["title", "price", "free_threshold"]
+    list_display = ["title", "price", "free_threshold", "is_express"]
 
 
 class OrderItemInline(StackedInline):

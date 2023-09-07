@@ -5,7 +5,8 @@
   "fields": {
     "title": "Обычная доставка",
     "price": "200.00",
-    "free_threshold": null
+    "free_threshold": "2000.00",
+    "is_express": false
   }
 },
 {
@@ -14,7 +15,8 @@
   "fields": {
     "title": "Экспресс доставка",
     "price": "500.00",
-    "free_threshold": "2000.00"
+    "free_threshold": null,
+    "is_express": true
   }
 }
 ]
