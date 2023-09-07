@@ -31,6 +31,7 @@ class OrderAdmin(admin.ModelAdmin):
         "payment",
         "status",
         "is_paid",
+        "total_price",
     ]
     list_filter = [
         "status",
@@ -39,6 +40,7 @@ class OrderAdmin(admin.ModelAdmin):
     readonly_fields = [
         "created",
         "updated",
+        "total_price",
     ]
     inlines = [OrderItemInline]
     fieldsets = [
@@ -57,6 +59,7 @@ class OrderAdmin(admin.ModelAdmin):
             "Способ оплаты и статус",
             {
                 "fields": [
+                    "total_price",
                     "payment",
                     "status",
                     "is_paid",

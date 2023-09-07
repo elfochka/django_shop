@@ -132,6 +132,13 @@ class Order(models.Model):
     def __str__(self):
         return f"Заказ №{self.id}"
 
+    @property
+    def total_price(self):
+        """Delivery price plus sum of all order item prices."""
+        order_items = OrderItem.objects.filter(order=self)
+        total_items_price = sum([item.price for item in order_items])
+        return total_items_price + self.delivery_price
+
 
 class OrderItem(models.Model):
     """Model for storing order items."""
