@@ -69,6 +69,7 @@ class OrderAdmin(admin.ModelAdmin):
             {
                 "fields": [
                     "delivery",
+                    "delivery_price",
                     "city",
                     "address",
                     "comment",

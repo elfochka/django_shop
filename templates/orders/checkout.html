@@ -311,8 +311,10 @@
                           Итого:
                         </strong>
                         <span class="Cart-price">
-                          {{ cart.get_total_price }}
+                          {{ cart.get_total_products_price|add:order.delivery_price }}
                         </span>
+                        Доставка: {{ order.delivery_price }}
+                        Товары: {{ cart.get_total_products_price }}
                       </div>
                       <div class="Cart-block">
                         <button class="btn btn_primary btn_lg" type="submit">

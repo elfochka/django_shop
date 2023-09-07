@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.http import HttpRequest
 
+from orders.models import Deliver
 from products.models import ProductPosition
 
 
@@ -101,7 +102,23 @@ class Cart:
         """
         return sum(item["quantity"] for item in self.cart.values())
 
-    def get_total_price(self):
+    def get_delivery_price(self, delivery: Deliver):
+        """Return delivery price taking into account delivery type, number of sellers and total price."""
+        products_price = self.get_total_products_price()
+        sellers_qty = len(set([item["product_position"].seller.pk for item in self]))
+
+        # We assume that delivery with pk=2 is express
+        is_express = delivery.pk == 2
+
+        if not is_express:
+            if products_price < delivery.free_threshold or sellers_qty > 1:
+                return delivery.price
+            if products_price > delivery.free_threshold and sellers_qty == 1:
+                return 0
+
+        return delivery.price
+
+    def get_total_products_price(self):
         """
         Count total price for all items in the cart.
         """

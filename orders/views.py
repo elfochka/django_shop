@@ -6,6 +6,7 @@ from django.views.generic import FormView, TemplateView
 
 from products.models import ProductPosition
 from products.views import BaseMixin
+from products.cart import Cart
 
 from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3, CheckoutStep4
 from .models import Deliver, Order, OrderItem
@@ -45,10 +46,13 @@ class CheckoutView(BaseMixin, FormView):
             settings.ORDER_SESSION_ID, default={}
         )
 
-        # Put delivery instance into context
+        # Put delivery instance and delivery price into context
         if context["order"].get("delivery"):
             delivery_instance = Deliver.objects.get(pk=context["order"]["delivery"])
             context["order"]["delivery"] = delivery_instance
+            context["order"]["delivery_price"] = Cart(self.request).get_delivery_price(
+                delivery_instance
+            )
         return context
 
     def get_form(self, form_class=None):
@@ -113,11 +117,13 @@ class CheckoutView(BaseMixin, FormView):
             # Final step - create Order, OrderItem model instances
             client = self.request.user if self.request.user.is_authenticated else None
             delivery = Deliver.objects.get(pk=order["delivery"])
+            delivery_price = Cart(self.request).get_delivery_price(delivery=delivery)
 
             # Create Order instance
             order_instance = Order.objects.create(
                 client=client,
                 delivery=delivery,
+                delivery_price=delivery_price,
                 payment=order["payment"],
                 status="created",
                 name=order["name"],
