@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.conf import settings
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import FormView, TemplateView
 from django.contrib.auth import authenticate, login
@@ -8,6 +9,7 @@ from django.contrib.auth import authenticate, login
 from products.models import ProductPosition
 from products.views import BaseMixin
 from products.cart import Cart
+from users.models import CustomUser
 
 from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3, CheckoutStep4
 from .models import Deliver, Order, OrderItem
@@ -114,6 +116,12 @@ class CheckoutView(BaseMixin, FormView):
 
         request.session.modified = True
 
+        # Store order and cart dicts from session in the copy
+        order_copy = order.copy()
+        cart_copy = self.request.session[settings.CART_SESSION_ID].copy()
+
+        user = None
+
         # Handle user login (existing user with "email" and "password1")
         if (
             step == self.STEP_1_CLIENT_INFO
@@ -128,17 +136,37 @@ class CheckoutView(BaseMixin, FormView):
                 email=order["email"],
                 password=order["password1"],
             )
-            if user:
-                # Store order and cart dicts from session in the copy
-                order_copy = order.copy()
-                cart_copy = self.request.session[settings.CART_SESSION_ID].copy()
-                print("Copies:", order_copy, cart_copy)
-                # Login user, session data will be lost
-                login(self.request, user)
-                # Restore order and cart in session from copies
-                self.request.session[settings.CART_SESSION_ID] = cart_copy
-                self.request.session[settings.ORDER_SESSION_ID] = order_copy
 
+        # Handle new user signup
+        if (
+            step == self.STEP_1_CLIENT_INFO
+            and not self.request.user.is_authenticated
+            and order.get("password1")
+            and order.get("password2")
+        ):
+            # Create new user with provided info
+            user = CustomUser.objects.create_user(
+                username=order["email"],
+                email=order["email"],
+                password=order["password1"],
+                phone=order["phone"],
+            )
+
+        # We created new user, or authenticated as existing one => login:
+        if user:
+            # Login user, session data will be lost
+            login(
+                self.request,
+                user,
+                backend="allauth.account.auth_backends.AuthenticationBackend",
+            )
+            # Restore order and cart in session from copies
+            self.request.session[settings.CART_SESSION_ID] = cart_copy
+            self.request.session[settings.ORDER_SESSION_ID] = order_copy
+            request.session.modified = True
+            return redirect(reverse("orders:checkout") + "?step=2")
+
+        # Handle order submit on the last step
         if step == self.STEP_4_SUBMIT_ORDER:
             # Final step - create Order, OrderItem model instances
             client = self.request.user if self.request.user.is_authenticated else None

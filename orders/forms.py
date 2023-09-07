@@ -4,14 +4,19 @@ from django import forms
 from django.contrib.auth import authenticate
 
 from .models import Deliver, Order
+from users.models import CustomUser
 
 
 class CheckoutStep1(forms.Form):
     name = forms.CharField(label="ФИО")
     phone = forms.CharField(label="Телефон")
     email = forms.EmailField(label="E-mail")
-    password1 = forms.CharField(label="Пароль", required=False)
-    password2 = forms.CharField(label="Повторите пароль", required=False)
+    password1 = forms.CharField(
+        label="Пароль", required=False, widget=forms.PasswordInput()
+    )
+    password2 = forms.CharField(
+        label="Повторите пароль", required=False, widget=forms.PasswordInput()
+    )
 
     name.widget.attrs.update({"class": "form-input", "placeholder": "Ф.И.О."})
     phone.widget.attrs.update({"class": "form-input", "placeholder": "Номер телефона"})
@@ -37,6 +42,16 @@ class CheckoutStep1(forms.Form):
             if not re.match(r"^(?:\+7|8)[0-9]{10}$", phone_number):
                 raise forms.ValidationError("Неверный формат номера телефона")
         return phone_number
+
+    def clean_email(self):
+        email = self.data.get("email")
+        password2 = self.data.get("password2")
+
+        # Do not allow existing emails if user is trying to signup.
+        if password2 and CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError("Пользователь с таким email уже существует!")
+
+        return email
 
     def clean_password1(self):
         """Check if the user with email and password1 actually exists in database."""
