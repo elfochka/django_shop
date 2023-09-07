@@ -55,35 +55,35 @@
                         <div class="Section-columnContent">
                             <div class="buttons">
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=1">Видео</a>
+                                   href="/products/catalog/?tags=1{{payload}}">Видео</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=2">Игры</a>
+                                   href="/products/catalog/?tags=2{{payload}}">Игры</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=3">Xbox</a>
+                                   href="/products/catalog/?tags=3{{payload}}">Xbox</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=4">Новинка</a>
+                                   href="/products/catalog/?tags=4{{payload}}">Новинка</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=5">Хит сезона</a>
+                                   href="/products/catalog/?tags=5{{payload}}">Хит сезона</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=6">Музыка</a>
+                                   href="/products/catalog/?tags=6{{payload}}">Музыка</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=7">Для дома</a>
+                                   href="/products/catalog/?tags=7{{payload}}">Для дома</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=8">Творчество</a>
+                                   href="/products/catalog/?tags=8{{payload}}">Творчество</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=9">Pro</a>
+                                   href="/products/catalog/?tags=9{{payload}}">Pro</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=10">Детям</a>
+                                   href="/products/catalog/?tags=10{{payload}}">Детям</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=11">Сделай сам</a>
+                                   href="/products/catalog/?tags=11{{payload}}">Сделай сам</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=12">Классика</a>
+                                   href="/products/catalog/?tags=12{{payload}}">Классика</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=13">Подарок</a>
+                                   href="/products/catalog/?tags=13{{payload}}">Подарок</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=14">Отпуск</a>
+                                   href="/products/catalog/?tags=14{{payload}}">Отпуск</a>
                                 <a class="btn btn_default btn_sm"
-                                   href="/products/catalog/?tags=15">Стильно</a>
+                                   href="/products/catalog/?tags=15{{payload}}">Стильно</a>
                             </div>
                         </div>
                     </div>
@@ -95,46 +95,46 @@
                         <div class="Sort-variants">
                              {% if sort_param == "pop_h2l" %}
                                  <a class="Sort-sortBy Sort-sortBy_inc "
-                                    href="/products/catalog/?sort_param=pop_l2h{{ payload }}">Популярности</a>
+                                    href="/products/catalog/?sort_param=pop_l2h">Популярности</a>
                              {% elif sort_param == "pop_l2h" %}
                                 <a class="Sort-sortBy Sort-sortBy_dec"
                                    href="/products/catalog/">Популярности</a>
                              {% else %}
                                 <a class="Sort-sortBy"
-                                   href="/products/catalog/?sort_param=pop_h2l{{ payload }}">Популярности</a>
+                                   href="/products/catalog/?sort_param=pop_h2l">Популярности</a>
                              {% endif %}
 
                             {% if sort_param == "price_h2l" %}
                                 <a class="Sort-sortBy Sort-sortBy_inc "
-                                   href="/products/catalog/?sort_param=price_l2h{{ payload }}">Цене</a>
+                                   href="/products/catalog/?sort_param=price_l2h">Цене</a>
                             {% elif sort_param == "price_l2h" %}
                                 <a class="Sort-sortBy Sort-sortBy_dec"
                                    href="/products/catalog/">Цене</a>
                             {% else %}
                                 <a class="Sort-sortBy"
-                                   href="/products/catalog/?sort_param=price_h2l{{ payload }}">Цене</a>
+                                   href="/products/catalog/?sort_param=price_h2l">Цене</a>
                             {% endif %}
 
                             {% if sort_param == "review_h2l" %}
                                 <a class="Sort-sortBy Sort-sortBy_inc"
-                                   href="/products/catalog/?sort_param=review_l2h{{ payload }}">Отзывам</a>
+                                   href="/products/catalog/?sort_param=review_l2h">Отзывам</a>
                             {% elif sort_param == "review_l2h" %}
                                 <a class="Sort-sortBy Sort-sortBy_dec "
                                    href="/products/catalog/">Отзывам</a>
                             {% else %}
                                 <a class="Sort-sortBy"
-                                   href="/products/catalog/?sort_param=review_h2l{{ payload }}">Отзывам</a>
+                                   href="/products/catalog/?sort_param=review_h2l">Отзывам</a>
                             {% endif %}
 
                             {% if sort_param == "new_h2l" %}
                                 <a class="Sort-sortBy Sort-sortBy_inc"
-                                   href="/products/catalog/?sort_param=new_l2h{{ payload }}">Новизне</a>
+                                   href="/products/catalog/?sort_param=new_l2h">Новизне</a>
                             {% elif sort_param == "new_l2h" %}
                                 <a class="Sort-sortBy Sort-sortBy_dec"
                                    href="/products/catalog/">Новизне</a>
                             {% else %}
                                 <a class="Sort-sortBy"
-                                   href="/products/catalog/?sort_param=new_h2l{{ payload }}">Новизне</a>
+                                   href="/products/catalog/?sort_param=new_h2l">Новизне</a>
                             {% endif %}
                         </div>
                     </div>
