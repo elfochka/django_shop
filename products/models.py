@@ -407,6 +407,10 @@ class ProductPosition(models.Model):
         auto_now=True,
         verbose_name="Дата обновления",
     )
+    free_shipping = models.BooleanField(
+        verbose_name="Бесплатная доставка",
+        default=False,
+    )
 
     def __str__(self):
         return f"{self.product.title} - {self.seller.title}"
