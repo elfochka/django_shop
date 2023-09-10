@@ -246,22 +246,33 @@ class CompareView(BaseMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         comparison_ids = self.request.session.get("comparison_products", [])
         products_to_compare = Product.objects.filter(id__in=comparison_ids)
-        show_differences = self.request.GET.get("show_differences", "true").lower() == "true"
+        show_differences = (
+            self.request.GET.get("show_differences", "true").lower() == "true"
+        )
 
         if len(products_to_compare) < 2:
             context["error_message"] = "Недостаточно данных для сравнения"
             return context
 
-        all_categories_equal = all(p.category == products_to_compare[0].category for p in products_to_compare)
-        common_features = {key: True for key in (products_to_compare[0].features or {}).keys()}
+        all_categories_equal = all(
+            p.category == products_to_compare[0].category for p in products_to_compare
+        )
+        common_features = {
+            key: True for key in (products_to_compare[0].features or {}).keys()
+        }
 
         for product in products_to_compare:
             product_features = product.features or {}
             for key in common_features.keys():
-                if key not in product_features or product_features[key] != products_to_compare[0].features[key]:
+                if (
+                    key not in product_features
+                    or product_features[key] != products_to_compare[0].features[key]
+                ):
                     common_features[key] = False
 
-            average_price = product.productposition_set.aggregate(Avg("price"))["price__avg"]
+            average_price = product.productposition_set.aggregate(Avg("price"))[
+                "price__avg"
+            ]
 
             if average_price is not None:
                 offers = Offer.objects.filter(
@@ -269,8 +280,7 @@ class CompareView(BaseMixin, TemplateView):
                     date_start__lte=datetime.today(),
                     date_end__gte=datetime.today(),
                 ).filter(
-                    Q(products__in=[product]) |
-                    Q(categories__in=[product.category])
+                    Q(products__in=[product]) | Q(categories__in=[product.category])
                 )
 
                 for offer in offers:
@@ -285,7 +295,11 @@ class CompareView(BaseMixin, TemplateView):
 
         highlighted_keys = [key for key, value in common_features.items() if value]
 
-        common_keys = set(products_to_compare[0].features.keys()) if products_to_compare[0].features else set()
+        common_keys = (
+            set(products_to_compare[0].features.keys())
+            if products_to_compare[0].features
+            else set()
+        )
 
         for product in products_to_compare[1:]:
             product_keys = set(product.features.keys()) if product.features else set()
@@ -294,10 +308,11 @@ class CompareView(BaseMixin, TemplateView):
         has_common_features = bool(common_keys)
 
         if not has_common_features and not all_categories_equal:
-            context[
-                "impossible_to_compare"] = "Величина мира и его явлений такова, " \
-                                           "что все попытки сравнения между несравнимыми " \
-                                           "вещами лишь уменьшают их уникальность."
+            context["impossible_to_compare"] = (
+                "Величина мира и его явлений такова, "
+                "что все попытки сравнения между несравнимыми "
+                "вещами лишь уменьшают их уникальность."
+            )
             context["products"] = products_to_compare
             return context
 
@@ -321,9 +336,10 @@ class SaleView(BaseMixin, ListView):
 
 
 @require_POST
-def cart_add(request: HttpRequest, product_id: int) -> HttpResponse:
+def cart_add_product(request: HttpRequest, product_id: int) -> HttpResponse:
     """
-    View for adding product_position positions to the cart or updating quantities for already added products.
+    View for adding first product position of the product to the cart
+    or updating quantities for already added product positions.
     """
     cart = Cart(request)
     # Get random product position for the selected product
@@ -348,6 +364,46 @@ def cart_add(request: HttpRequest, product_id: int) -> HttpResponse:
     # Redirect to product page, and open the modal
     return redirect(
         reverse_lazy("products:product", kwargs={"pk": product_id}) + "#modal_open"
+    )
+
+
+@require_POST
+def cart_add_product_position(
+    request: HttpRequest, product_position_id: int
+) -> HttpResponse:
+    """
+    View for adding specified product position of the product to the cart
+    or updating quantities for already added product positions.
+    """
+    cart = Cart(request)
+    product_position = ProductPosition.objects.get(pk=product_position_id)
+    # If there's no such product position, redirect user to the product catalogue
+    if not product_position:
+        return redirect(reverse_lazy("products:catalog"))
+
+    form = AddProductToCartForm(request.POST)
+    if form.is_valid():
+        data = form.cleaned_data
+        cart.add(
+            product_position=product_position,
+            quantity=data["quantity"],
+            override_quantity=data["is_override"],
+        )
+        # We  only set `is_override` to True in cart detailed view, so redirect user there
+        if data["is_override"]:
+            return redirect("products:cart_detail")
+    # No form data - we are adding from product page, sellers tab:
+    else:
+        cart.add(
+            product_position=product_position,
+            quantity=1,
+            override_quantity=False,
+        )
+
+    # Redirect to product page, and open the modal
+    return redirect(
+        reverse_lazy("products:product", kwargs={"pk": product_position.product.id})
+        + "#modal_open"
     )
 
 

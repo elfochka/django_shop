@@ -4,7 +4,9 @@
   "pk": 1,
   "fields": {
     "title": "Обычная доставка",
-    "price": "200.00"
+    "price": "200.00",
+    "free_threshold": "2000.00",
+    "is_express": false
   }
 },
 {
@@ -12,7 +14,9 @@
   "pk": 2,
   "fields": {
     "title": "Экспресс доставка",
-    "price": "500.00"
+    "price": "500.00",
+    "free_threshold": null,
+    "is_express": true
   }
 }
 ]
