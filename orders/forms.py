@@ -3,6 +3,8 @@ import re
 from django import forms
 from .tasks import check_card_number
 from .models import Deliver, Order
+from django.contrib.auth import authenticate
+from users.models import CustomUser
 
 
 class CheckoutStep1(forms.Form):
@@ -61,10 +63,3 @@ class CheckoutStep4(forms.Form):
 
 class CardNumberForm(forms.Form):
     card_number = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': "Payment-bill", 'placeholder': "9999 9999", "data-mask": "9999 9999"}))
-
-    # def clean_card_number(self):
-    #     card_number = self.cleaned_data.get("card_number")
-    #     celery_result = check_card_number.delay(card_number)
-    #     if not celery_result:
-    #         raise forms.ValidationError("Неверно введены данные")
-    #     return card_number

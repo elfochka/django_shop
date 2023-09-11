@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, TemplateView, UpdateView
 
+from orders.models import Order
 from users.forms import CustomUserChangeForm
 from users.models import Action, CustomUser
 
@@ -12,6 +13,7 @@ class AccountDetailView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
+        context["orders"] = Order.objects.filter(client_id=self.request.user)
         return context
 
 
@@ -21,6 +23,17 @@ class EmailView(TemplateView):
 
 class PasswordView(TemplateView):
     template_name = "users/password.html"
+
+
+class HistoryOrderView(TemplateView):
+    template_name = "users/historyorder.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user
+        context["orders"] = Order.objects.filter(client_id=self.request.user)
+        print(context)
+        return context
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):

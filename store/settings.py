@@ -171,5 +171,12 @@ ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("account_login")
 
 CART_SESSION_ID = "cart"
 ORDER_SESSION_ID = "order"
-CELERY_BROKER_URL = "amqp://celuser:celpass@localhost:5672/mycelhost"
-CELERY_RESULT_BACKEND = "rpc://localhost"
+CELERY_BROKER_URL = env("CELERY_BROKER_URL")
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")

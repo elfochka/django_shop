@@ -2,15 +2,16 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView, TemplateView
+from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
-from django.shortcuts import redirect
-from products.models import ProductPosition
 from products.views import BaseMixin
+from django.contrib.auth import authenticate, login
+from products.cart import Cart
 
 from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3, CheckoutStep4, CardNumberForm
 from .models import Deliver, Order, OrderItem
 from .tasks import check_card_number
+from products.models import ProductPosition
 
 
 class CartView(TemplateView):
@@ -175,17 +176,21 @@ class PaymentView(FormView):
 
     def get_template_names(self):
         order = self.request.session.get(settings.ORDER_SESSION_ID, "")
+        order["order_id"] = self.request.GET.get("order_id")
         if order["payment"] == "online":
             return ["orders/payment.html"]
         else:
             return ["orders/paymentsomeone.html"]
 
     def get_success_url(self):
-        return reverse_lazy("orders:progress-payment", args=[self.request.POST.get("card_number", '0')])
+        return reverse_lazy("orders:progress-payment")
 
     def post(self, request, *args, **kwargs):
+        order = self.request.session.get(settings.ORDER_SESSION_ID, "")
         form = self.get_form()
+
         if form.is_valid():
+            check_card_number.delay(self.request.POST.get("card_number", '0'), order["order_id"])
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -194,15 +199,6 @@ class PaymentView(FormView):
 class ProgressPaymentView(TemplateView):
     template_name = "orders/progress-payment.html"
 
-    def get(self, request, *args, **kwargs):
-        check_num = check_card_number.delay(kwargs.get("card_number"))
-        result = check_num.get()
-
-        if result:
-            return redirect("orders:cart") #Редирект для теста
-        else:
-            return redirect("orders:orders") #Редирект для теста
-
 
 class OrderListView(TemplateView):
     template_name = "orders/orders.html"
@@ -210,3 +206,10 @@ class OrderListView(TemplateView):
 
 class OrderDetailsView(TemplateView):
     template_name = "orders/order_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user
+        context["order"] = Order.objects.filter(id=self.kwargs['pk']).first()
+        context["products"] = OrderItem.objects.select_related("product_position").filter(order_id=self.kwargs['pk'])
+        return context
