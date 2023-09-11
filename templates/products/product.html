@@ -105,23 +105,13 @@
                         <div class="Tabs-wrap">
                             <div class="Tabs-block" id="description">
 
-                                <h2>Megano Store Hystory
-                                </h2>
-                                <p>Lorem ipsum dolor sit amet, consectetuer&#32;
-                                    <strong>adipiscing
-                                    </strong>&#32;elit doli. Aenean commodo ligula eget dolor. Aenean massa.&#32;<a
-                                            href="#">Cumtipsu</a>&#32;sociis natoque penatibus et magnis dis parturient
-                                    montesti, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque
-                                    eutu,
-                                    pretiumem.
-                                </p>
-
                                 {% with product.images.all|first as img %}
                                     {% if img %}
                                         <img class="pict pict_right" src="{{ img.image_url }}"
                                              alt="{{ img.image.name }}">
                                     {% endif %}
                                 {% endwith %}
+
                                 {{ product.description }}
 
                                 <div class="clearfix">
