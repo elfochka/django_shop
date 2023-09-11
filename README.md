@@ -100,3 +100,19 @@ crontab -l
   коробки". Для подстановки ссылок на страницы входа, регистрации, выхода в шаблонах, необходимо использовать 
   соответственно `{% url 'account_login' %}`, `{% url 'account_signup' %}`, `{% url 'account_logout' %}`. Шаблоны 
   страниц входа и регистрации находятся в `templates/account/`.
+
+### Подключение celery 
+
+1. Скачать и установить Celery
+2. Установить брокер сообщений RabbitMQ
+3. [Настроить брокер сообщений](https://docs.celeryq.dev/en/stable/getting-started/backends-and-brokers/rabbitmq.html)
+
+
+ Команды для linux:
+```bash
+sudo rabbitmqctl add_user myuser mypassword
+sudo rabbitmqctl add_vhost myvhost
+sudo rabbitmqctl set_user_tags myuser mytag
+sudo rabbitmqctl set_permissions -p myvhost myuser ".*" ".*" ".*"
+```
+Заменить myuser, mypassword и myvhost на свои значения
