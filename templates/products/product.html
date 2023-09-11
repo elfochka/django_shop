@@ -12,6 +12,9 @@
                                 {% with product.images.all|first as img %}
                                     {% if img %}
                                         <img src="{{ img.image_url }}" alt="{{ img.image.name }}">
+                                    {% else %}
+                                        <img src="{% static 'assets/img/product-placeholder.png' %}"
+                                             alt="{{ product.title }}"/>
                                     {% endif %}
                                 {% endwith %}
                             </div>
