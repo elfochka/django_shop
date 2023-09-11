@@ -80,7 +80,7 @@
                                 <div class="ProductCard-tags">
                                     <strong class="ProductCard-tagsTitle">Тэги:</strong>
                                     {% for tag in product.tags.all %}
-                                        <a href="#">{{ tag.title }}</a>{% if not forloop.last %},{% endif %}
+                                        <a href="{% url "products:catalog" %}?tags={{ tag.pk }}">{{ tag.title }}</a>{% if not forloop.last %},{% endif %}
                                     {% empty %}
                                     {% endfor %}
                                 </div>
