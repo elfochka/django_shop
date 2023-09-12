@@ -11,11 +11,21 @@ class Deliver(models.Model):
         verbose_name="название",
         max_length=512,
     )
-
     price = models.DecimalField(
         verbose_name="цена",
         max_digits=10,
         decimal_places=2,
+    )
+    free_threshold = models.DecimalField(
+        verbose_name="порог бесплатной доставки",
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
+    is_express = models.BooleanField(
+        verbose_name="экспресс доставка",
+        default=False,
     )
 
     class Meta:
@@ -56,6 +66,12 @@ class Order(models.Model):
         verbose_name="доставка",
         on_delete=models.SET_NULL,
         null=True,
+    )
+    delivery_price = models.DecimalField(
+        verbose_name="стоимость доставки",
+        max_digits=10,
+        decimal_places=2,
+        default=0,
     )
     payment = models.CharField(
         verbose_name="способ оплаты",
@@ -114,7 +130,14 @@ class Order(models.Model):
         verbose_name_plural = "заказы"
 
     def __str__(self):
-        return f"Order {self.id}"
+        return f"Заказ №{self.id}"
+
+    @property
+    def total_price(self):
+        """Delivery price plus sum of all order item prices."""
+        order_items = OrderItem.objects.filter(order=self)
+        total_items_price = sum([item.price for item in order_items])
+        return total_items_price + self.delivery_price
 
 
 class OrderItem(models.Model):

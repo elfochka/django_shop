@@ -48,10 +48,13 @@ class CheckoutView(BaseMixin, FormView):
             settings.ORDER_SESSION_ID, default={}
         )
 
-        # Put delivery instance into context
+        # Put delivery instance and delivery price into context
         if context["order"].get("delivery"):
             delivery_instance = Deliver.objects.get(pk=context["order"]["delivery"])
             context["order"]["delivery"] = delivery_instance
+            context["order"]["delivery_price"] = Cart(self.request).get_delivery_price(
+                delivery_instance
+            )
         return context
 
     def get_form(self, form_class=None):
@@ -112,15 +115,68 @@ class CheckoutView(BaseMixin, FormView):
 
         request.session.modified = True
 
+        # Store order and cart dicts from session in the copy
+        order_copy = order.copy()
+        cart_copy = self.request.session[settings.CART_SESSION_ID].copy()
+
+        user = None
+
+        # Handle user login (existing user with "email" and "password1")
+        if (
+            step == self.STEP_1_CLIENT_INFO
+            and not self.request.user.is_authenticated
+            and order.get("password1")
+            and not order.get("password2")
+        ):
+            # Login user and proceed to step 2 (email & password1 pair checked in the form clean method,
+            # so it should be valid here).
+            user = authenticate(
+                self.request,
+                email=order["email"],
+                password=order["password1"],
+            )
+
+        # Handle new user signup
+        if (
+            step == self.STEP_1_CLIENT_INFO
+            and not self.request.user.is_authenticated
+            and order.get("password1")
+            and order.get("password2")
+        ):
+            # Create new user with provided info
+            user = CustomUser.objects.create_user(
+                username=order["email"],
+                email=order["email"],
+                password=order["password1"],
+                phone=order["phone"],
+            )
+
+        # We created new user, or authenticated as existing one => login:
+        if user:
+            # Login user, session data will be lost
+            login(
+                self.request,
+                user,
+                backend="allauth.account.auth_backends.AuthenticationBackend",
+            )
+            # Restore order and cart in session from copies
+            self.request.session[settings.CART_SESSION_ID] = cart_copy
+            self.request.session[settings.ORDER_SESSION_ID] = order_copy
+            request.session.modified = True
+            return redirect(reverse("orders:checkout") + "?step=2")
+
+        # Handle order submit on the last step
         if step == self.STEP_4_SUBMIT_ORDER:
             # Final step - create Order, OrderItem model instances
             client = self.request.user if self.request.user.is_authenticated else None
             delivery = Deliver.objects.get(pk=order["delivery"])
+            delivery_price = Cart(self.request).get_delivery_price(delivery=delivery)
 
             # Create Order instance
             order_instance = Order.objects.create(
                 client=client,
                 delivery=delivery,
+                delivery_price=delivery_price,
                 payment=order["payment"],
                 status="created",
                 name=order["name"],

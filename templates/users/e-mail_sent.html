@@ -53,24 +53,14 @@
             </div>
         </div>
 
+
         <div class="wrapper">
             <div class="header">
-                <h3 class="sign-in">Восстановление пароля (2/2)</h3>
-                <h5>Придумайте новый пароль для учетной записи</h5>
+                <h3 class="sign-in">Восстановление пароля (1/2)</h3>
+                <h5>Письмо с кодом для восстановления пароля успешно отправлено</h5>
             </div>
-            <form action="{% url 'users:password' %}?code={{ code }}" method="post">
-                {% csrf_token %}
-                <div>
-                    <input type="hidden" name="code" value="{{ code }}"/>
-                    <input type="password" name="pass" id="name" placeholder="Пароль"/>
-                </div>
-                <div>
-                    <input type="submit" value="Сохранить пароль"/>
-                </div>
-            </form>
-        </div>
 
-    </div>
+        </div>
 
     </div>
     </main>

@@ -31,15 +31,14 @@
                                 </h2>
                                 <div class="ProductCard-info">
                                     <div class="ProductCard-cost">
-                                        <div class="ProductCard-price">$55.00</div>
+                                        <div class="ProductCard-price">${{ product.get_min_price }}</div>
                                     </div>
                                 </div>
                             </div>
                             <div class="ProductCard-text">
                                 {{ product.description|truncatechars:300 }}
                             </div>
-
-                          <form action="{% url 'products:cart_add' product.id %}" method="post">
+                          <form action="{% url 'products:cart_add_product' product.id %}" method="post">
                             <div class="ProductCard-cart">
                                 {% csrf_token %}
                                 <div class="ProductCard-cartElement ProductCard-cartElement_amount">
@@ -144,21 +143,38 @@
                             <div class="Tabs-block" id="sellers">
                                 <div class="Section-content">
                                     <div class="Orders">
+                                        {% for position in product_positions %}
                                         <div class="Order Order_anons">
                                             <div class="Order-personal">
                                                 <div class="row">
                                                     <div class="row-block">
-                                                        <a class="Order-title" href="oneorder.html">
-                                                            Ситилинк
+                                                        <a class="Order-title"
+                                                           href="{% if position.seller.title == "Ситилинк" %}
+                                                                 https://www.citilink.ru/
+                                                                 {% elif position.seller.title == "ДНС" %}
+                                                                 https://www.dns-shop.ru/
+                                                                 {% elif position.seller.title == "Эльдорадо" %}
+                                                                 https://www.eldorado.ru/
+                                                                 {% else %}
+                                                                 #
+                                                                 {% endif %}"
+                                                        >
+                                                            {{ position.seller.title }}
                                                         </a>
-                                                        <div class="ProductCard-cartElement" style="margin-top: 10px;">
-                                                            <a class="btn btn_primary" href="#modal_open">
-                                                                <img class="btn-icon"
-                                                                     src="{% static 'assets/img/icons/card/cart_white.svg' %}"
-                                                                     alt="cart_white.svg"/>
-                                                                <span class="btn-content">Купить</span>
-                                                            </a>
-                                                        </div>
+                                                        <form action="{% url 'products:cart_add_product_position' position.id %}" method="post">
+                                                            <div class="ProductCard-cartElement" style="margin-top: 10px;">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="quantity" value="1" required>
+                                                                <input type="hidden" name="is_override" id="id_is_override">
+                                                                <input type="hidden" name="seller_id" value="{{ position.seller.id }}">
+                                                                <button class="btn btn_primary" type="submit">
+                                                                    <img class="btn-icon"
+                                                                         src="{% static 'assets/img/icons/card/cart_white.svg' %}"
+                                                                         alt="cart_white.svg"/>
+                                                                    <span class="btn-content">Купить</span>
+                                                                </button>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                     <div class="row-block">
                                                         <div class="Order-info Order-info_delivery">
@@ -177,93 +193,35 @@
                                                             <div class="Order-infoType">Стоимость:
                                                             </div>
                                                             <div class="Order-infoContent"><span
-                                                                    class="Order-price">200.99$</span>
+                                                                    class="Order-price">{{ position.price }}$</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="Tabs-block" id="sellers">
+                                <div class="Section-content">
+                                    <div class="Orders">
+                                        {% for position in product_positions %}
                                         <div class="Order Order_anons">
                                             <div class="Order-personal">
                                                 <div class="row">
                                                     <div class="row-block">
-                                                        <a class="Order-title" href="oneorder.html">
-                                                            ДНС
+                                                        <a class="Order-title" href="#">
+                                                            {{ position.seller.title }}
                                                         </a>
-                                                        <div class="ProductCard-cartElement" style="margin-top: 10px;">
-                                                            <a class="btn btn_primary" href="#modal_open">
-                                                                <img class="btn-icon"
-                                                                     src="{% static 'assets/img/icons/card/cart_white.svg' %}"
-                                                                     alt="cart_white.svg"/>
-                                                                <span class="btn-content">Купить</span>
-                                                            </a>
-                                                        </div>
                                                     </div>
                                                     <div class="row-block">
-                                                        <div class="Order-info Order-info_delivery">
-                                                            <div class="Order-infoType">Тип доставки:
-                                                            </div>
-                                                            <div class="Order-infoContent">Обычная доставка
-                                                            </div>
-                                                        </div>
-                                                        <div class="Order-info Order-info_pay">
-                                                            <div class="Order-infoType">Оплата:
-                                                            </div>
-                                                            <div class="Order-infoContent">Онлайн картой
-                                                            </div>
-                                                        </div>
-                                                        <div class="Order-info">
-                                                            <div class="Order-infoType">Стоимость:
-                                                            </div>
-                                                            <div class="Order-infoContent"><span
-                                                                    class="Order-price">100.99$</span>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="Order Order_anons">
-                                            <div class="Order-personal">
-                                                <div class="row">
-                                                    <div class="row-block">
-                                                        <a class="Order-title" href="oneorder.html">
-                                                            Эльдорадо
-                                                        </a>
-                                                        <div class="ProductCard-cartElement" style="margin-top: 10px;">
-                                                            <a class="btn btn_primary" href="#modal_open">
-                                                                <img class="btn-icon"
-                                                                     src="{% static 'assets/img/icons/card/cart_white.svg' %}"
-                                                                     alt="cart_white.svg"/>
-                                                                <span class="btn-content">Купить</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row-block">
-                                                        <div class="Order-info Order-info_delivery">
-                                                            <div class="Order-infoType">Тип доставки:
-                                                            </div>
-                                                            <div class="Order-infoContent">Обычная доставка
-                                                            </div>
-                                                        </div>
-                                                        <div class="Order-info Order-info_pay">
-                                                            <div class="Order-infoType">Оплата:
-                                                            </div>
-                                                            <div class="Order-infoContent">Онлайн картой
-                                                            </div>
-                                                        </div>
-                                                        <div class="Order-info">
-                                                            <div class="Order-infoType">Стоимость:
-                                                            </div>
-                                                            <div class="Order-infoContent"><span
-                                                                    class="Order-price">20.00$</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>
