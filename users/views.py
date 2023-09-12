@@ -32,7 +32,6 @@ class HistoryOrderView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
         context["orders"] = Order.objects.filter(client_id=self.request.user)
-        print(context)
         return context
 
 

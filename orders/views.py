@@ -203,6 +203,11 @@ class ProgressPaymentView(TemplateView):
 class OrderListView(TemplateView):
     template_name = "orders/orders.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user
+        return context
+
 
 class OrderDetailsView(TemplateView):
     template_name = "orders/order_detail.html"
