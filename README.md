@@ -101,6 +101,19 @@ crontab -l
   соответственно `{% url 'account_login' %}`, `{% url 'account_signup' %}`, `{% url 'account_logout' %}`. Шаблоны 
   страниц входа и регистрации находятся в `templates/account/`.
 
+### Настройка SMTP-сервера.
+
+Добавить в файл `.env` необходимые значения переменных окружения, например, как в примере ниже или использовать
+существующие в скобках:
+
+```bash
+EMAIL_HOST=<your-smtp-server.com> (smtp.gmail.com)
+EMAIL_HOST_USER=<your-email@example.com> (megano.team28@gmail.com)
+EMAIL_HOST_PASSWORD=<your-email-password> (zwbvrfenewsnygez)
+EMAIL_PORT=587
+```
+
+
 ### Подключение celery 
 
 1. Скачать и установить Celery

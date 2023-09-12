@@ -2,12 +2,13 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView
+from django.shortcuts import redirect
+from django.views.generic import FormView, TemplateView
 from django.views.generic.edit import FormView
 from products.views import BaseMixin
 from django.contrib.auth import authenticate, login
 from products.cart import Cart
-
+from users.models import CustomUser
 from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3, CheckoutStep4, CardNumberForm
 from .models import Deliver, Order, OrderItem
 from .tasks import check_card_number
