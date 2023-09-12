@@ -4,7 +4,6 @@ from django.conf import settings
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import FormView, TemplateView
-from django.views.generic.edit import FormView
 from products.views import BaseMixin
 from django.contrib.auth import authenticate, login
 from products.cart import Cart
