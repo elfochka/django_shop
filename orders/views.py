@@ -1,18 +1,17 @@
 from decimal import Decimal
 
 from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
-from django.urls import reverse
 from django.views.generic import FormView, TemplateView
-
-from products.cart import Cart
-from products.models import ProductPosition
 from products.views import BaseMixin
+from django.contrib.auth import authenticate, login
+from products.cart import Cart
 from users.models import CustomUser
-
-from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3, CheckoutStep4
+from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3, CheckoutStep4, CardNumberForm
 from .models import Deliver, Order, OrderItem
+from .tasks import check_card_number
+from products.models import ProductPosition
 
 
 class CartView(TemplateView):
@@ -228,8 +227,29 @@ class CheckoutView(BaseMixin, FormView):
         )
 
 
-class PaymentView(TemplateView):
-    template_name = "orders/payment.html"
+class PaymentView(FormView):
+    form_class = CardNumberForm
+
+    def get_template_names(self):
+        order = self.request.session.get(settings.ORDER_SESSION_ID, "")
+        order["order_id"] = self.request.GET.get("order_id")
+        if order["payment"] == "online":
+            return ["orders/payment.html"]
+        else:
+            return ["orders/paymentsomeone.html"]
+
+    def get_success_url(self):
+        return reverse_lazy("orders:progress-payment")
+
+    def post(self, request, *args, **kwargs):
+        order = self.request.session.get(settings.ORDER_SESSION_ID, "")
+        form = self.get_form()
+
+        if form.is_valid():
+            check_card_number.delay(self.request.POST.get("card_number", '0'), order["order_id"])
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 
 class ProgressPaymentView(TemplateView):
@@ -239,6 +259,18 @@ class ProgressPaymentView(TemplateView):
 class OrderListView(TemplateView):
     template_name = "orders/orders.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user
+        return context
+
 
 class OrderDetailsView(TemplateView):
     template_name = "orders/order_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user
+        context["order"] = Order.objects.filter(id=self.kwargs['pk']).first()
+        context["products"] = OrderItem.objects.select_related("product_position").filter(order_id=self.kwargs['pk'])
+        return context

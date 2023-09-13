@@ -1,11 +1,10 @@
 import re
 
 from django import forms
-from django.contrib.auth import authenticate
-
-from users.models import CustomUser
-
+from .tasks import check_card_number
 from .models import Deliver, Order
+from django.contrib.auth import authenticate
+from users.models import CustomUser
 
 
 class CheckoutStep1(forms.Form):
@@ -123,3 +122,7 @@ class CheckoutStep4(forms.Form):
             }
         ),
     )
+
+
+class CardNumberForm(forms.Form):
+    card_number = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': "Payment-bill", 'placeholder': "9999 9999", "data-mask": "9999 9999"}))

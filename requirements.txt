@@ -6,3 +6,5 @@ django-allauth==0.54.0
 
 flake8-quotes==3.3.2
 isort==5.12.0
+
+celery==5.3.1
