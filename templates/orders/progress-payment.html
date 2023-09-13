@@ -3,24 +3,13 @@
 
 {% block content %}
     <div class="Middle Middle_top">
-        <div class="Middle-top">
-            <div class="wrap">
-                <div class="Middle-header">
-                    <h1 class="Middle-title">Ожидание оплаты
-                    </h1>
-                    <ul class="breadcrumbs Middle-breadcrumbs">
-                        <li class="breadcrumbs-item"><a href="index.html">home</a>
-                        </li>
-                        <li class="breadcrumbs-item breadcrumbs-item_current"><span>Ожидание оплаты</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
         <div class="Section">
             <div class="wrap">
                 <div class="ProgressPayment">
                     <div class="ProgressPayment-title">Ждем подтверждения оплаты платежной системой
+                    </div>
+                    </br>
+                    <div class="ProgressPayment-title"><a class="" href="{% url 'users:history_order' user.id %}">Вы можете посмотреть статус оплаты заказа в Личном кабинете</a>
                     </div>
                     <div class="ProgressPayment-icon">
                         <div class="cssload-thecube">

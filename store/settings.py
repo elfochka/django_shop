@@ -171,6 +171,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("account_login")
 
 CART_SESSION_ID = "cart"
 ORDER_SESSION_ID = "order"
+CELERY_BROKER_URL = env("CELERY_BROKER_URL")
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env("EMAIL_HOST")
