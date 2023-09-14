@@ -34,7 +34,13 @@
                                 </h2>
                                 <div class="ProductCard-info">
                                     <div class="ProductCard-cost">
-                                        <div class="ProductCard-price">${{ product.get_min_price }}</div>
+                                        <div class="ProductCard-price">
+                                          {% if not product_positions %}
+                                            Нет вналичии
+                                          {% else %}
+                                            ${{ product.get_min_price }}
+                                          {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
