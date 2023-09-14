@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0009_merge_20230821_0839'),
+        ("products", "0009_merge_20230821_0839"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='productposition',
-            name='free_shipping',
-            field=models.BooleanField(default=False, verbose_name='Бесплатная доставка'),
+            model_name="productposition",
+            name="free_shipping",
+            field=models.BooleanField(default=False, verbose_name="Бесплатная доставка"),
         ),
     ]

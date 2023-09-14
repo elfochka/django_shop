@@ -5,7 +5,11 @@
     <div class="Middle Middle_top">
         <div class="Section">
             <div class="wrap">
+                {% if order_id %}
+                <form class="form Payment" action="{% url 'orders:payment_with_params' order_id=order_id %}" method="post">
+                {% else %}
                 <form class="form Payment" action="{% url 'orders:payment' %}" method="post">
+                {% endif %}
                     <div class="Payment-card">
                          <div class="form-group">
                             <label class="form-label">Номер счета</label>
