@@ -90,11 +90,7 @@
                             <div class="ProductCard-info">
                                 <div class="ProductCard-cost">
                                     <div class="ProductCard-price">
-                                        {% if product.calculated_price %}
-                                            ${{ product.calculated_price }}
-                                        {% else %}
-                                            Нет цены
-                                        {% endif %}
+                                        ${{ product.get_avg_price_in_sale }}
                                     </div>
                                 </div>
                             </div>

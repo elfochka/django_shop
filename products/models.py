@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from django.db import models
-from django.db.models import Max, Min, Avg
+from django.db.models import Max, Min, Avg, Q
 from django.templatetags.static import static
 
 from users.models import CustomUser
@@ -149,6 +151,30 @@ class Product(models.Model):
     def get_avg_price(self):
         avg_price = self.productposition_set.aggregate(avg_price=Avg("price"))["avg_price"]
         return round(avg_price, 2) if avg_price is not None else None
+
+    def get_avg_price_in_sale(self):
+        average_price = self.get_avg_price()  # Получаем среднюю цену без скидок
+
+        if average_price is not None:
+            offers = Offer.objects.filter(
+                is_active=True,
+                date_start__lte=datetime.today(),
+                date_end__gte=datetime.today(),
+            ).filter(
+                Q(products__in=[self]) | Q(categories__in=[self.category])
+            )
+
+            for offer in offers:
+                if offer.discount_type == Offer.Types.DISCOUNT_PERCENT:
+                    average_price -= (average_price * offer.discount_value) / 100
+                elif offer.discount_type == Offer.Types.DISCOUNT_AMOUNT:
+                    average_price -= offer.discount_value
+                elif offer.discount_type == Offer.Types.FIXED_PRICE:
+                    average_price = offer.discount_value
+
+            return round(average_price, 2)
+        else:
+            return None
 
     def __str__(self):
         return self.title
