@@ -134,8 +134,8 @@ class CatalogView(BaseMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         price_range = self.request.GET.get("price")
-        min_price_of_all = ProductPosition.objects.values('price').aggregate(Min('price'))['price__min']
-        max_price_of_all = ProductPosition.objects.values('price').aggregate(Max('price'))['price__max']
+        min_price_of_all = ProductPosition.objects.values("price").aggregate(Min("price"))["price__min"]
+        max_price_of_all = ProductPosition.objects.values("price").aggregate(Max("price"))["price__max"]
         sort_param = self.request.GET.get("sort_param")
         if price_range:
             min_price, max_price = map(int, price_range.split(";"))
