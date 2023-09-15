@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Max, Min
+from django.db.models import Max, Min, Avg
 from django.templatetags.static import static
 
 from users.models import CustomUser
@@ -146,6 +146,10 @@ class Product(models.Model):
     def get_max_price(self):
         return self.productposition_set.aggregate(highest_price=Max("price"))["highest_price"]
 
+    def get_avg_price(self):
+        avg_price = self.productposition_set.aggregate(avg_price=Avg("price"))["avg_price"]
+        return round(avg_price, 2) if avg_price is not None else None
+
     def __str__(self):
         return self.title
 
@@ -267,6 +271,18 @@ class Offer(models.Model):
         ]
         verbose_name = "скидка"
         verbose_name_plural = "скидки"
+
+    def apply_discount(self, price):
+        if self.discount_type == self.Types.DISCOUNT_PERCENT:
+            discounted_price = price * (1 - self.discount_value / 100)
+        elif self.discount_type == self.Types.DISCOUNT_AMOUNT:
+            discounted_price = price - self.discount_value
+        elif self.discount_type == self.Types.FIXED_PRICE:
+            discounted_price = self.discount_value
+        else:
+            discounted_price = price
+
+        return max(discounted_price, 0)
 
     def __str__(self):
         return self.description[:64]
