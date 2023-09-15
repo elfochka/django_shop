@@ -2,11 +2,52 @@
 {% load static %}
 
 {% block content %}
-  <ul>
-    {% for offer in offers %}
-      <li>
-        {{ offer.description }}
-      </li>
-    {% endfor %}
-  </ul>
-{% endblock content %}
+<div class="Middle">
+    <div class="wrap">
+        <div class="Article">
+            <ul>
+                {% if offers %}
+                    {% for offer in offers %}
+                        <li>
+                            <h3 class="modal-title">{{ offer.description }}</h3>
+                            <p>С {{ offer.date_start|date:"d.m.Y" }} по {{ offer.date_end|date:"d.m.Y" }}</p>
+                            <p class="countdown" data-end-date="{{ offer.date_end }}"></p>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <h3 class="modal-title">Скидок пока нет.</h3>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var countdowns = document.querySelectorAll('.countdown');
+    countdowns.forEach(function(countdown) {
+        var endDate = new Date(countdown.dataset.endDate).getTime();
+
+        function updateCountdown() {
+            var now = new Date().getTime();
+            var timeLeft = endDate - now;
+
+            if (timeLeft < 0) {
+                countdown.innerHTML = 'Скидка завершена';
+            } else {
+                var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                countdown.innerHTML = 'Осталось: ' + days + ' дней ' + hours + ' часов ' + minutes + ' минут ' + seconds + ' секунд';
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    });
+});
+</script>
+
+{% endblock %}
