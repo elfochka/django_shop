@@ -34,6 +34,11 @@ DEBUG = env("DEBUG", default=False)
 
 ALLOWED_HOSTS = []
 
+# Needed by django-debug-toolbar
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,6 +52,7 @@ INSTALLED_APPS = [
     # Third party apps
     "allauth",
     "allauth.account",
+    "debug_toolbar",
     # Our Applications
     "products",
     "orders",
@@ -55,6 +61,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
