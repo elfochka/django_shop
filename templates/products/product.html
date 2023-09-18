@@ -138,6 +138,14 @@
                                             <td>{{ product.category }}
                                             </td>
                                         </tr>
+                                        {% if product.features %}
+                                          {% for key, value in product.features.items %}
+                                            <tr>
+                                              <td>{{ key }}</td>
+                                              <td>{{ value }}</td>
+                                            </tr>
+                                          {% endfor %}
+                                        {% endif %}
                                     </table>
                                 </div>
                             </div>
@@ -278,9 +286,9 @@
                                 </div>
                               {% else %}
                                 <header class="Section-header Section-header_product">
-                                    <h3 class="Section-title">
-                                      Войдите, чтобы оставить отзыв.
-                                    </h3>
+                                  <h3 class="Section-title">
+                                    Войдите, чтобы оставить отзыв.
+                                  </h3>
                                 </header>
                               {% endif %}
                             </div>
