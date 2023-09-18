@@ -47,6 +47,7 @@
                             <div class="ProductCard-text">
                                 {{ product.description|truncatechars:300 }}
                             </div>
+                          {% if product_positions %}
                           <form action="{% url 'products:cart_add_product' product.id %}" method="post">
                             <div class="ProductCard-cart">
                                 {% csrf_token %}
@@ -82,6 +83,7 @@
                                 </div>
                             </div>
                           </form>
+                          {% endif %}
                             <div class="ProductCard-footer">
                                 <div class="ProductCard-tags">
                                     <strong class="ProductCard-tagsTitle">Тэги:</strong>
