@@ -1,17 +1,20 @@
 from decimal import Decimal
 
 from django.conf import settings
-from django.urls import reverse, reverse_lazy
-from django.shortcuts import redirect
-from django.views.generic import FormView, TemplateView
-from products.views import BaseMixin
 from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect
+from django.urls import reverse, reverse_lazy
+from django.views.generic import FormView, TemplateView
+
 from products.cart import Cart
+from products.models import ProductPosition
+from products.views import BaseMixin
 from users.models import CustomUser
-from .forms import CheckoutStep1, CheckoutStep2, CheckoutStep3, CheckoutStep4, CardNumberForm
+
+from .forms import (CardNumberForm, CheckoutStep1, CheckoutStep2,
+                    CheckoutStep3, CheckoutStep4)
 from .models import Deliver, Order, OrderItem
 from .tasks import check_card_number
-from products.models import ProductPosition
 
 
 class CartView(TemplateView):
@@ -244,9 +247,29 @@ class PaymentView(FormView):
     def post(self, request, *args, **kwargs):
         order = self.request.session.get(settings.ORDER_SESSION_ID, "")
         form = self.get_form()
-
         if form.is_valid():
-            check_card_number.delay(self.request.POST.get("card_number", '0'), order["order_id"])
+            check_card_number.delay(self.request.POST.get("card_number", "0"), order["order_id"])
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
+class PaymentViewWithParams(FormView):
+    form_class = CardNumberForm
+    template_name = "orders/paymentsomeone.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["order_id"] = self.kwargs["order_id"]
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy("orders:progress-payment")
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            check_card_number.delay(self.request.POST.get("card_number", "0"), self.kwargs["order_id"])
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -271,6 +294,6 @@ class OrderDetailsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
-        context["order"] = Order.objects.filter(id=self.kwargs['pk']).first()
-        context["products"] = OrderItem.objects.select_related("product_position").filter(order_id=self.kwargs['pk'])
+        context["order"] = Order.objects.filter(id=self.kwargs["pk"]).first()
+        context["products"] = OrderItem.objects.select_related("product_position").filter(order_id=self.kwargs["pk"])
         return context

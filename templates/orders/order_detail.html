@@ -155,7 +155,7 @@
                                         <strong class="Cart-title">Итого:<span class="Cart-price">{{ order.total_price }}$</span>
                                         </strong>
                                     </div>
-                                    <div class="Cart-block"><a class="btn btn_primary btn_lg" href="#">Оплатить</a>
+                                    <div class="Cart-block"><a class="btn btn_primary btn_lg" href="{% url 'orders:payment_with_params' order_id=order.id%}">Оплатить</a>
                                     </div>
                                 </div>
                             </div>
