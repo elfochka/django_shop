@@ -25,9 +25,11 @@ class BaseMixin(ContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["categories"] = Category.objects.filter(
-            parent=None, is_deleted=False
-        ).order_by("pk")
+        context["categories"] = (
+            Category.objects.filter(parent=None, is_deleted=False)
+            .order_by("pk")
+            .prefetch_related("subcategories")
+        )
         return context
 
 
@@ -183,7 +185,9 @@ class ProductDetailsView(BaseMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["form"] = ReviewCreationForm()
         context["reviews"] = Review.objects.filter(product=self.object)
-        context["product_positions"] = self.object.productposition_set.all()
+        context[
+            "product_positions"
+        ] = self.object.productposition_set.all().prefetch_related("seller")
         return context
 
     def get(self, request, *args, **kwargs):
