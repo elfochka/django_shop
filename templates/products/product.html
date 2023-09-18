@@ -258,6 +258,7 @@
                                     {% endfor %}
                                 </div>
 
+                              {% if user.is_authenticated %}
                                 <header class="Section-header Section-header_product">
                                     <h3 class="Section-title">Добавить отзыв
                                     </h3>
@@ -275,6 +276,13 @@
                                         </div>
                                     </form>
                                 </div>
+                              {% else %}
+                                <header class="Section-header Section-header_product">
+                                    <h3 class="Section-title">
+                                      Войдите, чтобы оставить отзыв.
+                                    </h3>
+                                </header>
+                              {% endif %}
                             </div>
                         </div>
                     </div>
