@@ -38,7 +38,11 @@
                                           {% if not product_positions %}
                                             Нет вналичии
                                           {% else %}
-                                            ${{ product.get_min_price }}
+                                            {% if product.get_avg_price_with_discount == product.get_avg_price %}
+                                              ${{ product.get_avg_price_with_discount }}
+                                            {% else %}
+                                              <span style="text-decoration: line-through; color: rgb(66, 70, 80);">${{ product.get_avg_price }}</span> ${{ product.get_avg_price_with_discount }}
+                                            {% endif %}
                                           {% endif %}
                                         </div>
                                     </div>

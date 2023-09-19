@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from django.db import models
-from django.db.models import Max, Min
+from django.db.models import Avg, Max, Min, Q
 from django.templatetags.static import static
 
 from users.models import CustomUser
@@ -143,6 +145,42 @@ class Product(models.Model):
     def get_min_price(self):
         return self.productposition_set.aggregate(lowest_price=Min("price"))["lowest_price"]
 
+    def get_avg_price(self):
+        """Return average price of all product positions for this product, rounded to two decimal places."""
+        return round(
+            self.productposition_set.aggregate(average_price=Avg("price"))["average_price"],
+            2,
+        )
+
+    def get_avg_price_with_discount(self):
+        """
+        Return average price of all product positions for this product, rounded to two decimal places,
+        with maximum discount applied.
+        """
+        average_price = self.get_avg_price()
+    
+        if average_price:
+            # Find applicable offer with top priority
+            top_offer = (
+                Offer.objects.filter(
+                    is_active=True,
+                    date_start__lte=datetime.today(),
+                    date_end__gte=datetime.today(),
+                )
+                .filter(Q(products__in=[self]) | Q(categories__in=[self.category]))
+                .order_by("-priority")
+            ).first()
+    
+            if top_offer:
+                if top_offer.discount_type == Offer.Types.DISCOUNT_PERCENT:
+                    average_price -= (average_price * top_offer.discount_value) / 100
+                elif top_offer.discount_type == Offer.Types.DISCOUNT_AMOUNT:
+                    average_price -= top_offer.discount_value
+                elif top_offer.discount_type == Offer.Types.FIXED_PRICE:
+                    average_price = top_offer.discount_value
+    
+        return round(average_price, 2)
+    
     def get_max_price(self):
         return self.productposition_set.aggregate(highest_price=Max("price"))["highest_price"]
 
