@@ -7,11 +7,11 @@
     "priority": 0,
     "discount_type": "DP",
     "discount_value": 10,
-    "date_start": "2023-08-01",
-    "date_end": "2023-08-31",
+    "date_start": "2023-09-01",
+    "date_end": "2023-10-30",
     "is_active": true,
     "created": "2023-08-01T18:43:37.942Z",
-    "updated": "2023-08-01T18:43:37.943Z",
+    "updated": "2023-09-19T07:27:27.371Z",
     "products": [
       3
     ],
@@ -66,10 +66,10 @@
     "discount_type": "FP",
     "discount_value": 1000,
     "date_start": "2023-08-01",
-    "date_end": "2023-08-31",
+    "date_end": "2023-10-30",
     "is_active": true,
     "created": "2023-08-01T18:47:58.399Z",
-    "updated": "2023-08-01T18:47:58.399Z",
+    "updated": "2023-09-19T07:29:12.290Z",
     "products": [
       15
     ],
@@ -103,11 +103,11 @@
     "priority": 0,
     "discount_type": "DP",
     "discount_value": 5,
-    "date_start": "2023-08-01",
+    "date_start": "2023-09-01",
     "date_end": "2023-10-30",
     "is_active": true,
     "created": "2023-08-01T18:50:14.687Z",
-    "updated": "2023-08-01T18:50:14.687Z",
+    "updated": "2023-09-19T07:27:12.717Z",
     "products": [],
     "categories": [
       11
