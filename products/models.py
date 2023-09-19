@@ -456,3 +456,30 @@ class ProductPosition(models.Model):
     class Meta:
         verbose_name = "Товарная позиция"
         verbose_name_plural = "Товарные позиции"
+
+    def get_price_with_discount(self):
+        """
+        Return price with discount applied, or base price if there's no discounts for this product,
+        rounded to two decimal positions.
+        """
+        price_with_discount = self.price
+
+        top_offer = (
+            Offer.objects.filter(
+                is_active=True,
+                date_start__lte=datetime.today(),
+                date_end__gte=datetime.today(),
+            )
+            .filter(Q(products__in=[self.product]) | Q(categories__in=[self.product.category]))
+            .order_by("-priority")
+        ).first()
+        
+        if top_offer:
+            if top_offer.discount_type == Offer.Types.DISCOUNT_PERCENT:
+                price_with_discount -= (price_with_discount * top_offer.discount_value) / 100
+            elif top_offer.discount_type == Offer.Types.DISCOUNT_AMOUNT:
+                price_with_discount -= top_offer.discount_value
+            elif top_offer.discount_type == Offer.Types.FIXED_PRICE:
+                price_with_discount = top_offer.discount_value
+
+        return round(price_with_discount, 2)

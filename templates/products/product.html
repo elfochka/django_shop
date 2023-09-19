@@ -186,7 +186,11 @@
                                                             </div>
                                                             <div class="Order-infoContent">
                                                               <span class="Order-price">
-                                                                {{ position.price }}$
+                                                                {% if position.price == position.get_price_with_discount %}
+                                                                  ${{ position.price }}
+                                                                {% else %}
+                                                                  <span style="text-decoration: line-through;">${{ position.price }}</span> ${{ position.get_price_with_discount }}
+                                                                {% endif %}
                                                               </span>
                                                             </div>
                                                         </div>
