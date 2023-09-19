@@ -53,11 +53,13 @@ class CheckoutView(BaseMixin, FormView):
 
         # Put delivery instance and delivery price into context
         if context["order"].get("delivery"):
+            cart = Cart(self.request)
             delivery_instance = Deliver.objects.get(pk=context["order"]["delivery"])
+            delivery_price = cart.get_delivery_price(delivery_instance)
+            total_price = cart.get_total_products_price() + delivery_price
             context["order"]["delivery"] = delivery_instance
-            context["order"]["delivery_price"] = Cart(self.request).get_delivery_price(
-                delivery_instance
-            )
+            context["order"]["delivery_price"] = delivery_price
+            context["order"]["total_price"] = total_price
         return context
 
     def get_form(self, form_class=None):

@@ -315,7 +315,7 @@
                           Итого:
                         </strong>
                         <span class="Cart-price">
-                          {{ cart.get_total_products_price|add:order.delivery_price }}
+                          {{ order.total_price }}
                         </span>
                         Доставка: {{ order.delivery_price }}
                         Товары: {{ cart.get_total_products_price }}
