@@ -157,30 +157,12 @@ class Product(models.Model):
         Return average price of all product positions for this product, rounded to two decimal places,
         with maximum discount applied.
         """
-        average_price = self.get_avg_price()
-    
-        if average_price:
-            # Find applicable offer with top priority
-            top_offer = (
-                Offer.objects.filter(
-                    is_active=True,
-                    date_start__lte=datetime.today(),
-                    date_end__gte=datetime.today(),
-                )
-                .filter(Q(products__in=[self]) | Q(categories__in=[self.category]))
-                .order_by("-priority")
-            ).first()
-    
-            if top_offer:
-                if top_offer.discount_type == Offer.Types.DISCOUNT_PERCENT:
-                    average_price -= (average_price * top_offer.discount_value) / 100
-                elif top_offer.discount_type == Offer.Types.DISCOUNT_AMOUNT:
-                    average_price -= top_offer.discount_value
-                elif top_offer.discount_type == Offer.Types.FIXED_PRICE:
-                    average_price = top_offer.discount_value
-    
-        return round(average_price, 2)
-    
+        prices_with_discount = [
+            position.get_price_with_discount() for position in self.productposition_set.all()
+        ]
+        average_price = round(sum(prices_with_discount) / len(prices_with_discount), 2)
+        return average_price
+
     def get_max_price(self):
         return self.productposition_set.aggregate(highest_price=Max("price"))["highest_price"]
 
@@ -464,6 +446,7 @@ class ProductPosition(models.Model):
         """
         price_with_discount = self.price
 
+        # Find applicable offer with top priority
         top_offer = (
             Offer.objects.filter(
                 is_active=True,
