@@ -355,9 +355,15 @@ def cart_add_product(request: HttpRequest, product_id: int) -> HttpResponse:
     form = AddProductToCartForm(request.POST)
     if form.is_valid():
         data = form.cleaned_data
+        # Add only available quantity
+        quantity = (
+            data["quantity"]
+            if int(data["quantity"]) <= product_position.quantity
+            else product_position.quantity
+        )
         cart.add(
             product_position=product_position,
-            quantity=data["quantity"],
+            quantity=quantity,
             override_quantity=data["is_override"],
         )
 
@@ -388,9 +394,15 @@ def cart_add_product_position(
     form = AddProductToCartForm(request.POST)
     if form.is_valid():
         data = form.cleaned_data
+        # Add only available quantity
+        quantity = (
+            data["quantity"]
+            if int(data["quantity"]) <= product_position.quantity
+            else product_position.quantity
+        )
         cart.add(
             product_position=product_position,
-            quantity=data["quantity"],
+            quantity=quantity,
             override_quantity=data["is_override"],
         )
         # We  only set `is_override` to True in cart detailed view, so redirect user there
