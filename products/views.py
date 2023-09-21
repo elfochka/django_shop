@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator
-from django.db.models import Avg, Q, Min, Max, Sum, Count
+from django.db.models import Avg, Count, Max, Min, Q, Sum
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -16,8 +16,6 @@ from products.models import (AdBanner, Category, Offer, Product,
                              ProductPosition, Review)
 from users.models import Action
 from users.utils import create_action
-
-from django.db.models import Exists, OuterRef
 
 
 class BaseMixin(ContextMixin):

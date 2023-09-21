@@ -1,22 +1,56 @@
 {% extends "users/base-account.html" %}
+{% load static %}
+{% block account_section %}
+    <div class="Section-content">
+        <div class="Cards">
+            {% for action in actions %}
+                <div class="Card">
+                    <a class="Card-picture" href="{% url 'products:product' action.target_id %}">
+                        {% if action.target.images.count %}
+                            <img src="{{ action.target.images.all.first.image_url }}" alt="{{ action.target.title }}"/>
+                        {% else %}
+                            <img src="{% static 'assets/img/product-placeholder.png' %}"
+                                 alt="{{ action.target.title }}"/>
+                        {% endif %}
+                    </a>
+                    <div class="Card-content">
+                        <strong class="Card-title">
+                            <a href="{% url 'products:product' action.target_id %}">{{ action.target.title }}</a>
+                        </strong>
+                        <div class="Card-description">
+                            <div class="Card-cost">
+                                {% if action.target.get_new_price_and_sale.new_price %}
+                                    <span class="Card-priceOld">${{ action.target.get_old_price }}</span>
+                                    <span class="Card-price">${{ action.target.get_new_price_and_sale.new_price|default:"NONE" }}</span>
+                                {% else %}
+                                    <span class="Card-price">${{ action.target.get_old_price }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="Card-category">{{ action.target.category }}
+                            </div>
+                            <div class="Card-hover">
+{#                                <a class="Card-btn" href="#">#}
+{#                                    <img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/>#}
+{#                                </a>#}
+                                <a class="Card-btn"
+                                   href="{% url 'products:product' action.target_id %}">
+                                    <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
+                                </a>
+                                <a class="Card-btn" href="{% url 'products:add_to_comparison' pk=action.target_id %}">
+                                    <img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
- {% block account_section %}
-       <div class="Section-content">
-        <div class="Profile">
-          <h2>
-            История просмотра товаров
-          </h2>
-
-        <ul>
-          {% for action in actions %}
-            <li>
-            <a href="{% url 'products:product' action.target_id %}">
-              {{ action.target }}
-            </a>
-            &middot; {{ action.created }}
-            </li>
-          {% endfor %}
-        </ul>
+                    {% if action.target.get_new_price_and_sale.sale %}
+                        <div class="Card-sale">
+                            {{ action.target.get_new_price_and_sale.sale }}
+                        </div>
+                    {% else %}
+                    {% endif %}
+                </div>
+            {% endfor %}
         </div>
-       </div>
- {% endblock %}
+    </div>
+{% endblock %}

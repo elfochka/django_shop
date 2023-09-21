@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from django.db import models
-from django.db.models import Max, Min
+from django.db.models import Avg, Max, Min, Q
 from django.templatetags.static import static
 
 from users.models import CustomUser
@@ -145,6 +147,41 @@ class Product(models.Model):
 
     def get_max_price(self):
         return self.productposition_set.aggregate(highest_price=Max("price"))["highest_price"]
+
+    @property
+    def get_old_price(self):
+        old_price = self.productposition_set.aggregate(Avg("price"))["price__avg"]
+        if not old_price:
+            return None
+        return round(old_price, 2)
+
+    @property
+    def get_new_price_and_sale(self):
+        offers = Offer.objects.filter(
+            is_active=True,
+            date_start__lte=datetime.today(),
+            date_end__gte=datetime.today()).filter(Q(products=self) | Q(categories=self.category))
+
+        if self.get_old_price:
+
+            temp_new_price = 0
+            new_price = False
+            sale = False
+            for offer in offers:
+                if offer.discount_type == Offer.Types.DISCOUNT_PERCENT:
+                    temp_new_price -= offer.discount_value
+                    if (new_price and temp_new_price < new_price) or not new_price:
+                        sale = f"-{offer.discount_value}%"
+                        new_price = self.get_old_price - (self.get_old_price * offer.discount_value) / 100
+                elif offer.discount_type == Offer.Types.DISCOUNT_AMOUNT:
+                    temp_new_price = self.get_old_price - offer.discount_value
+                    if (new_price and temp_new_price < new_price) or not new_price:
+                        new_price = temp_new_price
+                        sale = f"-${offer.discount_value}"
+                elif offer.discount_type == Offer.Types.FIXED_PRICE:
+                    new_price = offer.discount_value
+                    sale = f"${offer.discount_value}"
+            return {"new_price": round(new_price, 2), "sale": sale}
 
     def __str__(self):
         return self.title
