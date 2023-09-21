@@ -173,7 +173,7 @@ class CheckoutView(BaseMixin, FormView):
         # Check product position availability before proceeding to the last step
         if step == self.STEP_3_PAYMENT_OPTIONS:
             cart = self.request.session[settings.CART_SESSION_ID]
-        
+
             for product_position_id in cart.keys():
                 product_position_instance = ProductPosition.objects.get(pk=product_position_id)
                 quantity = int(cart[product_position_id]["quantity"])
@@ -181,7 +181,7 @@ class CheckoutView(BaseMixin, FormView):
                     cart[product_position_id]["quantity"] = product_position_instance.quantity
 
             self.request.session.modified = True
-        
+
         # Handle order submit on the last step
         if step == self.STEP_4_SUBMIT_ORDER:
             # Final step - create Order, OrderItem model instances

@@ -456,7 +456,7 @@ class ProductPosition(models.Model):
             .filter(Q(products__in=[self.product]) | Q(categories__in=[self.product.category]))
             .order_by("-priority")
         ).first()
-        
+
         if top_offer:
             if top_offer.discount_type == Offer.Types.DISCOUNT_PERCENT:
                 price_with_discount -= (price_with_discount * top_offer.discount_value) / 100

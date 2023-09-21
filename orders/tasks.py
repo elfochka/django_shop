@@ -1,5 +1,5 @@
-from store.celery import app
 from orders.models import Order
+from store.celery import app
 
 
 @app.task
