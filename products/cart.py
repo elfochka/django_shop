@@ -41,9 +41,10 @@ class Cart:
         product_position_id = str(product_position.id)
 
         if product_position_id not in self.cart:
+            # NB: we store price with discount (if any) applied
             self.cart[product_position_id] = {
                 "quantity": 0,
-                "price": str(product_position.price),
+                "price": str(product_position.get_price_with_discount()),
             }
 
         if override_quantity:

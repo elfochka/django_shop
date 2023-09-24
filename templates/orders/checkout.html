@@ -26,39 +26,45 @@
                       Шаг 1. Параметры пользователя
                     </a>
                   </li>
-                  <li
-                    {% if step == "2" %}
-                      class="menu-item_ACTIVE menu-item"
-                    {% else %}
-                      class="menu-item"
-                    {% endif %}
-                  >
-                    <a class="menu-link" href="{% url 'orders:checkout' %}?step=2">
-                      Шаг 2. Способ доставки
-                    </a>
-                  </li>
-                  <li
-                    {% if step == "3" %}
-                      class="menu-item_ACTIVE menu-item"
-                    {% else %}
-                      class="menu-item"
-                    {% endif %}
-                  >
-                    <a class="menu-link" href="{% url 'orders:checkout' %}?step=3">
-                      Шаг 3. Способ оплаты
-                    </a>
-                  </li>
-                  <li
-                    {% if step == "4" %}
-                      class="menu-item_ACTIVE menu-item"
-                    {% else %}
-                      class="menu-item"
-                    {% endif %}
-                  >
-                    <a class="menu-link" href="{% url 'orders:checkout' %}?step=4">
-                      Шаг 4. Подтверждение заказа
-                    </a>
-                  </li>
+                  {% if step == "2" or step == "3" or step == "4" %}
+                    <li
+                      {% if step == "2" %}
+                        class="menu-item_ACTIVE menu-item"
+                      {% else %}
+                        class="menu-item"
+                      {% endif %}
+                    >
+                      <a class="menu-link" href="{% url 'orders:checkout' %}?step=2">
+                        Шаг 2. Способ доставки
+                      </a>
+                    </li>
+                  {% endif %}
+                  {% if step == "3" or step == "4" %}
+                    <li
+                      {% if step == "3" %}
+                        class="menu-item_ACTIVE menu-item"
+                      {% else %}
+                        class="menu-item"
+                      {% endif %}
+                    >
+                      <a class="menu-link" href="{% url 'orders:checkout' %}?step=3">
+                        Шаг 3. Способ оплаты
+                      </a>
+                    </li>
+                  {% endif %}
+                  {% if step == "4" %}
+                    <li
+                      {% if step == "4" %}
+                        class="menu-item_ACTIVE menu-item"
+                      {% else %}
+                        class="menu-item"
+                      {% endif %}
+                    >
+                      <a class="menu-link" href="{% url 'orders:checkout' %}?step=4">
+                        Шаг 4. Подтверждение заказа
+                      </a>
+                    </li>
+                  {% endif %}
                 </ul>
               </div>
             </div>
@@ -315,7 +321,7 @@
                           Итого:
                         </strong>
                         <span class="Cart-price">
-                          {{ cart.get_total_products_price|add:order.delivery_price }}
+                          {{ order.total_price }}
                         </span>
                         Доставка: {{ order.delivery_price }}
                         Товары: {{ cart.get_total_products_price }}

@@ -12,6 +12,9 @@
                                 {% with product.images.all|first as img %}
                                     {% if img %}
                                         <img src="{{ img.image_url }}" alt="{{ img.image.name }}">
+                                    {% else %}
+                                        <img src="{% static 'assets/img/product-placeholder.png' %}"
+                                             alt="{{ product.title }}"/>
                                     {% endif %}
                                 {% endwith %}
                             </div>
@@ -31,13 +34,24 @@
                                 </h2>
                                 <div class="ProductCard-info">
                                     <div class="ProductCard-cost">
-                                        <div class="ProductCard-price">${{ product.get_min_price }}</div>
+                                        <div class="ProductCard-price">
+                                          {% if not product_positions %}
+                                            Нет вналичии
+                                          {% else %}
+                                            {% if product.get_avg_price_with_discount == product.get_avg_price %}
+                                              ${{ product.get_avg_price_with_discount }}
+                                            {% else %}
+                                              <span style="text-decoration: line-through; color: rgb(66, 70, 80);">${{ product.get_avg_price }}</span> ${{ product.get_avg_price_with_discount }}
+                                            {% endif %}
+                                          {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="ProductCard-text">
                                 {{ product.description|truncatechars:300 }}
                             </div>
+                          {% if product_positions %}
                           <form action="{% url 'products:cart_add_product' product.id %}" method="post">
                             <div class="ProductCard-cart">
                                 {% csrf_token %}
@@ -73,11 +87,12 @@
                                 </div>
                             </div>
                           </form>
+                          {% endif %}
                             <div class="ProductCard-footer">
                                 <div class="ProductCard-tags">
                                     <strong class="ProductCard-tagsTitle">Тэги:</strong>
                                     {% for tag in product.tags.all %}
-                                        <a href="#">{{ tag.title }}</a>{% if not forloop.last %},{% endif %}
+                                        <a href="{% url "products:catalog" %}?tags={{ tag.pk }}">{{ tag.title }}</a>{% if not forloop.last %},{% endif %}
                                     {% empty %}
                                     {% endfor %}
                                 </div>
@@ -102,24 +117,14 @@
                         <div class="Tabs-wrap">
                             <div class="Tabs-block" id="description">
 
-                                <h2>Megano Store Hystory
-                                </h2>
-                                <p>Lorem ipsum dolor sit amet, consectetuer&#32;
-                                    <strong>adipiscing
-                                    </strong>&#32;elit doli. Aenean commodo ligula eget dolor. Aenean massa.&#32;<a
-                                            href="#">Cumtipsu</a>&#32;sociis natoque penatibus et magnis dis parturient
-                                    montesti, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque
-                                    eutu,
-                                    pretiumem.
-                                </p>
-
                                 {% with product.images.all|first as img %}
                                     {% if img %}
                                         <img class="pict pict_right" src="{{ img.image_url }}"
                                              alt="{{ img.image.name }}">
                                     {% endif %}
                                 {% endwith %}
-                                {{ product.description }}
+
+                                <div style="white-space: pre-wrap !important;">{{ product.description }}</div>
 
                                 <div class="clearfix">
                                 </div>
@@ -137,6 +142,14 @@
                                             <td>{{ product.category }}
                                             </td>
                                         </tr>
+                                        {% if product.features %}
+                                          {% for key, value in product.features.items %}
+                                            <tr>
+                                              <td>{{ key }}</td>
+                                              <td>{{ value }}</td>
+                                            </tr>
+                                          {% endfor %}
+                                        {% endif %}
                                     </table>
                                 </div>
                             </div>
@@ -148,18 +161,8 @@
                                             <div class="Order-personal">
                                                 <div class="row">
                                                     <div class="row-block">
-                                                        <a class="Order-title"
-                                                           href="{% if position.seller.title == "Ситилинк" %}
-                                                                 https://www.citilink.ru/
-                                                                 {% elif position.seller.title == "ДНС" %}
-                                                                 https://www.dns-shop.ru/
-                                                                 {% elif position.seller.title == "Эльдорадо" %}
-                                                                 https://www.eldorado.ru/
-                                                                 {% else %}
-                                                                 #
-                                                                 {% endif %}"
-                                                        >
-                                                            {{ position.seller.title }}
+                                                        <a class="Order-title">
+                                                          {{ position.seller.title }}
                                                         </a>
                                                         <form action="{% url 'products:cart_add_product_position' position.id %}" method="post">
                                                             <div class="ProductCard-cartElement" style="margin-top: 10px;">
@@ -177,23 +180,18 @@
                                                         </form>
                                                     </div>
                                                     <div class="row-block">
-                                                        <div class="Order-info Order-info_delivery">
-                                                            <div class="Order-infoType">Тип доставки:
-                                                            </div>
-                                                            <div class="Order-infoContent">Обычная доставка
-                                                            </div>
-                                                        </div>
-                                                        <div class="Order-info Order-info_pay">
-                                                            <div class="Order-infoType">Оплата:
-                                                            </div>
-                                                            <div class="Order-infoContent">Онлайн картой
-                                                            </div>
-                                                        </div>
                                                         <div class="Order-info">
-                                                            <div class="Order-infoType">Стоимость:
+                                                            <div class="Order-infoType">
+                                                              Стоимость:
                                                             </div>
-                                                            <div class="Order-infoContent"><span
-                                                                    class="Order-price">{{ position.price }}$</span>
+                                                            <div class="Order-infoContent">
+                                                              <span class="Order-price">
+                                                                {% if position.price == position.get_price_with_discount %}
+                                                                  ${{ position.price }}
+                                                                {% else %}
+                                                                  <span style="text-decoration: line-through;">${{ position.price }}</span> ${{ position.get_price_with_discount }}
+                                                                {% endif %}
+                                                              </span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -266,6 +264,7 @@
                                     {% endfor %}
                                 </div>
 
+                              {% if user.is_authenticated %}
                                 <header class="Section-header Section-header_product">
                                     <h3 class="Section-title">Добавить отзыв
                                     </h3>
@@ -283,6 +282,13 @@
                                         </div>
                                     </form>
                                 </div>
+                              {% else %}
+                                <header class="Section-header Section-header_product">
+                                  <h3 class="Section-title">
+                                    Войдите, чтобы оставить отзыв.
+                                  </h3>
+                                </header>
+                              {% endif %}
                             </div>
                         </div>
                     </div>
