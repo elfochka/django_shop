@@ -3,6 +3,7 @@ from django.db.models import Max, Min
 from django.templatetags.static import static
 
 from users.models import CustomUser
+import random
 
 
 def get_default_image():
@@ -138,7 +139,7 @@ class Product(models.Model):
 
     @classmethod
     def get_limited_edition_products(cls):
-        return cls.objects.filter(is_limited=True, is_deleted=False).order_by("?")[:16]
+        return cls.objects.filter(is_limited=True, is_deleted=False, is_chosen=False).order_by("?")[:16]
 
     def get_min_price(self):
         return self.productposition_set.aggregate(lowest_price=Min("price"))["lowest_price"]
@@ -301,7 +302,10 @@ class AdBanner(models.Model):
 
     @classmethod
     def get_banners(cls):
-        return cls.objects.filter(is_chosen=True)
+        banners = cls.objects.filter(is_chosen=True)
+        possible_banners = random.sample(list(banners.values_list('id', flat=True)), k=3)
+        random_banners = banners.filter(pk__in=possible_banners)
+        return random_banners
 
 
 class Review(models.Model):

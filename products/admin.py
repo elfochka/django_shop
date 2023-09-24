@@ -242,6 +242,7 @@ class ProductPositionAdmin(admin.ModelAdmin):
         "quantity",
         "created",
         "updated",
+        "free_shipping",
     ]
     search_fields = ["product__title", "seller__title"]
     list_filter = ["seller", "product"]

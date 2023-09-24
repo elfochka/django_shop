@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 
 from django.core.paginator import Paginator
@@ -16,8 +17,6 @@ from products.models import (AdBanner, Category, Offer, Product,
                              ProductPosition, Review)
 from users.models import Action
 from users.utils import create_action
-
-from django.db.models import Exists, OuterRef
 
 
 class BaseMixin(ContextMixin):
