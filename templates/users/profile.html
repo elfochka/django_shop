@@ -18,6 +18,9 @@
                                 <label class="Profile-fileLabel" for="{{ form.image.id_for_label }}"></label>
                                 {{ form.image }}
                             </div>
+                            {% if form.image.errors %}
+                                <p>{{ form.image.errors }}</p>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="row-block">

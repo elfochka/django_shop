@@ -1,5 +1,5 @@
 {% extends "users/base-account.html" %}
-
+{% load static %}
 {% block account_section %}
     <div class="Section-content">
         <div class="Account">
@@ -17,15 +17,15 @@
             </div>
             <div class="Account-group">
                 <div class="Account-column Account-column_full">
-                    {% for order in orders %}
+                {% if latest_order and latest_order.id %}
                     <div class="Order Order_anons">
                         <div class="Order-personal">
                             <div class="row">
                                 <div class="row-block">
-                                    <a class="Order-title" href="{% url 'orders:order_detail' pk=order.id %}">
+                                    <a class="Order-title" href="{% url 'orders:order_detail' pk=latest_order.id %}">
                                         Заказ&#32;
-                                        <span class="Order-numberOrder">№{{ order.id }}</span>&#32;от&#32;
-                                        <span class="Order-dateOrder">{{ order.created|date:"d.m.Y" }}</span>
+                                        <span class="Order-numberOrder">№{{ latest_order.id }}</span>&#32;от&#32;
+                                        <span class="Order-dateOrder">{{ latest_order.created|date:"d.m.Y" }}</span>
                                     </a>
                                     <div class="Account-editLink">
                                         <a href="{% url 'users:history_order' user.id %}">История заказов</a>
@@ -36,7 +36,7 @@
                                         <div class="Order-infoType">Тип доставки:
                                         </div>
                                         <div class="Order-infoContent">
-                                            {% if order.delivery_id == 1 %}
+                                            {% if latest_order.delivery_id == 1 %}
                                                 Обычная доставка
                                             {% else %}
                                                 Экспресс доставка
@@ -47,7 +47,7 @@
                                         <div class="Order-infoType">Оплата:
                                         </div>
                                         <div class="Order-infoContent">
-                                            {% if order.payment == 'someone' %}
+                                            {% if latest_order.payment == 'someone' %}
                                                 Онлайн со случайного чужого счета
                                             {% else %}
                                                 Онлайн картой
@@ -57,24 +57,24 @@
                                     <div class="Order-info">
                                         <div class="Order-infoType">Общая стоимость:
                                         </div>
-                                        <div class="Order-infoContent">{{ order.total_price }}$
+                                        <div class="Order-infoContent">{{ latest_order.total_price }}$
                                         </div>
                                     </div>
                                     <div class="Order-info Order-info_status">
                                         <div class="Order-infoType">Статус:
                                         </div>
                                         <div class="Order-infoContent">
-                                            {% if order.status == 'created' %}
+                                            {% if latest_order.status == 'created' %}
                                                 Сформирован
-                                            {% elif order.status == 'unpaid' %}
+                                            {% elif latest_order.status == 'unpaid' %}
                                                 Не оплачен
-                                            {% elif order.status == 'paid' %}
+                                            {% elif latest_order.status == 'paid' %}
                                                 Оплачен
-                                            {% elif order.status == 'shipped' %}
+                                            {% elif latest_order.status == 'shipped' %}
                                                 В пути
-                                            {% elif order.status == 'delivered' %}
+                                            {% elif latest_order.status == 'delivered' %}
                                                 Доставлен
-                                            {% elif order.status == 'returned' %}
+                                            {% elif latest_order.status == 'returned' %}
                                                 Возвращен
                                             {% endif %}
                                         </div>
@@ -83,7 +83,66 @@
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
+                {% endif %}
+                {% if actions %}
+                    <BR><BR>
+                    <div>
+                        <div><a href="{% url 'users:viewhistory' %}">История просмотров:</a></div>
+                        <div class="Cards">
+                            {% for action in actions %}
+                                <div class="Card">
+                                    <a class="Card-picture" href="{% url 'products:product' action.target_id %}">
+                                        {% if action.target.images.count %}
+                                            <img src="{{ action.target.images.all.first.image_url }}"
+                                                 alt="{{ action.target.title }}"/>
+                                        {% else %}
+                                            <img src="{% static 'assets/img/product-placeholder.png' %}"
+                                                 alt="{{ action.target.title }}"/>
+                                        {% endif %}
+                                    </a>
+                                    <div class="Card-content">
+                                        <strong class="Card-title">
+                                            <a href="{% url 'products:product' action.target_id %}">{{ action.target.title }}</a>
+                                        </strong>
+                                        <div class="Card-description">
+                                            <div class="Card-cost">
+                                                {% if action.target.get_new_price_and_sale.new_price %}
+                                                    <span class="Card-priceOld">${{ action.target.get_old_price }}</span>
+                                                    <span class="Card-price">${{ action.target.get_new_price_and_sale.new_price|default:"NONE" }}</span>
+                                                {% else %}
+                                                    <span class="Card-price">${{ action.target.get_old_price }}</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="Card-category">{{ action.target.category }}
+                                            </div>
+                                            <div class="Card-hover">
+                                                {#                                <a class="Card-btn" href="#">#}
+                                                {#                                    <img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/>#}
+                                                {#                                </a>#}
+                                                <a class="Card-btn"
+                                                   href="{% url 'products:product' action.target_id %}">
+                                                    <img src="{% static 'assets/img/icons/card/cart.svg' %}"
+                                                         alt="cart.svg"/>
+                                                </a>
+                                                <a class="Card-btn"
+                                                   href="{% url 'products:add_to_comparison' pk=action.target_id %}">
+                                                    <img src="{% static 'assets/img/icons/card/change.svg' %}"
+                                                         alt="change.svg"/>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% if action.target.get_new_price_and_sale.sale %}
+                                        <div class="Card-sale">
+                                            {{ action.target.get_new_price_and_sale.sale }}
+                                        </div>
+                                    {% else %}
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
                 </div>
             </div>
         </div>

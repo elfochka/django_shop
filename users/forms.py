@@ -53,6 +53,16 @@ class CustomUserChangeForm(UserChangeForm):
                 raise forms.ValidationError("Неверный формат номера телефона")
         return phone_number
 
+    def clean_image(self):
+        image = self.cleaned_data.get("image")
+        if image.name == "../static/assets/img/icons/loon-icon.svg":
+            return image
+        if image:
+            if hasattr(image, "size"):
+                if image.size > 2 * 1024 * 1024:
+                    raise forms.ValidationError("Файл слишком большой. Максимальный размер - 2 МБ.")
+        return image
+
 
 class CustomUserChangeFormAdmin(UserChangeForm):
     image = forms.ImageField(
@@ -78,3 +88,13 @@ class CustomUserChangeFormAdmin(UserChangeForm):
             if not re.match(r"^(?:\+7|8)[0-9]{10}$", phone_number):
                 raise forms.ValidationError("Неверный формат номера телефона")
         return phone_number
+
+    def clean_image(self):
+        image = self.cleaned_data.get("image")
+        if image.name == "../static/assets/img/icons/loon-icon.svg":
+            return image
+        if image:
+            if hasattr(image, "size"):
+                if image.size > 2 * 1024 * 1024:
+                    raise forms.ValidationError("Файл слишком большой. Максимальный размер - 2 МБ.")
+        return image
