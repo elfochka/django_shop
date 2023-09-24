@@ -169,7 +169,11 @@
                                             <div class="Card-description">
                                                 <div class="Card-cost">
                                                     <span class="Card-price">
-                                                        ${{ product.get_min_price }}
+                                                        {% if product.get_avg_price_with_discount == product.get_avg_price %}
+															${{ product.get_avg_price_with_discount }}
+														{% else %}
+															<span style="text-decoration: line-through; color: rgb(66, 70, 80);">${{ product.get_avg_price }}</span> ${{ product.get_avg_price_with_discount }}
+														{% endif %}
                                                     </span>
                                                 </div>
 
@@ -214,7 +218,11 @@
                                                 <div class="Card-description">
                                                     <div class="Card-cost">
                                                         <span class="Card-price">
-                                                            ${{ edition_product.get_min_price }}
+															{% if edition_product.get_avg_price_with_discount == edition_product.get_avg_price %}
+																${{ edition_product.get_avg_price_with_discount }}
+															{% else %}
+																<span style="text-decoration: line-through; color: rgb(66, 70, 80);">${{ edition_product.get_avg_price }}</span> ${{ edition_product.get_avg_price_with_discount }}
+															{% endif %}
                                                         </span>
                                                     </div>
                                                     <div class="Card-category">{{ limited_product.category }}
