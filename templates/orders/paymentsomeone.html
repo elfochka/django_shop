@@ -5,13 +5,19 @@
     <div class="Middle Middle_top">
         <div class="Section">
             <div class="wrap">
+                {% if order_id %}
+                <form class="form Payment" action="{% url 'orders:payment_with_params' order_id=order_id %}" method="post">
+                {% else %}
                 <form class="form Payment" action="{% url 'orders:payment' %}" method="post">
+                {% endif %}
                     <div class="Payment-card">
-                        <div class="form-group">
-                            <label class="form-label">Номер карты</label>
+                         <div class="form-group">
+                            <label class="form-label">Номер счета</label>
                             {% csrf_token %}
                             {{ form.card_number }}
-                        </div>
+                         </div>
+                         <div class="form-group"><a class="btn btn_success Payment-generate" href="#">Сгенирировать случайный счет</a>
+                         </div>
                     </div>
                     <div class="Payment-pay"><button class="btn btn_primary" type="submit">Оплатить</button>
                     </div>

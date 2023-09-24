@@ -123,3 +123,9 @@ class CheckoutStep4(forms.Form):
             }
         ),
     )
+
+
+class CardNumberForm(forms.Form):
+    card_number = forms.CharField(required=True, widget=forms.TextInput(attrs={"class": "Payment-bill",
+                                                                               "placeholder": "9999 9999",
+                                                                               "data-mask": "9999 9999"}))

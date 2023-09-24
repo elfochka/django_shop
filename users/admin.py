@@ -1,14 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .forms import CustomUserChangeForm, CustomUserCreationForm
+from .forms import CustomUserChangeFormAdmin
 from .models import Action, CustomUser
 
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
-    add_form = CustomUserCreationForm
-    form = CustomUserChangeForm
+    form = CustomUserChangeFormAdmin
     model = CustomUser
     list_display = [
         "email",
@@ -28,18 +27,11 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     )
-    # Which fields to show when creating user via admin panel:
-    add_fieldsets = UserAdmin.add_fieldsets + (
-        (
-            "Дополнительные поля",
-            {
-                "fields": (
-                    "middle_name",
-                    "image",
-                    "phone",
-                )
-            },
-        ),
+
+    add_fieldsets = (
+        (None, {
+            "fields": ("username", "email", "password1", "password2"),
+        }),
     )
 
 

@@ -2,7 +2,7 @@ import random
 from datetime import datetime
 
 from django.core.paginator import Paginator
-from django.db.models import Avg, Q, Min, Max, Sum, Count
+from django.db.models import Avg, Count, Max, Min, Q, Sum
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -24,9 +24,11 @@ class BaseMixin(ContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["categories"] = Category.objects.filter(
-            parent=None, is_deleted=False
-        ).order_by("pk")
+        context["categories"] = (
+            Category.objects.filter(parent=None, is_deleted=False)
+            .order_by("pk")
+            .prefetch_related("subcategories")
+        )
         return context
 
 
@@ -133,8 +135,8 @@ class CatalogView(BaseMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         price_range = self.request.GET.get("price")
-        min_price_of_all = ProductPosition.objects.values('price').aggregate(Min('price'))['price__min']
-        max_price_of_all = ProductPosition.objects.values('price').aggregate(Max('price'))['price__max']
+        min_price_of_all = ProductPosition.objects.values("price").aggregate(Min("price"))["price__min"]
+        max_price_of_all = ProductPosition.objects.values("price").aggregate(Max("price"))["price__max"]
         sort_param = self.request.GET.get("sort_param")
         if price_range:
             min_price, max_price = map(int, price_range.split(";"))
@@ -182,7 +184,9 @@ class ProductDetailsView(BaseMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["form"] = ReviewCreationForm()
         context["reviews"] = Review.objects.filter(product=self.object)
-        context["product_positions"] = self.object.productposition_set.all()
+        context[
+            "product_positions"
+        ] = self.object.productposition_set.all().prefetch_related("seller")
         return context
 
     def get(self, request, *args, **kwargs):
@@ -350,9 +354,15 @@ def cart_add_product(request: HttpRequest, product_id: int) -> HttpResponse:
     form = AddProductToCartForm(request.POST)
     if form.is_valid():
         data = form.cleaned_data
+        # Add only available quantity
+        quantity = (
+            data["quantity"]
+            if int(data["quantity"]) <= product_position.quantity
+            else product_position.quantity
+        )
         cart.add(
             product_position=product_position,
-            quantity=data["quantity"],
+            quantity=quantity,
             override_quantity=data["is_override"],
         )
 
@@ -383,9 +393,15 @@ def cart_add_product_position(
     form = AddProductToCartForm(request.POST)
     if form.is_valid():
         data = form.cleaned_data
+        # Add only available quantity
+        quantity = (
+            data["quantity"]
+            if int(data["quantity"]) <= product_position.quantity
+            else product_position.quantity
+        )
         cart.add(
             product_position=product_position,
-            quantity=data["quantity"],
+            quantity=quantity,
             override_quantity=data["is_override"],
         )
         # We  only set `is_override` to True in cart detailed view, so redirect user there

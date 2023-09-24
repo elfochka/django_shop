@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
 from .models import (AdBanner, Category, Offer, Product, ProductImage,
-                     ProductPosition, Seller, Tag)
+                     ProductPosition, Review, Seller, Tag)
 
 
 @admin.register(Category)
@@ -229,6 +229,24 @@ class SellerAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ("Основная информация", {"fields": ["title", "description", "image", "address", "phone", "email"]}),
+        ("Время создания и изменения", {"fields": ["created", "updated"]}),
+    ]
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = [
+        "product",
+        "author",
+        "body",
+        "created",
+        "updated",
+    ]
+    search_fields = ["author"]
+    ordering = ["-created"]
+    readonly_fields = ["created", "updated"]
+    fieldsets = [
+        ("Основная информация", {"fields": ["product", "author", "body"]}),
         ("Время создания и изменения", {"fields": ["created", "updated"]}),
     ]
 

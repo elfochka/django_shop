@@ -5,8 +5,9 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.crypto import get_random_string
-from django.views.generic import ListView, TemplateView, UpdateView
+from django.views.generic import TemplateView, UpdateView
 
+from orders.models import Order
 from users.forms import CustomUserChangeForm
 from users.models import Action, CustomUser
 
@@ -17,6 +18,9 @@ class AccountDetailView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
+        context["latest_order"] = Order.objects.filter(client_id=self.request.user).order_by("-created").first()
+        context["actions"] = Action.objects.filter(verb=Action.VIEW_PRODUCT).order_by("-created").first()
+        context["actions"] = Action.objects.filter(verb=Action.VIEW_PRODUCT, user=self.request.user)[:3]
         return context
 
 
@@ -26,6 +30,11 @@ class EmailView(TemplateView):
     def post(self, request, *args, **kwargs):
         email = request.POST.get("email")
         last_request_time = cache.get(f"last_request_{email}")
+
+        user_exists = CustomUser.objects.filter(email=email).exists()
+        if not user_exists:
+            request.session["time_limit_error"] = "Введенный e-mail не найден."
+            return HttpResponseRedirect(reverse("users:e-mail"))
 
         if last_request_time and (timezone.now() - last_request_time).total_seconds() < 60:
             request.session["time_limit_error"] = "Вы не можете запрашивать проверочный код чаще одного раза в минуту."
@@ -93,6 +102,17 @@ class PasswordView(TemplateView):
             return JsonResponse({"status": "error", "message": "Invalid or expired code."})
 
 
+class HistoryOrderView(TemplateView):
+    template_name = "users/historyorder.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user
+        context["orders"] = Order.objects.filter(client_id=self.request.user)
+
+        return context
+
+
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = CustomUser
     form_class = CustomUserChangeForm
@@ -105,14 +125,10 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         return initial
 
 
-class ActionListView(LoginRequiredMixin, ListView):
-    model = Action
+class ActionListView(LoginRequiredMixin, TemplateView):
     template_name = "users/viewhistory.html"
-    queryset = Action.objects.filter(verb=Action.VIEW_PRODUCT)
-    context_object_name = "actions"
 
-    def get_queryset(self):
-        """
-        Get last 20 product views for authenticated user.
-        """
-        return self.queryset.filter(user=self.request.user)[:20]
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["actions"] = Action.objects.filter(verb=Action.VIEW_PRODUCT, user=self.request.user)[:20]
+        return context
