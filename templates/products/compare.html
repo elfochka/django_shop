@@ -94,16 +94,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <form action="{% url 'products:cart_add_product_position' product.id %}" method="post">
+                            <form action="{% url 'products:cart_add_product' product.id %}" method="post">
                                 <div class="ProductCard-cart">
                                     {% csrf_token %}
                                     <input type="hidden" name="quantity" value="1" required>
                                     <input type="hidden" name="is_override" id="id_is_override">
-                                    <input type="hidden" name="product_id" value="{{ product.id }}">
                                     <div class="ProductCard-cartElement">
                                         <button class="btn btn_primary" type="submit">
                                             <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
-                                            <span class="btn-content">Добавить в корзину {{ product.id }}</span>
+                                            <span class="btn-content">Добавить в корзину</span>
                                         </button>
                                     </div>
                                 </div>

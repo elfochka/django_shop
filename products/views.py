@@ -314,36 +314,46 @@ class SaleView(BaseMixin, ListView):
 @require_POST
 def cart_add_product(request: HttpRequest, product_id: int) -> HttpResponse:
     """
-    View for adding first product position of the product to the cart
-    or updating quantities for already added product positions.
+    View for adding the product with the cheapest position to the cart.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        product_id (int): The ID of the product to add to the cart.
+
+    Returns:
+        HttpResponse: Redirects to the product page or cart detail page.
+
+    Note:
+        If no product position is available for the selected product, it redirects
+        the user back to the product page. If successful, it adds the product to the cart
+        with the quantity specified in the form, or the maximum available quantity if specified
+        quantity exceeds the stock.
+
     """
     cart = Cart(request)
-    # Get random product position for the selected product
-    product_position = ProductPosition.objects.filter(product_id=product_id).first()
-    # If there's no product position for this product, redirect user back to the product page
-    if not product_position:
+    product = get_object_or_404(Product, id=product_id)
+    cheapest_position = product.get_lowest_price_position
+
+    if not cheapest_position:
         return redirect(reverse_lazy("products:product", kwargs={"pk": product_id}))
 
     form = AddProductToCartForm(request.POST)
     if form.is_valid():
         data = form.cleaned_data
-        # Add only available quantity
         quantity = (
             data["quantity"]
-            if int(data["quantity"]) <= product_position.quantity
-            else product_position.quantity
+            if int(data["quantity"]) <= cheapest_position.quantity
+            else cheapest_position.quantity
         )
         cart.add(
-            product_position=product_position,
+            product_position=cheapest_position,
             quantity=quantity,
             override_quantity=data["is_override"],
         )
 
-        # We  only set `is_override` to True in cart detailed view, so redirect user there
         if data["is_override"]:
             return redirect("products:cart_detail")
 
-    # Redirect to product page, and open the modal
     return redirect(
         reverse_lazy("products:product", kwargs={"pk": product_id}) + "#modal_open"
     )
