@@ -73,7 +73,7 @@
             </div>
         </div>
 
-        <!-- Блок "Ограниченные предложения" -->
+        <!-- Блок "ПРЕДЛОЖЕНИЕ ДНЯ" -->
         <div class="Section Section_column Section_columnLeft Section_columnDesktop">
             <div class="wrap">
                 <div class="Section-column">
@@ -81,7 +81,7 @@
                       {% if chosen_product %}
                         <header class="Section-columnHeader">
                           <strong class="Section-columnTitle">
-                            ОГРАНИЧЕННЫЕ ПРЕДЛОЖЕНИЯ
+                            ПРЕДЛОЖЕНИЕ ДНЯ
                           </strong>
                         </header>
                         <div class="Card">
@@ -155,8 +155,8 @@
                     </header>
                     <div class="Cards">
                         {% for product in popular_products %}
-                            <div class="Card">
-                                <a class="Card-picture" href="{% url 'products:product' pk=product.pk %}">
+                         <div class="Card">
+                             <a class="Card-picture" href="{% url 'products:product' pk=product.pk %}">
                                     <img src="{% static 'assets/img/content/home/card.jpg' %}"
                                          alt="card.jpg"/>
                                 </a>
@@ -166,23 +166,22 @@
                                             {{ product.title|slice:":36" }}
                                         </a>
                                     </strong>
-                                    <div class="Card-description">
-                                        <div class="Card-cost">
-                                            <span class="Card-price">
-                                                ${{ product.get_min_price }}
-                                            </span>
-                                        </div>
-                                        <div class="Card-category">{{ product.category }}
-                                        </div>
-                                        <div class="Card-hover">
-                                            <a class="Card-btn" href="#">
-                                                <img src="{% static 'assets/img/icons/card/cart.svg' %}"
-                                                     alt="cart.svg"/>
-                                            </a>
-                                        </div>
-                                    </div>
+                                            <div class="Card-description">
+                                                <div class="Card-cost">
+                                                    <span class="Card-price">
+                                                        {% if product.get_avg_price_with_discount == product.get_avg_price %}
+															${{ product.get_avg_price_with_discount }}
+														{% else %}
+															<span style="text-decoration: line-through; color: rgb(66, 70, 80);">${{ product.get_avg_price }}</span> ${{ product.get_avg_price_with_discount }}
+														{% endif %}
+                                                    </span>
+                                                </div>
+
+                                                <div class="Card-category">{{ product.category }}
+                                                </div>
+                                            </div>
                                 </div>
-                            </div>
+                         </div>
                         {% endfor %}
                     </div>
                 </div>
@@ -219,14 +218,14 @@
                                                 <div class="Card-description">
                                                     <div class="Card-cost">
                                                         <span class="Card-price">
-                                                            ${{ edition_product.get_min_price }}
+															{% if edition_product.get_avg_price_with_discount == edition_product.get_avg_price %}
+																${{ edition_product.get_avg_price_with_discount }}
+															{% else %}
+																<span style="text-decoration: line-through; color: rgb(66, 70, 80);">${{ edition_product.get_avg_price }}</span> ${{ edition_product.get_avg_price_with_discount }}
+															{% endif %}
                                                         </span>
                                                     </div>
                                                     <div class="Card-category">{{ limited_product.category }}
-                                                    </div>
-                                                    <div class="Card-hover"><a class="Card-btn" href="#">
-                                                        <img src="{% static 'assets/img/icons/card/cart.svg' %}"
-                                                             alt="cart.svg"/></a>
                                                     </div>
                                                 </div>
                                             </div>

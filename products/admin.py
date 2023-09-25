@@ -260,6 +260,7 @@ class ProductPositionAdmin(admin.ModelAdmin):
         "quantity",
         "created",
         "updated",
+        "free_shipping",
     ]
     search_fields = ["product__title", "seller__title"]
     list_filter = ["seller", "product"]
@@ -268,6 +269,6 @@ class ProductPositionAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ("Продукт и продавец", {"fields": ["product", "seller"]}),
-        ("Цена и количество", {"fields": ["price", "quantity"]}),
+        ("Цена, количество и доставка", {"fields": ["price", "quantity", "free_shipping"]}),
         ("Время создания и изменения", {"fields": ["created", "updated"]}),
     ]
