@@ -273,31 +273,6 @@ class CompareView(BaseMixin, TemplateView):
                 ):
                     common_features[key] = False
 
-            average_price = product.productposition_set.aggregate(Avg("price"))[
-                "price__avg"
-            ]
-
-            if average_price is not None:
-                offers = Offer.objects.filter(
-                    is_active=True,
-                    date_start__lte=datetime.today(),
-                    date_end__gte=datetime.today(),
-                ).filter(
-                    Q(products__in=[product]) | Q(categories__in=[product.category])
-                )
-
-                for offer in offers:
-                    if offer.discount_type == Offer.Types.DISCOUNT_PERCENT:
-                        average_price -= (average_price * offer.discount_value) / 100
-                    elif offer.discount_type == Offer.Types.DISCOUNT_AMOUNT:
-                        average_price -= offer.discount_value
-                    elif offer.discount_type == Offer.Types.FIXED_PRICE:
-                        average_price = offer.discount_value
-
-                product.calculated_price = round(average_price, 2)
-
-        highlighted_keys = [key for key, value in common_features.items() if value]
-
         common_keys = (
             set(products_to_compare[0].features.keys())
             if products_to_compare[0].features
@@ -321,7 +296,6 @@ class CompareView(BaseMixin, TemplateView):
 
         context["products"] = products_to_compare
         context["all_categories_equal"] = all_categories_equal
-        context["highlighted_keys"] = highlighted_keys
         context["show_differences"] = show_differences
 
         return context
@@ -341,36 +315,46 @@ class SaleView(BaseMixin, ListView):
 @require_POST
 def cart_add_product(request: HttpRequest, product_id: int) -> HttpResponse:
     """
-    View for adding first product position of the product to the cart
-    or updating quantities for already added product positions.
+    View for adding the product with the cheapest position to the cart.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        product_id (int): The ID of the product to add to the cart.
+
+    Returns:
+        HttpResponse: Redirects to the product page or cart detail page.
+
+    Note:
+        If no product position is available for the selected product, it redirects
+        the user back to the product page. If successful, it adds the product to the cart
+        with the quantity specified in the form, or the maximum available quantity if specified
+        quantity exceeds the stock.
+
     """
     cart = Cart(request)
-    # Get random product position for the selected product
-    product_position = ProductPosition.objects.filter(product_id=product_id).first()
-    # If there's no product position for this product, redirect user back to the product page
-    if not product_position:
+    product = get_object_or_404(Product, id=product_id)
+    cheapest_position = product.get_lowest_price_position
+
+    if not cheapest_position:
         return redirect(reverse_lazy("products:product", kwargs={"pk": product_id}))
 
     form = AddProductToCartForm(request.POST)
     if form.is_valid():
         data = form.cleaned_data
-        # Add only available quantity
         quantity = (
             data["quantity"]
-            if int(data["quantity"]) <= product_position.quantity
-            else product_position.quantity
+            if int(data["quantity"]) <= cheapest_position.quantity
+            else cheapest_position.quantity
         )
         cart.add(
-            product_position=product_position,
+            product_position=cheapest_position,
             quantity=quantity,
             override_quantity=data["is_override"],
         )
 
-        # We  only set `is_override` to True in cart detailed view, so redirect user there
         if data["is_override"]:
             return redirect("products:cart_detail")
 
-    # Redirect to product page, and open the modal
     return redirect(
         reverse_lazy("products:product", kwargs={"pk": product_id}) + "#modal_open"
     )

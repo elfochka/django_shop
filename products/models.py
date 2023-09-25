@@ -164,6 +164,7 @@ class Product(models.Model):
         average_price = round(sum(prices_with_discount) / len(prices_with_discount), 2)
         return average_price
 
+    @property
     def get_max_price(self):
         return self.productposition_set.aggregate(highest_price=Max("price"))["highest_price"]
 
@@ -201,6 +202,10 @@ class Product(models.Model):
                     new_price = offer.discount_value
                     sale = f"${offer.discount_value}"
             return {"new_price": round(new_price, 2), "sale": sale}
+
+    @property
+    def get_lowest_price_position(self):
+        return self.productposition_set.order_by('price').first()
 
     def __str__(self):
         return self.title
@@ -323,6 +328,18 @@ class Offer(models.Model):
         ]
         verbose_name = "скидка"
         verbose_name_plural = "скидки"
+
+    def apply_discount(self, price):
+        if self.discount_type == self.Types.DISCOUNT_PERCENT:
+            discounted_price = price * (1 - self.discount_value / 100)
+        elif self.discount_type == self.Types.DISCOUNT_AMOUNT:
+            discounted_price = price - self.discount_value
+        elif self.discount_type == self.Types.FIXED_PRICE:
+            discounted_price = self.discount_value
+        else:
+            discounted_price = price
+
+        return max(discounted_price, 0)
 
     def __str__(self):
         return self.description[:64]

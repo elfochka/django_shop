@@ -90,22 +90,23 @@
                             <div class="ProductCard-info">
                                 <div class="ProductCard-cost">
                                     <div class="ProductCard-price">
-                                        {% if product.calculated_price %}
-                                            ${{ product.calculated_price }}
-                                        {% else %}
-                                            Нет цены
-                                        {% endif %}
+                                        ${{ product.get_avg_price_with_discount }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="ProductCard-cart">
-                                <div class="ProductCard-cartElement"><a class="btn btn_primary"
-                                                                        href="cart.html"><img
-                                        class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
-                                        alt="cart_white.svg"/><span
-                                        class="btn-content">Добавить в корзину</span></a>
+                            <form action="{% url 'products:cart_add_product' product.id %}" method="post">
+                                <div class="ProductCard-cart">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="quantity" value="1" required>
+                                    <input type="hidden" name="is_override" id="id_is_override">
+                                    <div class="ProductCard-cartElement">
+                                        <button class="btn btn_primary" type="submit">
+                                            <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
+                                            <span class="btn-content">Добавить в корзину</span>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     {% endfor %}
                 {% endif %}
