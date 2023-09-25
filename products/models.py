@@ -1,7 +1,5 @@
-from datetime import datetime
-
 from django.db import models
-from django.db.models import Max, Min, Avg, Q
+from django.db.models import Avg, Max, Min, Q
 from django.templatetags.static import static
 
 from users.models import CustomUser
@@ -145,36 +143,61 @@ class Product(models.Model):
     def get_min_price(self):
         return self.productposition_set.aggregate(lowest_price=Min("price"))["lowest_price"]
 
+    def get_avg_price(self):
+        """Return average price of all product positions for this product, rounded to two decimal places."""
+        return round(
+            self.productposition_set.aggregate(average_price=Avg("price"))["average_price"],
+            2,
+        )
+
+    def get_avg_price_with_discount(self):
+        """
+        Return average price of all product positions for this product, rounded to two decimal places,
+        with maximum discount applied.
+        """
+        prices_with_discount = [
+            position.get_price_with_discount() for position in self.productposition_set.all()
+        ]
+        average_price = round(sum(prices_with_discount) / len(prices_with_discount), 2)
+        return average_price
+
     def get_max_price(self):
         return self.productposition_set.aggregate(highest_price=Max("price"))["highest_price"]
 
-    def get_avg_price(self):
-        avg_price = self.productposition_set.aggregate(avg_price=Avg("price"))["avg_price"]
-        return round(avg_price, 2) if avg_price is not None else None
+    @property
+    def get_old_price(self):
+        old_price = self.productposition_set.aggregate(Avg("price"))["price__avg"]
+        if not old_price:
+            return None
+        return round(old_price, 2)
 
-    def get_avg_price_in_sale(self):
-        average_price = self.get_avg_price()  # Получаем среднюю цену без скидок
+    @property
+    def get_new_price_and_sale(self):
+        offers = Offer.objects.filter(
+            is_active=True,
+            date_start__lte=datetime.today(),
+            date_end__gte=datetime.today()).filter(Q(products=self) | Q(categories=self.category))
 
-        if average_price is not None:
-            offers = Offer.objects.filter(
-                is_active=True,
-                date_start__lte=datetime.today(),
-                date_end__gte=datetime.today(),
-            ).filter(
-                Q(products__in=[self]) | Q(categories__in=[self.category])
-            )
+        if self.get_old_price:
 
+            temp_new_price = 0
+            new_price = False
+            sale = False
             for offer in offers:
                 if offer.discount_type == Offer.Types.DISCOUNT_PERCENT:
-                    average_price -= (average_price * offer.discount_value) / 100
+                    temp_new_price -= offer.discount_value
+                    if (new_price and temp_new_price < new_price) or not new_price:
+                        sale = f"-{offer.discount_value}%"
+                        new_price = self.get_old_price - (self.get_old_price * offer.discount_value) / 100
                 elif offer.discount_type == Offer.Types.DISCOUNT_AMOUNT:
-                    average_price -= offer.discount_value
+                    temp_new_price = self.get_old_price - offer.discount_value
+                    if (new_price and temp_new_price < new_price) or not new_price:
+                        new_price = temp_new_price
+                        sale = f"-${offer.discount_value}"
                 elif offer.discount_type == Offer.Types.FIXED_PRICE:
-                    average_price = offer.discount_value
-
-            return round(average_price, 2)
-        else:
-            return None
+                    new_price = offer.discount_value
+                    sale = f"${offer.discount_value}"
+            return {"new_price": round(new_price, 2), "sale": sale}
 
     def __str__(self):
         return self.title
@@ -460,3 +483,31 @@ class ProductPosition(models.Model):
     class Meta:
         verbose_name = "Товарная позиция"
         verbose_name_plural = "Товарные позиции"
+
+    def get_price_with_discount(self):
+        """
+        Return price with discount applied, or base price if there's no discounts for this product,
+        rounded to two decimal positions.
+        """
+        price_with_discount = self.price
+
+        # Find applicable offer with top priority
+        top_offer = (
+            Offer.objects.filter(
+                is_active=True,
+                date_start__lte=datetime.today(),
+                date_end__gte=datetime.today(),
+            )
+            .filter(Q(products__in=[self.product]) | Q(categories__in=[self.product.category]))
+            .order_by("-priority")
+        ).first()
+
+        if top_offer:
+            if top_offer.discount_type == Offer.Types.DISCOUNT_PERCENT:
+                price_with_discount -= (price_with_discount * top_offer.discount_value) / 100
+            elif top_offer.discount_type == Offer.Types.DISCOUNT_AMOUNT:
+                price_with_discount -= top_offer.discount_value
+            elif top_offer.discount_type == Offer.Types.FIXED_PRICE:
+                price_with_discount = top_offer.discount_value
+
+        return round(price_with_discount, 2)

@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
 from .models import (AdBanner, Category, Offer, Product, ProductImage,
-                     ProductPosition, Seller, Tag, Review)
+                     ProductPosition, Review, Seller, Tag)
 
 
 @admin.register(Category)

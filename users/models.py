@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 
 def get_default_profile_image():
@@ -45,6 +47,27 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+@receiver(pre_save, sender=CustomUser)
+def delete_old_image(sender, instance, **kwargs):
+    old_image_name = CustomUser.objects.get(pk=instance.pk)
+    if old_image_name.image.name == "../static/assets/img/icons/loon-icon.svg":
+        return
+
+    if instance.pk:
+        try:
+            old_image = CustomUser.objects.get(pk=instance.pk).image
+
+        except CustomUser.DoesNotExist:
+            return
+
+        if old_image and old_image.url != instance.image.url:
+            storage, path = old_image.storage, old_image.path
+            try:
+                storage.delete(path)
+            except Exception:
+                return
 
 
 class Action(models.Model):

@@ -105,11 +105,12 @@ crontab -l
 
 ## Используемые библиотеки
 
-- [django-allauth](https://github.com/pennersr/django-allauth) - для регистрации и аутентификации пользователей. 
+- [django-allauth](https://github.com/pennersr/django-allauth) – для регистрации и аутентификации пользователей. 
   Библиотека обладает [большим функционалом](https://github.com/pennersr/django-allauth#features), доступным "из 
   коробки". Для подстановки ссылок на страницы входа, регистрации, выхода в шаблонах, необходимо использовать 
   соответственно `{% url 'account_login' %}`, `{% url 'account_signup' %}`, `{% url 'account_logout' %}`. Шаблоны 
   страниц входа и регистрации находятся в `templates/account/`.
+- [django-debug-toolbar](https://django-debug-toolbar.readthedocs.io/en/latest/) – для удобства отладки приложения.
 
 ### Настройка SMTP-сервера.
 
