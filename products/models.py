@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 
 from django.db import models
@@ -5,7 +6,6 @@ from django.db.models import Avg, Max, Min, Q
 from django.templatetags.static import static
 
 from users.models import CustomUser
-import random
 
 
 def get_default_image():
@@ -205,7 +205,7 @@ class Product(models.Model):
 
     @property
     def get_lowest_price_position(self):
-        return self.productposition_set.order_by('price').first()
+        return self.productposition_set.order_by("price").first()
 
     def __str__(self):
         return self.title
@@ -375,7 +375,7 @@ class AdBanner(models.Model):
     @classmethod
     def get_banners(cls):
         banners = cls.objects.filter(is_chosen=True)
-        possible_banners = random.sample(list(banners.values_list('id', flat=True)), k=3)
+        possible_banners = random.sample(list(banners.values_list("id", flat=True)), k=3)
         random_banners = banners.filter(pk__in=possible_banners)
         return random_banners
 

@@ -51,6 +51,9 @@ class CustomUser(AbstractUser):
 
 @receiver(pre_save, sender=CustomUser)
 def delete_old_image(sender, instance, **kwargs):
+    if not instance.pk:
+        return
+
     old_image_name = CustomUser.objects.get(pk=instance.pk)
     if old_image_name.image.name == "../static/assets/img/icons/loon-icon.svg":
         return
