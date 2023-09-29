@@ -142,7 +142,7 @@
                     <div class="Cards">
                         {% for product in products %}
                             <div class="Card">
-                                <a class="Card-picture" href="#">
+                                <a class="Card-picture" href="{% url 'products:product' pk=product.pk %}">
                                     {% if product.images.count %}
                                         <img src="{{ product.images.all.first.image_url }}" alt="{{ product.title }}"/>
                                     {% else %}

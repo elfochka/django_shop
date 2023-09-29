@@ -78,7 +78,11 @@ class CatalogView(BaseMixin, ListView):
             tag_chosen = self.request.GET.get("tags")
 
             if product_name:
-                queryset = queryset.filter(title__icontains=product_name)
+                queryset = queryset.filter(
+                    Q(title__icontains=product_name)
+                    | Q(title__icontains=product_name.capitalize())
+                    | Q(title__icontains=product_name.lower())
+                )
 
             query = self.request.GET.get("query")
             if query:
