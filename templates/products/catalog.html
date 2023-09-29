@@ -13,6 +13,7 @@
                         </header>
                         <div class="Section-columnContent">
                             <form class="form" method="get">
+								<input type="hidden" name="sort_param" value="{{ sort_param }}">
                                 <div class="form-group">
                                     <div class="range Section-columnRange">
                                         <input class="range-line" id="price" name="price" type="text" data-type="double"
@@ -95,46 +96,46 @@
                         <div class="Sort-variants">
                              {% if sort_param == "pop_h2l" %}
                                  <a class="Sort-sortBy Sort-sortBy_inc "
-                                    href="/products/catalog/?sort_param=pop_l2h">Популярности</a>
+                                    href="/products/catalog/?sort_param=pop_l2h{{ sort_payload }}">Популярности</a>
                              {% elif sort_param == "pop_l2h" %}
                                 <a class="Sort-sortBy Sort-sortBy_dec"
-                                   href="/products/catalog/">Популярности</a>
+                                   href="/products/catalog/?{{ sort_payload }}">Популярности</a>
                              {% else %}
                                 <a class="Sort-sortBy"
-                                   href="/products/catalog/?sort_param=pop_h2l">Популярности</a>
+                                   href="/products/catalog/?sort_param=pop_h2l{{ sort_payload }}">Популярности</a>
                              {% endif %}
 
                             {% if sort_param == "price_h2l" %}
                                 <a class="Sort-sortBy Sort-sortBy_inc "
-                                   href="/products/catalog/?sort_param=price_l2h">Цене</a>
+                                   href="/products/catalog/?sort_param=price_l2h{{ sort_payload }}">Цене</a>
                             {% elif sort_param == "price_l2h" %}
                                 <a class="Sort-sortBy Sort-sortBy_dec"
-                                   href="/products/catalog/">Цене</a>
+                                   href="/products/catalog/?{{ sort_payload }}">Цене</a>
                             {% else %}
                                 <a class="Sort-sortBy"
-                                   href="/products/catalog/?sort_param=price_h2l">Цене</a>
+                                   href="/products/catalog/?sort_param=price_h2l{{ sort_payload }}">Цене</a>
                             {% endif %}
 
                             {% if sort_param == "review_h2l" %}
                                 <a class="Sort-sortBy Sort-sortBy_inc"
-                                   href="/products/catalog/?sort_param=review_l2h">Отзывам</a>
+                                   href="/products/catalog/?sort_param=review_l2h{{ sort_payload }}">Отзывам</a>
                             {% elif sort_param == "review_l2h" %}
                                 <a class="Sort-sortBy Sort-sortBy_dec "
-                                   href="/products/catalog/">Отзывам</a>
+                                   href="/products/catalog/?{{ sort_payload }}">Отзывам</a>
                             {% else %}
                                 <a class="Sort-sortBy"
-                                   href="/products/catalog/?sort_param=review_h2l">Отзывам</a>
+                                   href="/products/catalog/?sort_param=review_h2l{{ sort_payload }}">Отзывам</a>
                             {% endif %}
 
                             {% if sort_param == "new_h2l" %}
                                 <a class="Sort-sortBy Sort-sortBy_inc"
-                                   href="/products/catalog/?sort_param=new_l2h">Новизне</a>
+                                   href="/products/catalog/?sort_param=new_l2h{{ sort_payload }}">Новизне</a>
                             {% elif sort_param == "new_l2h" %}
                                 <a class="Sort-sortBy Sort-sortBy_dec"
-                                   href="/products/catalog/">Новизне</a>
+                                   href="/products/catalog/?{{ sort_payload }}">Новизне</a>
                             {% else %}
                                 <a class="Sort-sortBy"
-                                   href="/products/catalog/?sort_param=new_h2l">Новизне</a>
+                                   href="/products/catalog/?sort_param=new_h2l{{ sort_payload }}">Новизне</a>
                             {% endif %}
                         </div>
                     </div>
