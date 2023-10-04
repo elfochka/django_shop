@@ -44,6 +44,9 @@ class IndexView(BaseMixin, TemplateView):
             "popular_products": Product.get_popular_products(),
             "limited_edition_products": Product.get_limited_edition_products(),
             "banners": AdBanner.get_banners(),
+            "categories": Category.objects.filter(parent=None, is_deleted=False)
+            .order_by("pk")
+            .prefetch_related("subcategories")
         }
         context.update(context_data)
         return context_data
