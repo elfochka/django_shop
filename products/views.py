@@ -43,6 +43,9 @@ class IndexView(BaseMixin, TemplateView):
             "popular_products": Product.get_popular_products(),
             "limited_edition_products": Product.get_limited_edition_products(),
             "banners": AdBanner.get_banners(),
+            "categories": Category.objects.filter(parent=None, is_deleted=False)
+            .order_by("pk")
+            .prefetch_related("subcategories")
         }
         context.update(context_data)
         return context_data
@@ -77,7 +80,11 @@ class CatalogView(BaseMixin, ListView):
             tag_chosen = self.request.GET.get("tags")
 
             if product_name:
-                queryset = queryset.filter(title__icontains=product_name)
+                queryset = queryset.filter(
+                    Q(title__icontains=product_name)
+                    | Q(title__icontains=product_name.capitalize())
+                    | Q(title__icontains=product_name.lower())
+                )
 
             query = self.request.GET.get("query")
             if query:
@@ -97,10 +104,18 @@ class CatalogView(BaseMixin, ListView):
             if free_shipping:
                 queryset = queryset.filter(productposition__free_shipping=True)
 
+            if price_range or sort_param == "price_l2h" or sort_param == "price_h2l":
+                queryset = queryset.annotate(price=Avg("productposition__price"))
+
             if price_range:
                 min_price, max_price = map(int, price_range.split(";"))
-                queryset = queryset.annotate(price=Min("productposition__price"))
                 queryset = queryset.filter(price__gte=min_price, price__lte=max_price)
+
+            if sort_param == "price_l2h":
+                queryset = queryset.order_by("price")
+
+            elif sort_param == "price_h2l":
+                queryset = queryset.order_by("-price")
 
             if sort_param == "pop_l2h":
                 queryset = queryset.annotate(count_orders=Count("productposition__orderitem__order"))
@@ -108,11 +123,6 @@ class CatalogView(BaseMixin, ListView):
             elif sort_param == "pop_h2l":
                 queryset = queryset.annotate(count_orders=Count("productposition__orderitem__order"))
                 queryset = queryset.order_by("-count_orders")
-
-            if sort_param == "price_l2h":
-                queryset = queryset.order_by("productposition__price")
-            elif sort_param == "price_h2l":
-                queryset = queryset.order_by("-productposition__price")
 
             if sort_param == "review_l2h":
                 queryset = queryset.annotate(count_reviews=Count("reviews"))
@@ -156,6 +166,14 @@ class CatalogView(BaseMixin, ListView):
             for v in list_:
                 payload += "&" + k + "=" + v
         context["payload"] = payload
+
+        payload = ""
+        for k, list_ in self.request.GET.lists():
+            if k == "page" or k == "sort_param":
+                continue
+            for v in list_:
+                payload += "&" + k + "=" + v
+        context["sort_payload"] = payload
 
         return context
 
