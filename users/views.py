@@ -19,7 +19,6 @@ class AccountDetailView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
         context["latest_order"] = Order.objects.filter(client_id=self.request.user).order_by("-created").first()
-        context["actions"] = Action.objects.filter(verb=Action.VIEW_PRODUCT).order_by("-created").first()
         context["actions"] = Action.objects.filter(verb=Action.VIEW_PRODUCT, user=self.request.user)[:3]
         return context
 
