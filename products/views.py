@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator
-from django.db.models import Count, Max, Min, Q, Sum
+from django.db.models import Avg, Count, Max, Min, Q, Sum
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
