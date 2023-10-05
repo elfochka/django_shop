@@ -74,6 +74,7 @@ class CustomUserChangeFormAdmin(UserChangeForm):
         widget=forms.EmailInput(attrs={"placeholder": "Введите адрес эл. почты"})
     )
     phone = forms.CharField(
+        required=False,
         label="Введите номер телефона",
         widget=forms.TextInput(attrs={"placeholder": "89881234567"})
     )
