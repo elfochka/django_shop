@@ -266,6 +266,7 @@ class CompareView(BaseMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         comparison_ids = self.request.session.get("comparison_products", [])
         products_to_compare = Product.objects.filter(id__in=comparison_ids)
+
         show_differences = (
             self.request.GET.get("show_differences", "true").lower() == "true"
         )
@@ -290,6 +291,8 @@ class CompareView(BaseMixin, TemplateView):
                 ):
                     common_features[key] = False
 
+        highlighted_keys = [key for key, value in common_features.items() if value]
+
         common_keys = (
             set(products_to_compare[0].features.keys())
             if products_to_compare[0].features
@@ -313,6 +316,7 @@ class CompareView(BaseMixin, TemplateView):
 
         context["products"] = products_to_compare
         context["all_categories_equal"] = all_categories_equal
+        context["highlighted_keys"] = highlighted_keys
         context["show_differences"] = show_differences
 
         return context
