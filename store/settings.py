@@ -35,9 +35,9 @@ DEBUG = env("DEBUG", default=False)
 ALLOWED_HOSTS = []
 
 # Needed by django-debug-toolbar
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
+# INTERNAL_IPS = [
+#     "127.0.0.1",
+# ]
 
 # Application definition
 
