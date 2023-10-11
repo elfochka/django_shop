@@ -132,7 +132,10 @@
                                 {% for prod in products %}
                                 <div class="Cart-product">
                                     <div class="Cart-block Cart-block_row">
-                                        <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img" src="{{ prod.product_position.product.images }}" alt="card.jpg" /></a>
+                                        <div class="Cart-block Cart-block_pict">
+                                            <a class="Cart-pict" href="#">
+                                                <img class="Cart-img" src="{{ prod.product_position.product.images.all.first.image_url }}" alt="{{ product.title }}"/>
+                                        </a>
                                         </div>
                                         <div class="Cart-block Cart-block_info"><a class="Cart-title" href="#">{{ prod.product_position.product.title }}</a>
                                             <div class="Cart-desc">{{ prod.product_position.product.description|truncatechars:120 }}

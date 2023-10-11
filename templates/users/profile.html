@@ -15,8 +15,8 @@
                             </label>
                             <div class="Profile-avatar">
                                 <div class="Profile-img"><img src="{{ user.image.url }}" alt="card.jpg"/></div>
-                                <label class="Profile-fileLabel" for="{{ form.image.id_for_label }}"></label>
-                                {{ form.image }}
+                                <label class="Profile-fileLabel" for="{{ form.image.id_for_label }}">
+                                {{ form.image }}</label>
                             </div>
                             {% if form.image.errors %}
                                 <p>{{ form.image.errors }}</p>
